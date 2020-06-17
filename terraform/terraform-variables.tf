@@ -1,0 +1,14 @@
+variable "docker_image_tag" {}
+variable "github_docker_registry_url" {}
+variable "github_organization" {}
+variable "github_token" {}
+variable "kubernetes_api_server_endpoint" {}
+variable "kubernetes_api_server_cert_auth" {}
+variable "mysql_username" {}
+variable "mysql_password" {}
+variable "provider_access_key" {}
+variable "provider_secret_key" {}
+variable "spring_datasource_url" {}
+variable "spring_datasource_username" {}
+variable "spring_datasource_password" {}
+variable "ssl_cert_arn" {}

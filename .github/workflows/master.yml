@@ -1,0 +1,81 @@
+name: Master Branch
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - v*
+env:
+  IMAGE_NAME: eks-spring-graphql
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 14
+        uses: actions/setup-java@v1
+        with:
+          java-version: 14
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Test with Gradle
+        run: CLIENT_ID=${{ secrets.CLIENT_ID }} CLIENT_SECRET=${{ secrets.CLIENT_SECRET }} ./gradlew build
+
+  push:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build image
+        run: docker build . --file Dockerfile --tag image
+      - name: Log into registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+      - name: Push image
+        run: |
+          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          # Strip git ref prefix from version
+          # VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # TODO: toggle off of 'latest' tag after initial deployment
+          VERSION=$(git rev-parse --short "$GITHUB_SHA")
+          # VERSION=latest
+
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
+
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+
+          docker tag image $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+
+          # Set environment variables
+          # https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable
+          echo "::set-env name=IMAGE_ID::$IMAGE_ID"
+          echo "::set-env name=VERSION::$VERSION"
+
+      # https://github.com/marketplace/actions/eks-action
+      - name: Deploy
+        uses: cancue/eks-action@v0.0.2
+        env:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-east-1
+          cluster_name: default
+          K8S_NAMESPACE: graphql
+          K8S_DEPLOYMENT: graphql
+        with:
+          args: |
+            kubectl set image deployment $K8S_DEPLOYMENT -n $K8S_NAMESPACE $K8S_DEPLOYMENT=$IMAGE_ID:$VERSION &&
+            kubectl rollout status deployment/$K8S_DEPLOYMENT -n $K8S_NAMESPACE

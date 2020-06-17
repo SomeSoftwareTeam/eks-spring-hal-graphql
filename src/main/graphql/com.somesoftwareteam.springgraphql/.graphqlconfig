@@ -1,0 +1,16 @@
+{
+  "name": "Untitled GraphQL Schema",
+  "schemaPath": "schema.json",
+  "extensions": {
+    "endpoints": {
+      "Default GraphQL Endpoint": {
+        "url": "http://localhost:8080/graphql",
+        "headers": {
+          "user-agent": "JS GraphQL",
+          "Authorization": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Il9mUWFVb2tLaTFpTXNOd3ItQjhiZSJ9.eyJpc3MiOiJodHRwczovL3NvbWVzb2Z0d2FyZXRlYW0uYXV0aDAuY29tLyIsInN1YiI6IlFZVktqY29qTTF3M1F2Y05yaEY2YUVBMGtlbmRJem5SQGNsaWVudHMiLCJhdWQiOiJodHRwczovL2FwaS5zb21lc29mdHdhcmV0ZWFtLmNvbSIsImlhdCI6MTU5MjI3NzM2MiwiZXhwIjoxNTkyMzYzNzYyLCJhenAiOiJRWVZLamNvak0xdzNRdmNOcmhGNmFFQTBrZW5kSXpuUiIsInNjb3BlIjoicmVhZDpmaXh0dXJlcyB3cml0ZTpmaXh0dXJlcyByZWFkOnZlcmlmaWNhdGlvbnMgd3JpdGU6dmVyaWZpY2F0aW9ucyByZWFkOnByb3BlcnRpZXMgd3JpdGU6cHJvcGVydGllcyIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.JT6BcDYRTtnMQKenZaT9qBqr_bdaFqel3bDZfu7J5_UUZS3USJSzNsWXRyYn47nFQQnzIDMyTzsdiyzxQ_AzVtox-hd1p8qxl1kpNmmfBl-eKQWh-HE2KE_Crg6ZLPdmK6W_AydQ5zPvyhDkJp5Ebc0eWuBzjAr1RhmVgFMFRd4uvPzC7BZtxiJfEA3fILhaqI0vigi_hCK-d9123tOKXRGYTfPUUVxAXKKpRapj-vz1M9O_u-fOXVB7h-3KRhSu-Xk5Ym-vPL2hUJ1Cv_r-2DBMwOXCeRsAlaHexYHK8eMOJya2b0GHPyft0cVaE-28-mZDyUQJaFv5QGDxff-UhA"
+        },
+        "introspect": true
+      }
+    }
+  }
+}

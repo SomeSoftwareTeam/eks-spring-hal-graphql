@@ -1,0 +1,25 @@
+name: Development Branch
+
+on:
+  push:
+    branches:
+      - development
+    tags:
+      - v*
+env:
+  IMAGE_NAME: eks-spring-graphql
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 14
+        uses: actions/setup-java@v1
+        with:
+          java-version: 14
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Test with Gradle
+        run: CLIENT_ID=${{ secrets.CLIENT_ID }} CLIENT_SECRET=${{ secrets.CLIENT_SECRET }} ./gradlew build
