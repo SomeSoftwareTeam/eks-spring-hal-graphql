@@ -1,11 +1,11 @@
 package com.somesoftwareteam.graphql.resolvers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.somesoftwareteam.graphql.acl.MyAclService;
 import com.somesoftwareteam.graphql.entities.Property;
 import com.somesoftwareteam.graphql.repositories.EntityCreator;
 import com.somesoftwareteam.graphql.repositories.PropertyRepository;
 import com.somesoftwareteam.graphql.security.AuthenticationFacade;
-import com.vladmihalcea.hibernate.type.json.internal.JacksonUtil;
 import io.leangen.graphql.annotations.GraphQLId;
 import io.leangen.graphql.annotations.GraphQLMutation;
 import io.leangen.graphql.annotations.GraphQLNonNull;
@@ -41,7 +41,7 @@ public class PropertyResolver {
         this.repository = repository;
     }
 
-    @GraphQLQuery(name = "Property", description = "Get property by primary id")
+    @GraphQLQuery(name = "property", description = "Get property by primary id")
     public Property property(@GraphQLId @GraphQLNonNull Long id) {
         return repository.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
@@ -68,17 +68,18 @@ public class PropertyResolver {
     }
 
     @GraphQLMutation(name = "createProperty", description = "Create a new property record")
-    public Property createProperty(@GraphQLNonNull String name) {
+    public Property createProperty(@GraphQLNonNull String name, JsonNode attributes) {
         String owner = authenticationFacade.getCurrentPrincipalName();
-        Property property = new Property(name, owner, JacksonUtil.toJsonNode("{}"));
+        Property property = new Property(name, owner, attributes);
         Property newProperty = entityCreator.persistEntity(property);
         myAclService.createOrUpdateAccessControlListToIncludeCurrentSecurityIdentity(newProperty);
         return newProperty;
     }
 
     @GraphQLMutation(name = "updateProperty", description = "Update a property record")
-    public Property updateProperty(@GraphQLId @GraphQLNonNull Long id, String name) {
+    public Property updateProperty(@GraphQLId @GraphQLNonNull Long id, String name, JsonNode attributes) {
         Property property = repository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        property.setAttributes(attributes);
         property.setName(name);
         repository.save(property);
         return property;

@@ -1,5 +1,6 @@
 package com.somesoftwareteam.graphql.resolvers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.somesoftwareteam.graphql.acl.MyAclService;
 import com.somesoftwareteam.graphql.entities.Fixture;
 import com.somesoftwareteam.graphql.entities.Property;
@@ -45,7 +46,7 @@ public class FixtureResolver {
         this.propertyRepository = propertyRepository;
     }
 
-    @GraphQLQuery(name = "Fixture", description = "Get fixture by primary id")
+    @GraphQLQuery(name = "fixture", description = "Get fixture by primary id")
     public Fixture fixture(@GraphQLId @GraphQLNonNull Long id) {
         return fixtureRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
@@ -77,8 +78,9 @@ public class FixtureResolver {
     }
 
     @GraphQLMutation(name = "updateFixture", description = "Update a fixture record")
-    public Fixture updateFixture(@GraphQLId @GraphQLNonNull Long id, String name) {
+    public Fixture updateFixture(@GraphQLId @GraphQLNonNull Long id, String name, JsonNode attributes) {
         Fixture fixture = fixtureRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        fixture.setAttributes(attributes);
         fixture.setName(name);
         fixtureRepository.save(fixture);
         return fixture;
