@@ -8,6 +8,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import javax.persistence.EntityManager;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class EntityCreatorTests extends IntegrationTestBase {
 
     @Autowired

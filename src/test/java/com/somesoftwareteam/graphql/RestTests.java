@@ -10,11 +10,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static com.somesoftwareteam.graphql.TestTokenProvider.getToken;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * https://docs.spring.io/spring/docs/current/spring-framework-reference/pdf/testing-webtestclient.pdf
  */
-class RestTests extends com.somesoftwareteam.graphql.IntegrationTestBase {
+class RestTests extends IntegrationTestBase {
 
     @Test
     public void healthCheck_PassesWithoutAuth() {
