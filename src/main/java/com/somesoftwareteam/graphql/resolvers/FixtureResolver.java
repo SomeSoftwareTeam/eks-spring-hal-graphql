@@ -46,7 +46,7 @@ public class FixtureResolver {
         this.propertyRepository = propertyRepository;
     }
 
-    @GraphQLQuery(name = "fixture", description = "Get fixture by primary id")
+    @GraphQLQuery(name = "Fixture", description = "Get fixture by primary id")
     public Fixture fixture(@GraphQLId @GraphQLNonNull Long id) {
         return fixtureRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
     }

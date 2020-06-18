@@ -41,7 +41,7 @@ public class PropertyResolver {
         this.repository = repository;
     }
 
-    @GraphQLQuery(name = "property", description = "Get property by primary id")
+    @GraphQLQuery(name = "Property", description = "Get property by primary id")
     public Property property(@GraphQLId @GraphQLNonNull Long id) {
         return repository.findById(id).orElseThrow(ResourceNotFoundException::new);
     }

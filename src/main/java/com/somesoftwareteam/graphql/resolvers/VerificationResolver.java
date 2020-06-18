@@ -35,7 +35,7 @@ public class VerificationResolver {
         this.repository = repository;
     }
 
-    @GraphQLQuery(name = "verification", description = "Get verification by primary id")
+    @GraphQLQuery(name = "Verification", description = "Get verification by primary id")
     public Verification verification(@GraphQLId @GraphQLNonNull Long id) {
         return repository.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
