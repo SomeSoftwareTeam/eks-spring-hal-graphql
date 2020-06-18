@@ -68,10 +68,11 @@ public class FixtureResolver {
     }
 
     @GraphQLMutation(name = "createFixture", description = "Create a new fixture record")
-    public Fixture createFixture(@GraphQLId @GraphQLNonNull Long propertyId, @GraphQLNonNull String name) {
+    public Fixture createFixture(@GraphQLId @GraphQLNonNull Long propertyId, @GraphQLNonNull String name,
+                                 JsonNode attributes) {
         String owner = authenticationFacade.getCurrentPrincipalName();
         Property property = propertyRepository.findById(propertyId).orElseThrow(ResourceNotFoundException::new);
-        Fixture fixture = new Fixture(name, owner, JacksonUtil.toJsonNode("{}"), property);
+        Fixture fixture = new Fixture(name, owner, attributes, property);
         entityCreator.persistEntity(fixture);
         myAclService.createOrUpdateAccessControlListToIncludeCurrentSecurityIdentity(fixture);
         return fixture;

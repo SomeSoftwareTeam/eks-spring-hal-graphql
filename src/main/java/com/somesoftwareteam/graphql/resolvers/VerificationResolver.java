@@ -2,9 +2,15 @@ package com.somesoftwareteam.graphql.resolvers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.somesoftwareteam.graphql.acl.MyAclService;
+import com.somesoftwareteam.graphql.entities.Fixture;
+import com.somesoftwareteam.graphql.entities.Property;
 import com.somesoftwareteam.graphql.entities.Verification;
 import com.somesoftwareteam.graphql.repositories.EntityCreator;
+import com.somesoftwareteam.graphql.repositories.FixtureRepository;
+import com.somesoftwareteam.graphql.repositories.PropertyRepository;
 import com.somesoftwareteam.graphql.repositories.VerificationRepository;
+import com.somesoftwareteam.graphql.security.AuthenticationFacade;
+import com.vladmihalcea.hibernate.type.json.internal.JacksonUtil;
 import io.leangen.graphql.annotations.GraphQLId;
 import io.leangen.graphql.annotations.GraphQLMutation;
 import io.leangen.graphql.annotations.GraphQLNonNull;
@@ -24,32 +30,37 @@ import java.util.Objects;
 @PreAuthorize("hasAuthority('SCOPE_read:verifications')")
 public class VerificationResolver {
 
-    private final MyAclService myAclService;
+    private final AuthenticationFacade authenticationFacade;
     private final EntityCreator entityCreator;
-    private final VerificationRepository repository;
+    private final MyAclService myAclService;
+    private final VerificationRepository verificationRepository;
+    private final PropertyRepository propertyRepository;
 
-    public VerificationResolver(MyAclService myAclService, EntityCreator entityCreator,
-                                VerificationRepository repository) {
-        this.myAclService = myAclService;
+    public VerificationResolver(AuthenticationFacade authenticationFacade, EntityCreator entityCreator,
+                                MyAclService myAclService, VerificationRepository verificationRepository,
+                                PropertyRepository propertyRepository) {
+        this.authenticationFacade = authenticationFacade;
         this.entityCreator = entityCreator;
-        this.repository = repository;
+        this.myAclService = myAclService;
+        this.verificationRepository = verificationRepository;
+        this.propertyRepository = propertyRepository;
     }
 
     @GraphQLQuery(name = "Verification", description = "Get verification by primary id")
     public Verification verification(@GraphQLId @GraphQLNonNull Long id) {
-        return repository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        return verificationRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
 
     @GraphQLQuery(name = "allVerifications", description = "Get verification records")
     public List<Verification> allVerifications(Integer page, Integer perPage, String sortField, String sortOrder,
-                                            List<VerificationFilter> filters) {
+                                               List<VerificationFilter> filters) {
         // TODO: implement filter
         if (Objects.isNull(page)) page = 0;
         if (Objects.isNull(perPage)) perPage = 10;
         if (Objects.isNull(sortField)) sortField = "id";
         if (Objects.isNull(sortOrder)) sortOrder = "ASC";
         Sort sort = sortOrder.equals("ASC") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
-        return repository.findAll(PageRequest.of(page, perPage, sort)).getContent();
+        return verificationRepository.findAll(PageRequest.of(page, perPage, sort)).getContent();
     }
 
     @GraphQLQuery(name = "_allVerificationsMeta", description = "Get verification records metadata")
@@ -57,31 +68,33 @@ public class VerificationResolver {
         // TODO: implement filter
         if (Objects.isNull(page)) page = 0;
         if (Objects.isNull(perPage)) perPage = 10;
-        Long count = repository.findAll(PageRequest.of(page, perPage)).getTotalElements();
+        Long count = verificationRepository.findAll(PageRequest.of(page, perPage)).getTotalElements();
         return new ListMetadata(count);
     }
 
     @GraphQLMutation(name = "createVerification", description = "Create a new verification record")
-    public Verification createVerification(@GraphQLNonNull String name, JsonNode attributes) {
-        Verification verification = new Verification(name, attributes);
-        Verification newVerification = entityCreator.persistEntity(verification);
-        myAclService.createOrUpdateAccessControlListToIncludeCurrentSecurityIdentity(newVerification);
-        return newVerification;
+    public Verification createVerification(@GraphQLId @GraphQLNonNull Long propertyId, @GraphQLNonNull String name,
+                                      JsonNode attributes) {
+        Property property = propertyRepository.findById(propertyId).orElseThrow(ResourceNotFoundException::new);
+        Verification verification = new Verification(name, attributes, property);
+        entityCreator.persistEntity(verification);
+        myAclService.createOrUpdateAccessControlListToIncludeCurrentSecurityIdentity(verification);
+        return verification;
     }
 
     @GraphQLMutation(name = "updateVerification", description = "Update a verification record")
     public Verification updateVerification(@GraphQLId @GraphQLNonNull Long id, String name, JsonNode attributes) {
-        Verification verification = repository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Verification verification = verificationRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         verification.setAttributes(attributes);
         verification.setName(name);
-        repository.save(verification);
+        verificationRepository.save(verification);
         return verification;
     }
 
     @GraphQLMutation(name = "deleteVerification", description = "Delete a verification record")
     public Verification deleteVerification(@GraphQLId @GraphQLNonNull Long id) {
-        Verification verification = repository.findById(id).orElseThrow(ResourceNotFoundException::new);
-        repository.deleteById(id);
+        Verification verification = verificationRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        verificationRepository.deleteById(id);
         return verification;
     }
 

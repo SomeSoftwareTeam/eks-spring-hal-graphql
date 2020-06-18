@@ -43,6 +43,11 @@ public class Verification {
         this.attributes = attributes;
     }
 
+    public Verification(String name, JsonNode attributes, Property property) {
+        this.name = name;
+        this.attributes = attributes;
+    }
+
     public ZonedDateTime getCreated() {
         return created;
     }
