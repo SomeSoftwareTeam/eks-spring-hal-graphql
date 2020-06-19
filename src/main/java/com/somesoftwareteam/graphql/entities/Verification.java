@@ -29,6 +29,8 @@ public class Verification {
     @Type(type = "json-string")
     private JsonNode attributes;
 
+    private String owner;
+
     @OneToOne(fetch = FetchType.EAGER)
     private Property property;
 
@@ -38,15 +40,25 @@ public class Verification {
     public Verification() {
     }
 
-    public Verification(String name, JsonNode attributes) {
+    public Verification(String name, String owner, JsonNode attributes) {
         this.name = name;
+        this.owner = owner;
         this.attributes = attributes;
     }
 
-    public Verification(String name, JsonNode attributes, Property property) {
+    public Verification(String name, String owner, JsonNode attributes, Property property) {
         this.name = name;
+        this.owner = owner;
         this.attributes = attributes;
         this.property = property;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public ZonedDateTime getCreated() {

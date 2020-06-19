@@ -8,7 +8,6 @@ import com.somesoftwareteam.graphql.repositories.EntityCreator;
 import com.somesoftwareteam.graphql.repositories.FixtureRepository;
 import com.somesoftwareteam.graphql.repositories.PropertyRepository;
 import com.somesoftwareteam.graphql.security.AuthenticationFacade;
-import com.vladmihalcea.hibernate.type.json.internal.JacksonUtil;
 import io.leangen.graphql.annotations.GraphQLId;
 import io.leangen.graphql.annotations.GraphQLMutation;
 import io.leangen.graphql.annotations.GraphQLNonNull;
@@ -16,6 +15,7 @@ import io.leangen.graphql.annotations.GraphQLQuery;
 import io.leangen.graphql.spqr.spring.annotations.GraphQLApi;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -35,15 +35,22 @@ public class FixtureResolver {
     private final MyAclService myAclService;
     private final FixtureRepository fixtureRepository;
     private final PropertyRepository propertyRepository;
+    private final SpecificationBuilder<Fixture> specificationBuilder;
 
     public FixtureResolver(AuthenticationFacade authenticationFacade, EntityCreator entityCreator,
                            MyAclService myAclService, FixtureRepository fixtureRepository,
-                           PropertyRepository propertyRepository) {
+                           PropertyRepository propertyRepository, SpecificationBuilder<Fixture> specificationBuilder) {
         this.authenticationFacade = authenticationFacade;
         this.entityCreator = entityCreator;
         this.myAclService = myAclService;
         this.fixtureRepository = fixtureRepository;
         this.propertyRepository = propertyRepository;
+        this.specificationBuilder = specificationBuilder;
+    }
+
+
+    private Sort createSortFromInputs(String sortOrder, String sortField) {
+        return sortOrder.equals("ASC") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
     }
 
     @GraphQLQuery(name = "Fixture", description = "Get fixture by primary id")
@@ -52,12 +59,13 @@ public class FixtureResolver {
     }
 
     @GraphQLQuery(name = "allFixtures", description = "Get fixture records")
-    public List<Fixture> allFixtures(@GraphQLNonNull Integer page, @GraphQLNonNull Integer perPage,
-                                     @GraphQLNonNull String sortField, @GraphQLNonNull String sortOrder,
-                                     @GraphQLNonNull FixtureFilter filter) {
-        // TODO: implement filter
-        Sort sort = sortOrder.equals("ASC") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
-        return fixtureRepository.findAll(PageRequest.of(page, perPage, sort)).getContent();
+    public List<Fixture> allFixtures(Integer page, Integer perPage, String sortField, String sortOrder,
+                                     FixtureFilter filter) {
+
+        Specification<Fixture> spec = specificationBuilder.createSpecFromFilter(filter);
+
+        return fixtureRepository.findAll(spec,
+                PageRequest.of(page, perPage, createSortFromInputs(sortOrder, sortField))).getContent();
     }
 
     @GraphQLQuery(name = "_allFixturesMeta", description = "Get fixture records metadata")

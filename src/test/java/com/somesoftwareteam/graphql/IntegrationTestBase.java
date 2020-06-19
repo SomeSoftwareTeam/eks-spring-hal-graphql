@@ -117,7 +117,7 @@ public class IntegrationTestBase {
 
     public Verification createTestVerificationWithAccessControlListForUser(String username) {
 
-        Verification verification = new Verification("TestEntity", JacksonUtil.toJsonNode(""));
+        Verification verification = new Verification("TestEntity", username, JacksonUtil.toJsonNode(""));
         entityManager.persist(verification);
 
         // Prepare the information we'd like in our access control entry (ACE)

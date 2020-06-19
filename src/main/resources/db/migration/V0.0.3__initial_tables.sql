@@ -1,3 +1,4 @@
+# https://dev.mysql.com/doc/refman/8.0/en/create-table.html
 create table property
 (
     created timestamp not null default current_timestamp,
@@ -7,7 +8,8 @@ create table property
     name varchar(255) not null,
     owner varchar(255) not null,
     attributes json not null,
-    updated timestamp not null default current_timestamp
+    updated timestamp not null default current_timestamp,
+    index property_owner_index (owner)
 );
 
 create table verification
@@ -17,9 +19,11 @@ create table verification
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name varchar(255) not null,
     attributes json not null,
+    owner varchar(255) not null,
     property_id bigint unsigned,
     updated timestamp not null default current_timestamp,
-    FOREIGN KEY (property_id) REFERENCES property(id)
+    FOREIGN KEY (property_id) REFERENCES property(id),
+    index property_owner_index (owner)
 );
 
 create table fixture
@@ -32,5 +36,6 @@ create table fixture
     attributes json not null,
     property_id bigint unsigned,
     updated timestamp not null default current_timestamp,
-    FOREIGN KEY (property_id) REFERENCES property(id)
+    FOREIGN KEY (property_id) REFERENCES property(id),
+    index property_owner_index (owner)
 );

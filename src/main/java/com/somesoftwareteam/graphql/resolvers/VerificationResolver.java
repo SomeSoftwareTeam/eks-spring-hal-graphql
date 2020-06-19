@@ -75,8 +75,9 @@ public class VerificationResolver {
     @GraphQLMutation(name = "createVerification", description = "Create a new verification record")
     public Verification createVerification(@GraphQLId @GraphQLNonNull Long propertyId, @GraphQLNonNull String name,
                                       JsonNode attributes) {
+        String owner = authenticationFacade.getCurrentPrincipalName();
         Property property = propertyRepository.findById(propertyId).orElseThrow(ResourceNotFoundException::new);
-        Verification verification = new Verification(name, attributes, property);
+        Verification verification = new Verification(name, owner, attributes, property);
         entityCreator.persistEntity(verification);
         myAclService.createOrUpdateAccessControlListToIncludeCurrentSecurityIdentity(verification);
         return verification;

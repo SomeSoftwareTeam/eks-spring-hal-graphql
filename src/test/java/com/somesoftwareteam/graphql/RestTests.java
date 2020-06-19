@@ -111,7 +111,7 @@ class RestTests extends IntegrationTestBase {
         WebTestClient webTestClient = WebTestClient.bindToServer().baseUrl("http://localhost:" + port).build();
         String token = getToken();
 
-        Verification verification = new Verification("TestVerification", JacksonUtil.toJsonNode("{}"));
+        Verification verification = new Verification("TestVerification", null, JacksonUtil.toJsonNode("{}"));
         Verification resultFromVerificationPost = webTestClient
                 .post()
                 .uri("/rest/verifications")

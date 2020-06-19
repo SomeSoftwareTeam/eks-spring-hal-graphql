@@ -49,6 +49,7 @@ dependencies {
 	implementation 'org.springframework:spring-context-support'
 	implementation 'org.springframework.security:spring-security-oauth2-resource-server'
 	implementation 'org.springframework.security:spring-security-oauth2-jose'
+	implementation 'org.springframework.security:spring-security-data'
 	implementation 'org.springframework.security:spring-security-config'
 	implementation 'org.springframework.security:spring-security-acl'
 	implementation 'org.springframework.boot:spring-boot-starter-hateoas'

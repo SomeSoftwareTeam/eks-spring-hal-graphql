@@ -48,7 +48,7 @@ public class PropertyResolver {
 
     @GraphQLQuery(name = "allProperties", description = "Get property records")
     public List<Property> allProperties(Integer page, Integer perPage, String sortField, String sortOrder,
-                                        List<PropertyFilter> filters) {
+                                        PropertyFilter filter) {
         // TODO: implement filter
         if (Objects.isNull(page)) page = 0;
         if (Objects.isNull(perPage)) perPage = 10;

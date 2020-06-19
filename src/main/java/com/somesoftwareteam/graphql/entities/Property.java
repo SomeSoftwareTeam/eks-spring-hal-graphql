@@ -24,7 +24,7 @@ public class Property {
     @CreationTimestamp
     private ZonedDateTime created;
 
-    @OneToMany(mappedBy = "property")
+    @OneToMany(mappedBy = "property", fetch = FetchType.EAGER)
     Set<Fixture> fixtures;
 
     @Id
