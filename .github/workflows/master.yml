@@ -25,6 +25,7 @@ jobs:
         run: CLIENT_ID=${{ secrets.CLIENT_ID }} CLIENT_SECRET=${{ secrets.CLIENT_SECRET }} ./gradlew build
 
   migrate:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -36,10 +37,12 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Flyway migration with gradle
-        run: SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }} SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }} SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }} ./gradlew flywayMigrate
+        run: |
+          SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }} SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }} SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }} ./gradlew flywayMigrate
+          SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }} SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }} SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }} ./gradlew flywayInfo
 
   deploy:
-    needs: [test, migrate]
+    needs: migrate
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     steps:
