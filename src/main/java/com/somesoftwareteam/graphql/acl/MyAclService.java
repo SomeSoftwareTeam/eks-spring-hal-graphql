@@ -75,6 +75,7 @@ public class MyAclService extends JdbcMutableAclService {
     public void createOrUpdateAccessControlListToIncludeCurrentSecurityIdentity(Verification verification) {
         ObjectIdentity objectIdentity = new ObjectIdentityImpl(Verification.class, verification.getId());
         String currentPrincipalName = authenticationFacade.getCurrentPrincipalName();
+        createNewSecurityIdentityIfNecessary(currentPrincipalName);
         createOrUpdateAccessControlListToIncludeSecurityIdentity(currentPrincipalName, objectIdentity);
     }
 

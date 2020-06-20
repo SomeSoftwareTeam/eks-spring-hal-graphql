@@ -40,8 +40,8 @@ public class PropertyRepositoryTests extends IntegrationTestBase {
     @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:properties"})
     public void repository_FindsAllForOwner() {
         createTestPropertyWithAccessControlListForUser("google|12345");
-        List<Property> resultFromFindAll = repository.findAll();
-        assertThat(resultFromFindAll.size()).isGreaterThan(0);
+        Page<Property> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
+        assertThat(resultFromFindAll.getContent().size()).isGreaterThan(0);
     }
 
     @Test
@@ -49,8 +49,8 @@ public class PropertyRepositoryTests extends IntegrationTestBase {
     @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:properties"})
     public void repository_FindsNoneForNonOwner() {
         createTestPropertyWithAccessControlListForUser("google|12345");
-        List<Property> resultFromFindAll = repository.findAll();
-        assertThat(resultFromFindAll.size()).isEqualTo(0);
+        Page<Property> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
+        assertThat(resultFromFindAll.getContent().size()).isEqualTo(0);
     }
 
     @Test

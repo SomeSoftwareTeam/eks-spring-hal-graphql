@@ -42,21 +42,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         By default, Spring Security does not validate the "aud" claim of the token, to ensure that this token is
         indeed intended for our app. Adding our own validator is easy to do:
         */
-
         NimbusJwtDecoder jwtDecoder = (NimbusJwtDecoder) JwtDecoders.fromOidcIssuerLocation(issuer);
-
         OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(audience);
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuer);
         OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
-
         jwtDecoder.setJwtValidator(withAudience);
-
         return jwtDecoder;
     }
 
-    // https://docs.spring.io/spring-security/site/docs/4.0.x/reference/htmlsingle/#data
     @Bean
     public SecurityEvaluationContextExtension securityEvaluationContextExtension() {
+        /*
+        https://docs.spring.io/spring-security/site/docs/4.0.x/reference/htmlsingle/#data
+        Spring Security provides Spring Data integration that allows referring to the current user within your queries.
+         */
         return new SecurityEvaluationContextExtension();
     }
 }
