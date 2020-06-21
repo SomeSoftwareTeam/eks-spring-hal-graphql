@@ -14,9 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class EntityCreatorTests extends IntegrationTestBase {
 
-    @Autowired
-    EntityManager entityManger;
-
     @Test
     @WithMockUser("google|12345")
     public void entityCreator_CreatesNewPropertyWithCorrectOwner() {

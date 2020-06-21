@@ -115,6 +115,32 @@ public class IntegrationTestBase {
         return fixture;
     }
 
+    public Fixture createTestFixtureWithAccessControlListForUser(String username, Property property) {
+
+        Fixture fixture = new Fixture("TestEntity", username, JacksonUtil.toJsonNode("{}"), property);
+        entityManager.persist(fixture);
+
+        // Prepare the information we'd like in our access control entry (ACE)
+        ObjectIdentity oi = new ObjectIdentityImpl(Fixture.class, fixture.getId());
+        Sid sid = new PrincipalSid(username);
+
+        // Create or update the relevant ACL
+        MutableAcl acl;
+        try {
+            acl = (MutableAcl) myAclService.readAclById(oi);
+        } catch (NotFoundException nfe) {
+            acl = myAclService.createAcl(oi);
+        }
+
+        // Now grant some permissions via an access control entry (ACE)
+        acl.insertAce(acl.getEntries().size(), BasePermission.READ, sid, true);
+        acl.insertAce(acl.getEntries().size(), BasePermission.WRITE, sid, true);
+        acl.insertAce(acl.getEntries().size(), BasePermission.DELETE, sid, true);
+        myAclService.updateAcl(acl);
+
+        return fixture;
+    }
+
     public Verification createTestVerificationWithAccessControlListForUser(String username) {
 
         Verification verification = new Verification("TestEntity", username, JacksonUtil.toJsonNode(""));

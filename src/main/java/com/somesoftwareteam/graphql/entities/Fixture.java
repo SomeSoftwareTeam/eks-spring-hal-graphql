@@ -3,12 +3,11 @@ package com.somesoftwareteam.graphql.entities;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import io.leangen.graphql.annotations.types.GraphQLType;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.ZonedDateTime;
 
 @Entity
@@ -34,7 +33,7 @@ public class Fixture {
     @UpdateTimestamp
     private ZonedDateTime updated;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "property_id")
     private Property property;
 

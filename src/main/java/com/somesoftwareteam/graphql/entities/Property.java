@@ -10,10 +10,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
-import java.util.Set;
 
 /**
  * https://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#spatial
+ * https://vladmihalcea.com/the-best-way-to-map-a-onetomany-association-with-jpa-and-hibernate/
  */
 @Entity
 @Table(name = "property")
@@ -23,9 +23,6 @@ public class Property {
 
     @CreationTimestamp
     private ZonedDateTime created;
-
-    @OneToMany(mappedBy = "property", fetch = FetchType.EAGER)
-    Set<Fixture> fixtures;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,14 +55,6 @@ public class Property {
 
     public void setCreated(ZonedDateTime created) {
         this.created = created;
-    }
-
-    public Set<Fixture> getFixtures() {
-        return fixtures;
-    }
-
-    public void setFixtures(Set<Fixture> fixtures) {
-        this.fixtures = fixtures;
     }
 
     public Long getId() {

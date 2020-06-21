@@ -31,7 +31,7 @@ public class Verification {
 
     private String owner;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     private Property property;
 
     @UpdateTimestamp
