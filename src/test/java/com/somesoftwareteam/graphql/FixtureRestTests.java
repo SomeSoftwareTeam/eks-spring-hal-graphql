@@ -1,8 +1,6 @@
 package com.somesoftwareteam.graphql;
 
 import com.somesoftwareteam.graphql.entities.Fixture;
-import com.somesoftwareteam.graphql.entities.Property;
-import com.somesoftwareteam.graphql.entities.Verification;
 import com.vladmihalcea.hibernate.type.json.internal.JacksonUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;

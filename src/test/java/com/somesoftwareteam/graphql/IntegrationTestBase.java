@@ -23,7 +23,6 @@ import org.springframework.security.acls.model.MutableAcl;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.security.acls.model.ObjectIdentity;
 import org.springframework.security.acls.model.Sid;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.testcontainers.containers.MySQLContainer;
 
 import javax.persistence.EntityManager;
@@ -37,7 +36,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  * https://www.baeldung.com/spring-boot-testcontainers-integration-test
  * https://github.com/eugenp/tutorials/blob/master/spring-security-modules/spring-security-acl/src/test/java/com/baeldung/acl/SpringACLIntegrationTest.java
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class IntegrationTestBase {
 
@@ -67,6 +65,7 @@ public class IntegrationTestBase {
         Point location = geometryFactory.createPoint(new Coordinate(0, 0, 0));
         Property property = new Property("some property", username, JacksonUtil.toJsonNode("{}"));
         entityManager.persist(property);
+        myAclService.createNewSecurityIdentityIfNecessary(username);
 
         // Prepare the information we'd like in our access control entry (ACE)
         ObjectIdentity oi = new ObjectIdentityImpl(Property.class, property.getId());
@@ -97,6 +96,7 @@ public class IntegrationTestBase {
         // Prepare the information we'd like in our access control entry (ACE)
         ObjectIdentity oi = new ObjectIdentityImpl(Fixture.class, fixture.getId());
         Sid sid = new PrincipalSid(username);
+        myAclService.createNewSecurityIdentityIfNecessary(username);
 
         // Create or update the relevant ACL
         MutableAcl acl;
@@ -123,6 +123,7 @@ public class IntegrationTestBase {
         // Prepare the information we'd like in our access control entry (ACE)
         ObjectIdentity oi = new ObjectIdentityImpl(Fixture.class, fixture.getId());
         Sid sid = new PrincipalSid(username);
+        myAclService.createNewSecurityIdentityIfNecessary(username);
 
         // Create or update the relevant ACL
         MutableAcl acl;
@@ -149,6 +150,7 @@ public class IntegrationTestBase {
         // Prepare the information we'd like in our access control entry (ACE)
         ObjectIdentity oi = new ObjectIdentityImpl(Verification.class, verification.getId());
         Sid sid = new PrincipalSid(username);
+        myAclService.createNewSecurityIdentityIfNecessary(username);
 
         // Create or update the relevant ACL
         MutableAcl acl;

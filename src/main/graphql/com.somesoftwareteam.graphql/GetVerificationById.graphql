@@ -1,7 +1,0 @@
-query GetOwner($id: Long!) {
-    getVerification(id: $id) {
-        id
-        properties
-        created
-    }
-}

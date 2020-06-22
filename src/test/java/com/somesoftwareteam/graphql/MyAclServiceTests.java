@@ -13,6 +13,5 @@ public class MyAclServiceTests extends IntegrationTestBase {
         myAclService.createNewSecurityIdentityIfNecessary("google|12345");
         List<String> securityIdentities = myAclService.getAllSecurityIdentities();
         assertThat(securityIdentities.contains("google|12345"));
-        System.out.println("here");
     }
 }

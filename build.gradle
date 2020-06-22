@@ -5,7 +5,6 @@ buildscript {
 	}
 	dependencies {
 		classpath 'mysql:mysql-connector-java'
-		classpath("com.apollographql.apollo:apollo-gradle-plugin:2.0.3")
 	}
 }
 
@@ -20,8 +19,6 @@ group = 'com.somesoftwareteam'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '14'
 
-apply plugin: 'com.apollographql.apollo'
-
 repositories {
 	jcenter()
 	mavenCentral()
@@ -30,10 +27,8 @@ repositories {
 
 dependencies {
 	// graphql
-	implementation("com.apollographql.apollo:apollo-runtime:2.0.3")
+	// TODO: remove graphql-spring-boot-starter whenever graphql-spqr-spring-boot-starter is updated
 	implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:6.0.1'
-	implementation 'com.graphql-java-kickstart:graphql-java-tools:6.1.0'
-	implementation 'io.leangen.graphql:spqr:0.10.1'
 	implementation 'io.leangen.graphql:graphql-spqr-spring-boot-starter:0.0.4'
 	implementation 'com.graphql-java:graphql-java-extended-scalars:1.0'
 	// hibernate
@@ -69,6 +64,7 @@ dependencies {
 	testCompile "org.testcontainers:junit-jupiter:1.14.3"
 	testCompile "org.testcontainers:mysql:1.14.3"
 	// test
+	testImplementation 'com.graphql-java-kickstart:graphql-spring-boot-starter-test:6.0.1'
 	testImplementation 'io.projectreactor:reactor-test'
 	implementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
@@ -84,8 +80,4 @@ flyway {
 	url = "$System.env.SPRING_DATASOURCE_URL"
 	user = "$System.env.SPRING_DATASOURCE_USERNAME"
 	password = "$System.env.SPRING_DATASOURCE_PASSWORD"
-}
-
-apollo {
-	generateKotlinModels.set(false) // false for Java models
 }

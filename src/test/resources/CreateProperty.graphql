@@ -1,0 +1,7 @@
+mutation CreatePropery($name: String!, $attributes: Json!) {
+    createProperty(name: $name, attributes: $attributes) {
+        id
+        attributes
+        created
+    }
+}

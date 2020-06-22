@@ -1,10 +1,10 @@
 package com.somesoftwareteam.graphql.assemblers;
 
 import com.somesoftwareteam.graphql.entities.Fixture;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.rest.webmvc.support.RepositoryEntityLinks;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 
@@ -17,9 +17,9 @@ public class FixtureModelAssembler implements RepresentationModelAssembler<Fixtu
         this.repositoryEntityLinks = repositoryEntityLinks;
     }
 
-    @NotNull
+    @NonNull
     @Override
-    public EntityModel<Fixture> toModel(@NotNull Fixture fixture) {
+    public EntityModel<Fixture> toModel(@NonNull Fixture fixture) {
         return EntityModel.of(fixture,
                 repositoryEntityLinks.linkToItemResource(Fixture.class, fixture.getId()).withSelfRel(),
                 repositoryEntityLinks.linkToCollectionResource(Fixture.class).withRel("fixtures"));

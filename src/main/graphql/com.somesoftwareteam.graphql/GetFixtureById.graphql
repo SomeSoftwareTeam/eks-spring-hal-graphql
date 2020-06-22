@@ -1,7 +1,0 @@
-query GetFixture($id: Long!) {
-    getFixture(id: $id) {
-        id
-        properties
-        created
-    }
-}

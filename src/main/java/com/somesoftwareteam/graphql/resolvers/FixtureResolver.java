@@ -8,14 +8,17 @@ import com.somesoftwareteam.graphql.repositories.EntityCreator;
 import com.somesoftwareteam.graphql.repositories.FixtureRepository;
 import com.somesoftwareteam.graphql.repositories.PropertyRepository;
 import com.somesoftwareteam.graphql.security.AuthenticationFacade;
+import com.somesoftwareteam.graphql.specification.SpecificationBuilder;
 import io.leangen.graphql.annotations.GraphQLId;
 import io.leangen.graphql.annotations.GraphQLMutation;
 import io.leangen.graphql.annotations.GraphQLNonNull;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import io.leangen.graphql.spqr.spring.annotations.GraphQLApi;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -48,7 +51,6 @@ public class FixtureResolver {
         this.specificationBuilder = specificationBuilder;
     }
 
-
     private Sort createSortFromInputs(String sortOrder, String sortField) {
         return sortOrder.equals("ASC") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
     }
@@ -63,15 +65,16 @@ public class FixtureResolver {
                                      FixtureFilter filter) {
 
         Specification<Fixture> spec = specificationBuilder.createSpecFromFilter(filter);
-
-        return fixtureRepository.findAll(spec,
-                PageRequest.of(page, perPage, createSortFromInputs(sortOrder, sortField))).getContent();
+        Sort sort = createSortFromInputs(sortOrder, sortField);
+        PageRequest pageRequest = PageRequest.of(page, perPage, sort);
+        return fixtureRepository.findAll(spec, pageRequest).getContent();
     }
 
     @GraphQLQuery(name = "_allFixturesMeta", description = "Get fixture records metadata")
-    public ListMetadata allFixturesMeta(@GraphQLNonNull Integer page, @GraphQLNonNull Integer perPage,
-                                        @GraphQLNonNull FixtureFilter filter) {
-        Long count = fixtureRepository.findAll(PageRequest.of(page, perPage)).getTotalElements();
+    public ListMetadata allFixturesMeta(Integer page, Integer perPage, FixtureFilter filter) {
+        Specification<Fixture> spec = specificationBuilder.createSpecFromFilter(filter);
+        PageRequest pageRequest = PageRequest.of(page, perPage);
+        Long count = fixtureRepository.findAll(spec, pageRequest).getTotalElements();
         return new ListMetadata(count);
     }
 
