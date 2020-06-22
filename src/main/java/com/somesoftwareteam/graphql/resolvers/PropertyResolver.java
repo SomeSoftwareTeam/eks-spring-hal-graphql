@@ -70,6 +70,7 @@ public class PropertyResolver {
         return new ListMetadata(count);
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_write:properties')")
     @GraphQLMutation(name = "createProperty", description = "Create a new property record")
     public Property createProperty(@GraphQLNonNull String name, JsonNode attributes) {
         String owner = authenticationFacade.getCurrentPrincipalName();
@@ -79,6 +80,7 @@ public class PropertyResolver {
         return newProperty;
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_write:properties')")
     @GraphQLMutation(name = "updateProperty", description = "Update a property record")
     public Property updateProperty(@GraphQLId @GraphQLNonNull Long id, String name, JsonNode attributes) {
         Property property = propertyRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
@@ -88,6 +90,7 @@ public class PropertyResolver {
         return property;
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_write:properties')")
     @GraphQLMutation(name = "deleteProperty", description = "Delete a property record")
     public Property deleteProperty(@GraphQLId @GraphQLNonNull Long id) {
         Property property = propertyRepository.findById(id).orElseThrow(ResourceNotFoundException::new);

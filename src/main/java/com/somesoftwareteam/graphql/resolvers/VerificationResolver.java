@@ -73,6 +73,7 @@ public class VerificationResolver {
         return new ListMetadata(count);
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_write:verifications')")
     @GraphQLMutation(name = "createVerification", description = "Create a new verification record")
     public Verification createVerification(@GraphQLId @GraphQLNonNull Long propertyId, @GraphQLNonNull String name,
                                            JsonNode attributes) {
@@ -84,6 +85,7 @@ public class VerificationResolver {
         return verification;
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_write:verifications')")
     @GraphQLMutation(name = "updateVerification", description = "Update a verification record")
     public Verification updateVerification(@GraphQLId @GraphQLNonNull Long id, String name, JsonNode attributes) {
         Verification verification = verificationRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
@@ -93,6 +95,7 @@ public class VerificationResolver {
         return verification;
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_write:verifications')")
     @GraphQLMutation(name = "deleteVerification", description = "Delete a verification record")
     public Verification deleteVerification(@GraphQLId @GraphQLNonNull Long id) {
         Verification verification = verificationRepository.findById(id).orElseThrow(ResourceNotFoundException::new);

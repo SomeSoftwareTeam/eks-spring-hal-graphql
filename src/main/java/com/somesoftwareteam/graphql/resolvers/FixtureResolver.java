@@ -75,6 +75,7 @@ public class FixtureResolver {
         return new ListMetadata(count);
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_write:fixtures')")
     @GraphQLMutation(name = "createFixture", description = "Create a new fixture record")
     public Fixture createFixture(@GraphQLId @GraphQLNonNull Long propertyId, @GraphQLNonNull String name,
                                  JsonNode attributes) {
@@ -86,6 +87,7 @@ public class FixtureResolver {
         return fixture;
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_write:fixtures')")
     @GraphQLMutation(name = "updateFixture", description = "Update a fixture record")
     public Fixture updateFixture(@GraphQLId @GraphQLNonNull Long id, String name, JsonNode attributes) {
         Fixture fixture = fixtureRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
@@ -95,6 +97,7 @@ public class FixtureResolver {
         return fixture;
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_write:fixtures')")
     @GraphQLMutation(name = "deleteFixture", description = "Delete a fixture record")
     public Fixture deleteFixture(@GraphQLId @GraphQLNonNull Long id) {
         Fixture fixture = fixtureRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
