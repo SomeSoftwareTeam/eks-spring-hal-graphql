@@ -24,6 +24,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 
+import static com.somesoftwareteam.graphql.resolvers.ResolverUtils.createPageRequest;
+import static com.somesoftwareteam.graphql.resolvers.ResolverUtils.createSort;
+
 @Service
 @GraphQLApi
 @PreAuthorize("hasAuthority('SCOPE_read:verifications')")
@@ -48,10 +51,6 @@ public class VerificationResolver {
         this.verificationRepository = verificationRepository;
     }
 
-    private Sort createSortFromInputs(String sortOrder, String sortField) {
-        return sortOrder.equals("ASC") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
-    }
-
     @GraphQLQuery(name = "Verification", description = "Get verification by primary id")
     public Verification verification(@GraphQLId @GraphQLNonNull Long id) {
         return verificationRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
@@ -61,17 +60,16 @@ public class VerificationResolver {
     public List<Verification> allVerifications(Integer page, Integer perPage, String sortField, String sortOrder,
                                                VerificationFilter filter) {
         Specification<Verification> spec = specificationBuilder.createSpecFromFilter(filter);
-        Sort sort = createSortFromInputs(sortOrder, sortField);
-        PageRequest pageRequest = PageRequest.of(page, perPage, sort);
+        Sort sort = createSort(sortOrder, sortField);
+        PageRequest pageRequest = createPageRequest(page, perPage, sort);
         return verificationRepository.findAll(spec, pageRequest).getContent();
     }
 
     @GraphQLQuery(name = "_allVerificationsMeta", description = "Get verification records metadata")
     public ListMetadata allVerificationsMeta(Integer page, Integer perPage, VerificationFilter filter) {
-        // TODO: implement filter
-        if (Objects.isNull(page)) page = 0;
-        if (Objects.isNull(perPage)) perPage = 10;
-        Long count = verificationRepository.findAll(PageRequest.of(page, perPage)).getTotalElements();
+        Specification<Verification> spec = specificationBuilder.createSpecFromFilter(filter);
+        PageRequest pageRequest = createPageRequest(page, perPage);
+        Long count = verificationRepository.findAll(spec, pageRequest).getTotalElements();
         return new ListMetadata(count);
     }
 

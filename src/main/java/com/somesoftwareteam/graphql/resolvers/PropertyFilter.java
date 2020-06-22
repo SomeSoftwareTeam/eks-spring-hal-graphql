@@ -4,23 +4,23 @@ import java.util.List;
 
 public class PropertyFilter {
 
+    private List<Long> ids;
     private String q;
-    private Long id;
+
+    public PropertyFilter(List<Long> ids, String q) {
+        this.ids = ids;
+        this.q = q;
+    }
 
     public PropertyFilter() {
     }
 
-    public PropertyFilter(String q, Long id) {
-        this.q = q;
-        this.id = id;
+    public List<Long> getIds() {
+        return ids;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public void setIds(List<Long> ids) {
+        this.ids = ids;
     }
 
     public String getQ() {

@@ -25,6 +25,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.somesoftwareteam.graphql.resolvers.ResolverUtils.createPageRequest;
+import static com.somesoftwareteam.graphql.resolvers.ResolverUtils.createSort;
+
 /**
  * https://github.com/marmelab/react-admin/tree/master/packages/ra-data-graphql-simple
  */
@@ -51,10 +54,6 @@ public class FixtureResolver {
         this.specificationBuilder = specificationBuilder;
     }
 
-    private Sort createSortFromInputs(String sortOrder, String sortField) {
-        return sortOrder.equals("ASC") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
-    }
-
     @GraphQLQuery(name = "Fixture", description = "Get fixture by primary id")
     public Fixture fixture(@GraphQLId @GraphQLNonNull Long id) {
         return fixtureRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
@@ -65,15 +64,15 @@ public class FixtureResolver {
                                      FixtureFilter filter) {
 
         Specification<Fixture> spec = specificationBuilder.createSpecFromFilter(filter);
-        Sort sort = createSortFromInputs(sortOrder, sortField);
-        PageRequest pageRequest = PageRequest.of(page, perPage, sort);
+        Sort sort = createSort(sortOrder, sortField);
+        PageRequest pageRequest = createPageRequest(page, perPage, sort);
         return fixtureRepository.findAll(spec, pageRequest).getContent();
     }
 
     @GraphQLQuery(name = "_allFixturesMeta", description = "Get fixture records metadata")
     public ListMetadata allFixturesMeta(Integer page, Integer perPage, FixtureFilter filter) {
         Specification<Fixture> spec = specificationBuilder.createSpecFromFilter(filter);
-        PageRequest pageRequest = PageRequest.of(page, perPage);
+        PageRequest pageRequest = createPageRequest(page, perPage);
         Long count = fixtureRepository.findAll(spec, pageRequest).getTotalElements();
         return new ListMetadata(count);
     }

@@ -1,23 +1,26 @@
 package com.somesoftwareteam.graphql.resolvers;
 
+import java.util.List;
+
 public class FixtureFilter {
 
-    private Long id;
+    private List<Long> ids;
     private String q;
+
+    public FixtureFilter(List<Long> ids, String q) {
+        this.ids = ids;
+        this.q = q;
+    }
 
     public FixtureFilter() {
     }
 
-    public FixtureFilter(String q) {
-        this.q = q;
+    public List<Long> getIds() {
+        return ids;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public void setIds(List<Long> ids) {
+        this.ids = ids;
     }
 
     public String getQ() {

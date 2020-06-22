@@ -21,6 +21,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.somesoftwareteam.graphql.resolvers.ResolverUtils.createPageRequest;
+import static com.somesoftwareteam.graphql.resolvers.ResolverUtils.createSort;
+
 /**
  * https://github.com/marmelab/react-admin/tree/master/packages/ra-data-graphql-simple
  */
@@ -45,10 +48,6 @@ public class PropertyResolver {
         this.propertyRepository = repository;
     }
 
-    private Sort createSortFromInputs(String sortOrder, String sortField) {
-        return sortOrder.equals("ASC") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
-    }
-
     @GraphQLQuery(name = "Property", description = "Get property by primary id")
     public Property property(@GraphQLId @GraphQLNonNull Long id) {
         return propertyRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
@@ -58,15 +57,15 @@ public class PropertyResolver {
     public List<Property> allProperties(Integer page, Integer perPage, String sortField, String sortOrder,
                                         PropertyFilter filter) {
         Specification<Property> spec = specificationBuilder.createSpecFromFilter(filter);
-        Sort sort = createSortFromInputs(sortOrder, sortField);
-        PageRequest pageRequest = PageRequest.of(page, perPage, sort);
+        Sort sort = createSort(sortOrder, sortField);
+        PageRequest pageRequest = createPageRequest(page, perPage, sort);
         return propertyRepository.findAll(spec, pageRequest).getContent();
     }
 
     @GraphQLQuery(name = "_allPropertiesMeta", description = "Get property records metadata")
     public ListMetadata allPropertiesMeta(Integer page, Integer perPage, PropertyFilter filter) {
         Specification<Property> spec = specificationBuilder.createSpecFromFilter(filter);
-        PageRequest pageRequest = PageRequest.of(page, perPage);
+        PageRequest pageRequest = createPageRequest(page, perPage);
         Long count = propertyRepository.findAll(spec, pageRequest).getTotalElements();
         return new ListMetadata(count);
     }
