@@ -1,8 +1,10 @@
 package com.somesoftwareteam.graphql.repositories;
 
+import com.somesoftwareteam.graphql.entities.Property;
 import com.somesoftwareteam.graphql.entities.Verification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -27,6 +29,10 @@ public interface VerificationRepository extends JpaRepository<Verification, Long
     @NonNull
     @Query("select p from Verification p where p.owner = ?#{ authentication.name }")
     Page<Verification> findAll(@NonNull Pageable pageable);
+
+    @NonNull
+    @Query("select p from Property p where p.owner = ?#{ authentication.name }")
+    Page<Verification> findAll(Specification<Verification> specification, @NonNull Pageable pageable);
 
     @NonNull
     @PostAuthorize("hasPermission(returnObject.get(), 'READ')")

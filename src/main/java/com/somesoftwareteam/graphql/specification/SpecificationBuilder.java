@@ -16,6 +16,8 @@ public class SpecificationBuilder<T> {
 
         Specification<T> spec = exists();
 
+        if (Objects.isNull(filter)) return spec;
+
         if (!Objects.isNull(filter.getQ())) {
             spec = spec.and(nameContains(filter.getQ()));
         }
@@ -31,6 +33,8 @@ public class SpecificationBuilder<T> {
 
         Specification<T> spec = exists();
 
+        if (Objects.isNull(filter)) return spec;
+
         if (!Objects.isNull(filter.getQ())) {
             spec = spec.and(nameContains(filter.getQ()));
         }
@@ -45,6 +49,8 @@ public class SpecificationBuilder<T> {
     public Specification<T> createSpecFromFilter(VerificationFilter filter) {
 
         Specification<T> spec = exists();
+
+        if (Objects.isNull(filter)) return spec;
 
         if (!Objects.isNull(filter.getQ())) {
             spec = spec.and(nameContains(filter.getQ()));

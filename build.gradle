@@ -28,7 +28,7 @@ repositories {
 dependencies {
 	// graphql
 	// TODO: remove graphql-spring-boot-starter whenever graphql-spqr-spring-boot-starter is updated
-	implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:6.0.1'
+	implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:5.7.1'
 	implementation 'io.leangen.graphql:graphql-spqr-spring-boot-starter:0.0.4'
 	implementation 'com.graphql-java:graphql-java-extended-scalars:1.0'
 	// hibernate
@@ -64,7 +64,7 @@ dependencies {
 	testCompile "org.testcontainers:junit-jupiter:1.14.3"
 	testCompile "org.testcontainers:mysql:1.14.3"
 	// test
-	testImplementation 'com.graphql-java-kickstart:graphql-spring-boot-starter-test:6.0.1'
+	testImplementation 'com.graphql-java-kickstart:graphql-spring-boot-starter-test:5.7.1'
 	testImplementation 'io.projectreactor:reactor-test'
 	implementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
