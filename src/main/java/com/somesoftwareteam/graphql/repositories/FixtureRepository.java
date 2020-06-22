@@ -1,7 +1,6 @@
 package com.somesoftwareteam.graphql.repositories;
 
 import com.somesoftwareteam.graphql.entities.Fixture;
-import com.somesoftwareteam.graphql.entities.Property;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -26,11 +25,11 @@ import java.util.Optional;
 public interface FixtureRepository extends JpaRepository<Fixture, Long>, JpaSpecificationExecutor<Fixture> {
 
     @NonNull
-    @Query("select p from Fixture p where p.owner = ?#{ authentication.name }")
+    @Query("select f from Fixture f where f.owner = ?#{ authentication.name }")
     Page<Fixture> findAll(@NonNull Pageable pageable);
 
     @NonNull
-    @Query("select p from Property p where p.owner = ?#{ authentication.name }")
+    @Query("select f from Fixture f where f.owner = ?#{ authentication.name }")
     Page<Fixture> findAll(Specification<Fixture> specification, @NonNull Pageable pageable);
 
     @NonNull

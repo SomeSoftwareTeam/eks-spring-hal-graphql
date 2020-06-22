@@ -15,15 +15,14 @@ import io.leangen.graphql.annotations.GraphQLNonNull;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import io.leangen.graphql.spqr.spring.annotations.GraphQLApi;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.somesoftwareteam.graphql.resolvers.ResolverUtils.createPageRequest;
 import static com.somesoftwareteam.graphql.resolvers.ResolverUtils.createSort;
@@ -62,7 +61,6 @@ public class FixtureResolver {
     @GraphQLQuery(name = "allFixtures", description = "Get fixture records")
     public List<Fixture> allFixtures(Integer page, Integer perPage, String sortField, String sortOrder,
                                      FixtureFilter filter) {
-
         Specification<Fixture> spec = specificationBuilder.createSpecFromFilter(filter);
         Sort sort = createSort(sortOrder, sortField);
         PageRequest pageRequest = createPageRequest(page, perPage, sort);

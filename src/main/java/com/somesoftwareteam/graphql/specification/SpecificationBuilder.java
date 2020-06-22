@@ -14,7 +14,7 @@ public class SpecificationBuilder<T> {
 
     public Specification<T> createSpecFromFilter(FixtureFilter filter) {
 
-        Specification<T> spec = exists();
+        Specification<T> spec = emptyConjunction();
 
         if (Objects.isNull(filter)) return spec;
 
@@ -31,7 +31,7 @@ public class SpecificationBuilder<T> {
 
     public Specification<T> createSpecFromFilter(PropertyFilter filter) {
 
-        Specification<T> spec = exists();
+        Specification<T> spec = emptyConjunction();
 
         if (Objects.isNull(filter)) return spec;
 
@@ -48,7 +48,7 @@ public class SpecificationBuilder<T> {
 
     public Specification<T> createSpecFromFilter(VerificationFilter filter) {
 
-        Specification<T> spec = exists();
+        Specification<T> spec = emptyConjunction();
 
         if (Objects.isNull(filter)) return spec;
 
@@ -63,7 +63,7 @@ public class SpecificationBuilder<T> {
         return spec;
     }
 
-    private Specification<T> exists() {
+    private Specification<T> emptyConjunction() {
         return (root, query, cb) -> cb.conjunction();
     }
 
