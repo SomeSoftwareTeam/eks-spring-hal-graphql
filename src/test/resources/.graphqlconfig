@@ -7,7 +7,7 @@
         "url": "http://localhost:8080/graphql",
         "headers": {
           "user-agent": "JS GraphQL",
-          "Authorization": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Il9mUWFVb2tLaTFpTXNOd3ItQjhiZSJ9.eyJpc3MiOiJodHRwczovL3NvbWVzb2Z0d2FyZXRlYW0uYXV0aDAuY29tLyIsInN1YiI6IlFZVktqY29qTTF3M1F2Y05yaEY2YUVBMGtlbmRJem5SQGNsaWVudHMiLCJhdWQiOiJodHRwczovL2FwaS5zb21lc29mdHdhcmV0ZWFtLmNvbSIsImlhdCI6MTU5MjgzNjIxNywiZXhwIjoxNTkyOTIyNjE3LCJhenAiOiJRWVZLamNvak0xdzNRdmNOcmhGNmFFQTBrZW5kSXpuUiIsInNjb3BlIjoicmVhZDpmaXh0dXJlcyB3cml0ZTpmaXh0dXJlcyByZWFkOnZlcmlmaWNhdGlvbnMgd3JpdGU6dmVyaWZpY2F0aW9ucyByZWFkOnByb3BlcnRpZXMgd3JpdGU6cHJvcGVydGllcyIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.Ukbcd6qWYtNvYSw00n3kRecK5nLK60VRUUbOVY_H8ubhbroTg9COE2EaMx0j7BgEKziPWAEt3ncJez6AIHk5pbxrtpBqhnd5it7orKt5PctL3qvKmIeAF9tUV_v1kpE6EN3C6HKQ3SvP-TFodYvg4fIKjiRRX2gPJnVl7RDGO9STa4oMCNW8tFqlwh705XusI_aWEhKRk67W8w_F-3kJgTLdVJVFggOtxdWqnuxgu89pLoyOoQcuXLJ2b4yu7iM5JEmXiH6Oo5gP_x8XrNUpe5G3QYtYJK3TGq-mReEBGvgE5Jkrj2ZPeTwXZbNnyjJCRp8Db_6_uQvntJDhXbCO2A"
+          "Authorization": "Bearer your_token"
         },
         "introspect": true
       }
