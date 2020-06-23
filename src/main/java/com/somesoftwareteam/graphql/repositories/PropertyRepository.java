@@ -1,15 +1,14 @@
 package com.somesoftwareteam.graphql.repositories;
 
-import com.somesoftwareteam.graphql.entities.Fixture;
 import com.somesoftwareteam.graphql.entities.Property;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.lang.NonNull;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,6 +30,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long>, JpaSp
     Page<Property> findAll(@NonNull Pageable pageable);
 
     @NonNull
+    @RestResource(exported = false)
     @Query("select p from Property p where p.owner = ?#{ authentication.name }")
     Page<Property> findAll(Specification<Property> specification, @NonNull Pageable pageable);
 

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.lang.NonNull;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,6 +30,7 @@ public interface FixtureRepository extends JpaRepository<Fixture, Long>, JpaSpec
     Page<Fixture> findAll(@NonNull Pageable pageable);
 
     @NonNull
+    @RestResource(exported = false)
     @Query("select f from Fixture f where f.owner = ?#{ authentication.name }")
     Page<Fixture> findAll(Specification<Fixture> specification, @NonNull Pageable pageable);
 

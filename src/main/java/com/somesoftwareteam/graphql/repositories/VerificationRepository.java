@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.lang.NonNull;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,12 +25,12 @@ import java.util.Optional;
 @PreAuthorize("hasAuthority('SCOPE_read:verifications')")
 public interface VerificationRepository extends JpaRepository<Verification, Long>, JpaSpecificationExecutor<Verification> {
 
-    // https://docs.spring.io/spring-security/site/docs/4.0.x/reference/htmlsingle/#data
     @NonNull
     @Query("select v from Verification v where v.owner = ?#{ authentication.name }")
     Page<Verification> findAll(@NonNull Pageable pageable);
 
     @NonNull
+    @RestResource(exported = false)
     @Query("select v from Verification v where v.owner = ?#{ authentication.name }")
     Page<Verification> findAll(Specification<Verification> specification, @NonNull Pageable pageable);
 
