@@ -1,6 +1,6 @@
 {
-  "name": "Untitled GraphQL Schema",
-  "schemaPath": "schema.json",
+  "name": "Club Abode GraphQL Schema",
+  "schemaPath": "./schema.graphql",
   "extensions": {
     "endpoints": {
       "Default GraphQL Endpoint": {

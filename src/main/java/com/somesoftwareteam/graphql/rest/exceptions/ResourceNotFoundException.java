@@ -1,0 +1,8 @@
+package com.somesoftwareteam.graphql.rest.exceptions;
+
+public class ResourceNotFoundException extends RuntimeException {
+
+    public ResourceNotFoundException(Long id) {
+        super("Could not find resource " + id);
+    }
+}

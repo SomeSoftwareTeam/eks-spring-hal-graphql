@@ -1,4 +1,4 @@
 insert into acl_class (class)
-values ('com.somesoftwareteam.graphql.entities.Fixture'),
-       ('com.somesoftwareteam.graphql.entities.Property'),
-       ('com.somesoftwareteam.graphql.entities.Verification')
+values ('com.somesoftwareteam.graphql.datasources.mysql.entities.Fixture'),
+       ('com.somesoftwareteam.graphql.datasources.mysql.entities.Property'),
+       ('com.somesoftwareteam.graphql.datasources.mysql.entities.Verification')

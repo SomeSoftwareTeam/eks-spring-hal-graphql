@@ -1,0 +1,114 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+"Physical items belonging to an owner"
+type Fixture {
+    attributes: Json
+    created: ZonedDateTime
+    id: Long
+    name: String
+    owner: String
+    property: Property
+    updated: ZonedDateTime
+}
+
+type ListMetadata {
+    count: Long
+}
+
+"Mutation root"
+type Mutation {
+    "Create a new fixture record"
+    createFixture(attributes: Json, name: String!, propertyId: ID!): Fixture
+    "Create a new property record"
+    createProperty(attributes: Json, name: String!): Property
+    "Create a new verification record"
+    createVerification(attributes: Json, name: String!, propertyId: ID!): Verification
+    "Delete a fixture record"
+    deleteFixture(id: ID!): Fixture
+    "Delete a property record"
+    deleteProperty(id: ID!): Property
+    "Delete a verification record"
+    deleteVerification(id: ID!): Verification
+    "Update a fixture record"
+    updateFixture(attributes: Json, id: ID!, name: String): Fixture
+    "Update a property record"
+    updateProperty(attributes: Json, id: ID!, name: String): Property
+    "Update a verification record"
+    updateVerification(attributes: Json, id: ID!, name: String): Verification
+}
+
+"Land and/or structure at a location belonging to an owner"
+type Property {
+    attributes: Json
+    created: ZonedDateTime
+    id: Long
+    name: String
+    owner: String
+    updated: ZonedDateTime
+}
+
+"Query root"
+type Query {
+    "Get fixture by primary id"
+    Fixture(id: ID!): Fixture
+    "Get property by primary id"
+    Property(id: ID!): Property
+    "Get verification by primary id"
+    Verification(id: ID!): Verification
+    "Get fixture records metadata"
+    _allFixturesMeta(filter: FixtureFilterInput, page: Int, perPage: Int): ListMetadata
+    "Get property records metadata"
+    _allPropertiesMeta(filter: PropertyFilterInput, page: Int, perPage: Int): ListMetadata
+    "Get verification records metadata"
+    _allVerificationsMeta(filter: VerificationFilterInput, page: Int, perPage: Int): ListMetadata
+    "Get fixture records"
+    allFixtures(filter: FixtureFilterInput, page: Int, perPage: Int, sortField: String, sortOrder: String): [Fixture]
+    "Get property records"
+    allProperties(filter: PropertyFilterInput, page: Int, perPage: Int, sortField: String, sortOrder: String): [Property]
+    "Get verification records"
+    allVerifications(filter: VerificationFilterInput, page: Int, perPage: Int, sortField: String, sortOrder: String): [Verification]
+}
+
+"Verification of property or fixture ownership"
+type Verification {
+    attributes: Json
+    created: ZonedDateTime
+    id: Long
+    name: String
+    owner: String
+    property: Property
+    updated: ZonedDateTime
+}
+
+input FixtureFilterInput {
+    ids: [Long]
+    q: String
+}
+
+input PropertyFilterInput {
+    ids: [Long]
+    q: String
+}
+
+input VerificationFilterInput {
+    ids: [Long]
+    q: String
+}
+
+
+"Built-in scalar representing a date-time with a time-zone"
+scalar ZonedDateTime
+
+"Any JSON value"
+scalar Json
+
+"Unrepresentable type"
+scalar UNREPRESENTABLE
+
+"Long type"
+scalar Long

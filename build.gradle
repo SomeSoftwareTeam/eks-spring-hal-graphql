@@ -55,6 +55,7 @@ dependencies {
 	runtimeOnly 'mysql:mysql-connector-java'
 	// auth
 	implementation "com.auth0:java-jwt:3.4.0"
+	implementation "com.auth0:auth0:1.19.0"
 	// test containers https://www.testcontainers.org/quickstart/junit_5_quickstart/
 	def junitJupiterVersion = '5.4.2'
 	testCompile "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion"
