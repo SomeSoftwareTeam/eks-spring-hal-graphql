@@ -5,8 +5,8 @@ import com.somesoftwareteam.graphql.datasources.mysql.acl.MyAclService;
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Property;
 import com.somesoftwareteam.graphql.datasources.mysql.repositories.EntityCreator;
 import com.somesoftwareteam.graphql.datasources.mysql.repositories.PropertyRepository;
-import com.somesoftwareteam.graphql.security.AuthenticationFacade;
 import com.somesoftwareteam.graphql.datasources.mysql.specification.SpecificationBuilder;
+import com.somesoftwareteam.graphql.security.AuthenticationFacade;
 import io.leangen.graphql.annotations.GraphQLId;
 import io.leangen.graphql.annotations.GraphQLMutation;
 import io.leangen.graphql.annotations.GraphQLNonNull;
@@ -75,8 +75,8 @@ public class PropertyResolver {
     public Property createProperty(@GraphQLNonNull String name, JsonNode attributes) {
         String owner = authenticationFacade.getCurrentPrincipalName();
         Property property = new Property(name, owner, attributes);
-        Property newProperty = entityCreator.persistEntity(property);
-        myAclService.createOrUpdateAccessControlListToIncludeCurrentSecurityIdentity(newProperty);
+        Property newProperty = entityCreator.setOwnerAndPersistEntity(property);
+        myAclService.createAccessControlList(Property.class, newProperty.getId());
         return newProperty;
     }
 

@@ -3,18 +3,19 @@ package com.somesoftwareteam.graphql.datasources.mysql.entities;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import io.leangen.graphql.annotations.types.GraphQLType;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "fixture")
+@Table(name = "document")
 @TypeDef(name = "json-string", typeClass = JsonStringType.class)
-@GraphQLType(description = "Physical items belonging to an owner")
-public class Fixture {
+@GraphQLType(description = "Media or text document belonging to a property")
+public class Document {
 
     @Type(type = "json-string")
     private JsonNode attributes;
@@ -26,8 +27,6 @@ public class Fixture {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-
     private String owner;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -37,20 +36,30 @@ public class Fixture {
     @UpdateTimestamp
     private ZonedDateTime updated;
 
-    public Fixture() {
+    String url;
+
+    public Document() {
     }
 
-    public Fixture(String name, String owner, JsonNode attributes) {
-        this.name = name;
+    public Document(String owner, String url, JsonNode attributes) {
         this.owner = owner;
+        this.url = url;
         this.attributes = attributes;
     }
 
-    public Fixture(String name, String owner, JsonNode attributes, Property property) {
-        this.name = name;
+    public Document(String owner, String url, JsonNode attributes, Property property) {
         this.owner = owner;
+        this.url = url;
         this.attributes = attributes;
         this.property = property;
+    }
+
+    public JsonNode getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(JsonNode attributes) {
+        this.attributes = attributes;
     }
 
     public ZonedDateTime getCreated() {
@@ -69,14 +78,6 @@ public class Fixture {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getOwner() {
         return owner;
     }
@@ -85,12 +86,12 @@ public class Fixture {
         this.owner = owner;
     }
 
-    public JsonNode getAttributes() {
-        return attributes;
+    public Property getProperty() {
+        return property;
     }
 
-    public void setAttributes(JsonNode properties) {
-        this.attributes = properties;
+    public void setProperty(Property property) {
+        this.property = property;
     }
 
     public ZonedDateTime getUpdated() {
@@ -101,11 +102,11 @@ public class Fixture {
         this.updated = updated;
     }
 
-    public Property getProperty() {
-        return property;
+    public String getUrl() {
+        return url;
     }
 
-    public void setProperty(Property property) {
-        this.property = property;
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

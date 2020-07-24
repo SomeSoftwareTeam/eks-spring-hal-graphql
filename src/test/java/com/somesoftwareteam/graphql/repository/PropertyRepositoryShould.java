@@ -1,7 +1,7 @@
-package com.somesoftwareteam.graphql;
+package com.somesoftwareteam.graphql.repository;
 
-import com.somesoftwareteam.graphql.datasources.mysql.entities.Fixture;
-import com.somesoftwareteam.graphql.datasources.mysql.repositories.FixtureRepository;
+import com.somesoftwareteam.graphql.datasources.mysql.entities.Property;
+import com.somesoftwareteam.graphql.datasources.mysql.repositories.PropertyRepository;
 import com.somesoftwareteam.graphql.utility.IntegrationTestBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,10 +24,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * https://vladmihalcea.com/jpa-persist-and-merge/
  * https://github.com/eugenp/tutorials/blob/master/spring-security-modules/spring-security-acl/src/test/java/com/baeldung/acl/SpringACLIntegrationTest.java
  */
-public class FixtureRepositoryShould extends IntegrationTestBase {
+public class PropertyRepositoryShould extends IntegrationTestBase {
 
     @Autowired
-    private FixtureRepository repository;
+    private PropertyRepository repository;
 
     @BeforeEach
     public void before() {
@@ -37,37 +37,36 @@ public class FixtureRepositoryShould extends IntegrationTestBase {
 
     @Test
     @Transactional
-    @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:fixtures"})
+    @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:properties"})
     public void findAllForOwner() {
-        createTestFixtureWithAccessControlListForUser("google|12345");
-        Page<Fixture> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
+        createTestPropertyWithAccessControlListForUser("google|12345");
+        Page<Property> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
         assertThat(resultFromFindAll.getContent().size()).isGreaterThan(0);
     }
 
     @Test
     @Transactional
-    @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:fixtures"})
+    @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:properties"})
     public void findNoneForNonOwner() {
-        createTestFixtureWithAccessControlListForUser("google|12345");
-        Page<Fixture> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
+        createTestPropertyWithAccessControlListForUser("google|12345");
+        Page<Property> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
         assertThat(resultFromFindAll.getContent().size()).isEqualTo(0);
     }
 
     @Test
     @Transactional
-    @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:fixtures"})
+    @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:properties"})
     public void findByIdForOwner() {
-        Fixture fixture = createTestFixtureWithAccessControlListForUser("google|12345");
-        Fixture resultFromFindById =
-                repository.findById(fixture.getId()).orElseThrow(ResourceNotFoundException::new);
+        Property fixture = createTestPropertyWithAccessControlListForUser("google|12345");
+        Property resultFromFindById = repository.findById(fixture.getId()).orElseThrow(ResourceNotFoundException::new);
         assertThat(resultFromFindById.getId()).isEqualTo(fixture.getId());
     }
 
     @Test
     @Transactional
-    @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:fixtures"})
-    public void notGetFixtureByIdForNonOwner() {
-        Fixture fixture = createTestFixtureWithAccessControlListForUser("google|12345");
-        assertThrows(AccessDeniedException.class, () -> repository.findById(fixture.getId()));
+    @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:properties"})
+    public void notGetByIdForNonOwner() {
+        Property property = createTestPropertyWithAccessControlListForUser("google|12345");
+        assertThrows(AccessDeniedException.class, () -> repository.findById(property.getId()));
     }
 }

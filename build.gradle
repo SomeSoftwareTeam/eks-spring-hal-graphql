@@ -26,14 +26,17 @@ repositories {
 }
 
 dependencies {
+
 	// graphql
 	// TODO: remove graphql-spring-boot-starter whenever graphql-spqr-spring-boot-starter is updated
 	implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:5.7.1'
 	implementation 'io.leangen.graphql:graphql-spqr-spring-boot-starter:0.0.4'
 	implementation 'com.graphql-java:graphql-java-extended-scalars:1.0'
+
 	// hibernate
 	implementation "com.vladmihalcea:hibernate-types-52:1.0.0"
 	implementation 'org.hibernate:hibernate-spatial:5.4.2.Final'
+
 	// spring
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
@@ -48,14 +51,23 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-config'
 	implementation 'org.springframework.security:spring-security-acl'
 	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+
 	// access control
 	implementation 'net.sf.ehcache:ehcache-core:2.6.11'
+
 	// database
 	implementation 'org.flywaydb:flyway-core'
 	runtimeOnly 'mysql:mysql-connector-java'
+
 	// auth
 	implementation "com.auth0:java-jwt:3.4.0"
 	implementation "com.auth0:auth0:1.19.0"
+
+	// aws
+	// https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-project-gradle.html
+	implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.163')
+	implementation 'com.amazonaws:aws-java-sdk-s3'
+
 	// test containers https://www.testcontainers.org/quickstart/junit_5_quickstart/
 	def junitJupiterVersion = '5.4.2'
 	testCompile "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion"
@@ -64,6 +76,7 @@ dependencies {
 	testCompile "org.testcontainers:testcontainers:1.14.3"
 	testCompile "org.testcontainers:junit-jupiter:1.14.3"
 	testCompile "org.testcontainers:mysql:1.14.3"
+
 	// test
 	testImplementation 'com.graphql-java-kickstart:graphql-spring-boot-starter-test:5.7.1'
 	testImplementation 'io.projectreactor:reactor-test'

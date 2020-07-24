@@ -42,7 +42,6 @@ Steps:
     - route53 records via terraform https://www.terraform.io/docs/providers/aws/r/route53_record.html
     - database security group via terraform
     - subnet group via variable or reference to existing subnets
-    - add https://www.apollographql.com/docs/android/essentials/get-started/ details to readme
     - document usage of https://auth0.com/docs/extensions/authorization-extension/v2
     - document usage of spring acl
     - document usage of testcontainers

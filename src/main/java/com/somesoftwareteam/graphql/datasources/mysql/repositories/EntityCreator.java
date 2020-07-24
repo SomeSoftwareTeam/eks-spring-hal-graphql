@@ -20,13 +20,13 @@ public class EntityCreator {
     }
 
     @Transactional
-    public <T> T persistEntity(T entity) {
-        setOwnerPropertyOfEntityIfNecessary(entity);
+    public <T> T setOwnerAndPersistEntity(T entity) {
+        setOwnerOfEntityIfNecessary(entity);
         entityManager.persist(entity);
         return entity;
     }
 
-    private <T> void setOwnerPropertyOfEntityIfNecessary(T entity) {
+    private <T> void setOwnerOfEntityIfNecessary(T entity) {
 
         try {
             Method setOwnerMethod = entity.getClass().getDeclaredMethod("setOwner", String.class);

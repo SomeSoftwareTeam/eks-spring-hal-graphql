@@ -1,6 +1,6 @@
-package com.somesoftwareteam.graphql;
+package com.somesoftwareteam.graphql.utility;
 
-import com.somesoftwareteam.graphql.datasources.mysql.entities.Property;
+import com.somesoftwareteam.graphql.datasources.mysql.entities.Fixture;
 import com.somesoftwareteam.graphql.utility.IntegrationTestBase;
 import com.vladmihalcea.hibernate.type.json.internal.JacksonUtil;
 import org.junit.jupiter.api.Test;
@@ -16,42 +16,38 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * https://docs.spring.io/spring/docs/current/spring-framework-reference/pdf/testing-webtestclient.pdf
  */
-class PropertyRestApiShould extends IntegrationTestBase {
+public class RestResourceBase<T> extends IntegrationTestBase {
 
-    @Test
-    @AutoConfigureWebTestClient(timeout = "10000")
-    public void createReadUpdateDelete() {
+    public void createReadUpdateDelete(T entity, Class<T> entityClass, String resourceCollectionName) {
 
         WebTestClient webTestClient = WebTestClient.bindToServer().baseUrl("http://localhost:" + port).build();
         String token = getToken();
 
-        Property property = new Property("some property", null, JacksonUtil.toJsonNode("{}"));
-        Property resultFromPropertyPost = webTestClient
+        T resultFromPost = webTestClient
                 .post()
-                .uri("/rest/properties")
+                .uri("/rest/" + resourceCollectionName)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                .bodyValue(property)
+                .bodyValue(entity)
                 .exchange()
                 .expectStatus()
                 .isCreated()
-                .returnResult(Property.class)
+                .returnResult(entityClass)
                 .getResponseBody()
                 .blockFirst();
-        assertThat(resultFromPropertyPost).isNotNull();
-        assertThat(resultFromPropertyPost.getOwner()).isNotNull();
+        assertThat(resultFromPost).isNotNull();
 
-        List<Property> resultFromPropertyGetAll = webTestClient
+        List<T> resultFromGetAll = webTestClient
                 .get()
-                .uri("/rest/properties")
+                .uri("/rest/" + resourceCollectionName)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .exchange()
                 .expectStatus()
                 .isOk()
-                .expectBodyList(Property.class)
+                .expectBodyList(entityClass)
                 .returnResult()
                 .getResponseBody();
-        assertThat(resultFromPropertyGetAll).isNotNull();
-        assertThat(resultFromPropertyGetAll.size()).isGreaterThan(0);
+        assertThat(resultFromGetAll).isNotNull();
+        assertThat(resultFromGetAll.size()).isGreaterThan(0);
 
 //        String fixtureUri = "http://localhost:" + port + "/rest/fixtures/" + resultFromPost.getId();
 //        String verificationUri = "http://localhost:" + port + "/rest/verifications/" + resultFromVerificationPost.getId();

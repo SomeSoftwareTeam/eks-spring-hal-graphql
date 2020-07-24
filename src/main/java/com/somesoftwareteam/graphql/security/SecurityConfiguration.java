@@ -31,7 +31,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         */
         http.authorizeRequests()
                 .mvcMatchers("/health").permitAll()
-                .mvcMatchers(HttpMethod.POST, "/graphql").permitAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

@@ -1,4 +1,4 @@
-package com.somesoftwareteam.graphql;
+package com.somesoftwareteam.graphql.repository;
 
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Verification;
 import com.somesoftwareteam.graphql.datasources.mysql.repositories.VerificationRepository;

@@ -2,6 +2,10 @@ variable "docker_image_tag" {}
 variable "github_docker_registry_url" {}
 variable "github_organization" {}
 variable "github_token" {}
+variable "graphql_s3_access_key" {}
+variable "graphql_s3_secret_key" {}
+variable "graphql_s3_endpoint" {}
+variable "graphql_s3_bucket" {}
 variable "kubernetes_api_server_endpoint" {}
 variable "kubernetes_api_server_cert_auth" {}
 variable "mysql_username" {}

@@ -50,6 +50,26 @@ resource "kubernetes_deployment" "graphql" {
             value = var.spring_datasource_password
           }
 
+          env {
+            name = "GRAPHQL_S3_ACCESS_KEY"
+            value = var.graphql_s3_access_key
+          }
+
+          env {
+            name = "GRAPHQL_S3_SECRET_KEY"
+            value = var.graphql_s3_secret_key
+          }
+
+          env {
+            name = "GRAPHQL_S3_ENDPOINT"
+            value = var.graphql_s3_endpoint
+          }
+
+          env {
+            name = "GRAPHQL_S3_BUCKET"
+            value = var.graphql_s3_bucket
+          }
+
           resources {
             limits {
               cpu    = "2.0"

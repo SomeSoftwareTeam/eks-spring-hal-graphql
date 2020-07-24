@@ -56,24 +56,8 @@ public class MyAclService extends JdbcMutableAclService {
     }
 
     @Transactional
-    public void createOrUpdateAccessControlListToIncludeCurrentSecurityIdentity(Fixture fixture) {
-        ObjectIdentity objectIdentity = new ObjectIdentityImpl(Fixture.class, fixture.getId());
-        String currentPrincipalName = authenticationFacade.getCurrentPrincipalName();
-        createNewSecurityIdentityIfNecessary(currentPrincipalName);
-        createOrUpdateAccessControlListToIncludeSecurityIdentity(currentPrincipalName, objectIdentity);
-    }
-
-    @Transactional
-    public void createOrUpdateAccessControlListToIncludeCurrentSecurityIdentity(Property property) {
-        ObjectIdentity objectIdentity = new ObjectIdentityImpl(Property.class, property.getId());
-        String currentPrincipalName = authenticationFacade.getCurrentPrincipalName();
-        createNewSecurityIdentityIfNecessary(currentPrincipalName);
-        createOrUpdateAccessControlListToIncludeSecurityIdentity(currentPrincipalName, objectIdentity);
-    }
-
-    @Transactional
-    public void createOrUpdateAccessControlListToIncludeCurrentSecurityIdentity(Verification verification) {
-        ObjectIdentity objectIdentity = new ObjectIdentityImpl(Verification.class, verification.getId());
+    public void createAccessControlList(Class<?> entityClass, Long entityId) {
+        ObjectIdentity objectIdentity = new ObjectIdentityImpl(entityClass, entityId);
         String currentPrincipalName = authenticationFacade.getCurrentPrincipalName();
         createNewSecurityIdentityIfNecessary(currentPrincipalName);
         createOrUpdateAccessControlListToIncludeSecurityIdentity(currentPrincipalName, objectIdentity);

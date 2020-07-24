@@ -79,8 +79,8 @@ public class VerificationResolver {
         String owner = authenticationFacade.getCurrentPrincipalName();
         Property property = propertyRepository.findById(propertyId).orElseThrow(ResourceNotFoundException::new);
         Verification verification = new Verification(name, owner, attributes, property);
-        entityCreator.persistEntity(verification);
-        myAclService.createOrUpdateAccessControlListToIncludeCurrentSecurityIdentity(verification);
+        entityCreator.setOwnerAndPersistEntity(verification);
+        myAclService.createAccessControlList(Verification.class, verification.getId());
         return verification;
     }
 

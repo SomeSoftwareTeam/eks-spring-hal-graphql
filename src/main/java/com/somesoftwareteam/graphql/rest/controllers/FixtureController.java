@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RepositoryRestController
 public class FixtureController {
 
-    private final MyAclService aclManager;
+    private final MyAclService myAclService;
     private final EntityCreator entityCreator;
     private final FixtureModelAssembler fixtureModelAssembler;
 
     FixtureController(MyAclService aclManager, EntityCreator entityCreator,
                       FixtureModelAssembler fixtureModelAssembler) {
-        this.aclManager = aclManager;
+        this.myAclService = aclManager;
         this.entityCreator = entityCreator;
         this.fixtureModelAssembler = fixtureModelAssembler;
     }
@@ -32,8 +32,8 @@ public class FixtureController {
     @PostMapping("/fixtures")
     @PreAuthorize("hasAuthority('SCOPE_write:fixtures')")
     public ResponseEntity<?> newFixture(@RequestBody Fixture fixture) {
-        Fixture newFixture = entityCreator.persistEntity(fixture);
-        aclManager.createOrUpdateAccessControlListToIncludeCurrentSecurityIdentity(newFixture);
+        Fixture newFixture = entityCreator.setOwnerAndPersistEntity(fixture);
+        myAclService.createAccessControlList(Fixture.class, newFixture.getId());
         EntityModel<Fixture> model = fixtureModelAssembler.toModel(fixture);
         return ResponseEntity.created(model.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(model);
     }

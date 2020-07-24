@@ -21,6 +21,9 @@ import java.time.ZonedDateTime;
 @GraphQLType(description = "Land and/or structure at a location belonging to an owner")
 public class Property {
 
+    @Type(type = "json-string")
+    private JsonNode attributes;
+
     @CreationTimestamp
     private ZonedDateTime created;
 
@@ -33,9 +36,6 @@ public class Property {
     private String name;
 
     private String owner;
-
-    @Type(type = "json-string")
-    private JsonNode attributes;
 
     @UpdateTimestamp
     private ZonedDateTime updated;

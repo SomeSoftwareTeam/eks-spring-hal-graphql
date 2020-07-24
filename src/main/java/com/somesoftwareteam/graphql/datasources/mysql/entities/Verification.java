@@ -17,6 +17,9 @@ import java.time.ZonedDateTime;
 @GraphQLType(description = "Verification of property or fixture ownership")
 public class Verification {
 
+    @Type(type = "json-string")
+    private JsonNode attributes;
+
     @CreationTimestamp
     private ZonedDateTime created;
 
@@ -25,9 +28,6 @@ public class Verification {
     private Long id;
 
     private String name;
-
-    @Type(type = "json-string")
-    private JsonNode attributes;
 
     private String owner;
 

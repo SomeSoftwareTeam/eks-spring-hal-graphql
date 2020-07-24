@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RepositoryRestController
 public class VerificationController {
 
-    private final MyAclService aclManager;
+    private final MyAclService myAclService;
     private final EntityCreator entityCreator;
     private final VerificationModelAssembler verificationModelAssembler;
 
     VerificationController(MyAclService aclManager, EntityCreator entityCreator,
                            VerificationModelAssembler verificationModelAssembler) {
-        this.aclManager = aclManager;
+        this.myAclService = aclManager;
         this.entityCreator = entityCreator;
         this.verificationModelAssembler = verificationModelAssembler;
     }
@@ -32,8 +32,8 @@ public class VerificationController {
     @PostMapping("/verifications")
     @PreAuthorize("hasAuthority('SCOPE_write:verifications')")
     public ResponseEntity<?> newVerification(@RequestBody Verification verification) {
-        Verification newVerification = entityCreator.persistEntity(verification);
-        aclManager.createOrUpdateAccessControlListToIncludeCurrentSecurityIdentity(newVerification);
+        Verification newVerification = entityCreator.setOwnerAndPersistEntity(verification);
+        myAclService.createAccessControlList(Verification.class, newVerification.getId());
         EntityModel<Verification> model = verificationModelAssembler.toModel(newVerification);
         return ResponseEntity.created(model.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(model);
     }

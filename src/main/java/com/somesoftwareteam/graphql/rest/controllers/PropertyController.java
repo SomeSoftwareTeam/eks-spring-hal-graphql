@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RepositoryRestController
 public class PropertyController {
 
-    private final MyAclService aclManager;
+    private final MyAclService myAclService;
     private final EntityCreator entityCreator;
     private final PropertyModelAssembler assembler;
 
     PropertyController(MyAclService aclManager, EntityCreator entityCreator, PropertyModelAssembler assembler) {
-        this.aclManager = aclManager;
+        this.myAclService = aclManager;
         this.entityCreator = entityCreator;
         this.assembler = assembler;
     }
@@ -31,8 +31,8 @@ public class PropertyController {
     @PostMapping("/properties")
     @PreAuthorize("hasAuthority('SCOPE_write:properties')")
     public ResponseEntity<?> newFixture(@RequestBody Property property) {
-        Property newProperty = entityCreator.persistEntity(property);
-        aclManager.createOrUpdateAccessControlListToIncludeCurrentSecurityIdentity(newProperty);
+        Property newProperty = entityCreator.setOwnerAndPersistEntity(property);
+        myAclService.createAccessControlList(Property.class, newProperty.getId());
         EntityModel<Property> model = assembler.toModel(property);
         return ResponseEntity.created(model.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(model);
     }

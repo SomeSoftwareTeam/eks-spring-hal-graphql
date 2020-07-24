@@ -81,8 +81,8 @@ public class FixtureResolver {
         String owner = authenticationFacade.getCurrentPrincipalName();
         Property property = propertyRepository.findById(propertyId).orElseThrow(ResourceNotFoundException::new);
         Fixture fixture = new Fixture(name, owner, attributes, property);
-        entityCreator.persistEntity(fixture);
-        myAclService.createOrUpdateAccessControlListToIncludeCurrentSecurityIdentity(fixture);
+        entityCreator.setOwnerAndPersistEntity(fixture);
+        myAclService.createAccessControlList(Fixture.class, fixture.getId());
         return fixture;
     }
 
