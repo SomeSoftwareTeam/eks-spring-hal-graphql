@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * https://github.com/eugenp/tutorials/blob/master/spring-security-modules/spring-security-acl/src/test/java/com/baeldung/acl/SpringACLIntegrationTest.java
  * https://github.com/graphql-java-kickstart/graphql-spring-boot/blob/master/example-graphql-tools/src/test/java/com/graphql/sample/boot/GraphQLToolsSampleApplicationTest.java
  */
-class PropertyGraphqlApiShould extends IntegrationTestBase {
+class FixtureGraphqlApiShould extends IntegrationTestBase {
 
     @Autowired
     private GraphQLTestTemplate graphQLTestTemplate;
@@ -38,13 +38,13 @@ class PropertyGraphqlApiShould extends IntegrationTestBase {
         ObjectNode createVariables = mapper.createObjectNode();
         createVariables.put("name", "some property");
         createVariables.put("attributes", "{}");
-        GraphQLResponse createResponse = graphQLTestTemplate.perform("CreateProperty.graphql", createVariables);
+        GraphQLResponse createResponse = graphQLTestTemplate.perform("CreateFixture.graphql", createVariables);
         assertNotNull(createResponse);
         assertTrue(createResponse.isOk());
 
         ObjectNode getVariables = mapper.createObjectNode();
         getVariables.put("id", 1);
-        GraphQLResponse response = graphQLTestTemplate.perform("GetProperty.graphql", createVariables);
+        GraphQLResponse response = graphQLTestTemplate.perform("GetFixture.graphql", createVariables);
         assertNotNull(response);
         assertTrue(response.isOk());
     }

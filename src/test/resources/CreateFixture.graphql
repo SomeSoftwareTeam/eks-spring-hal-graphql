@@ -1,0 +1,7 @@
+mutation CreateFixture($propertyId: ID!, $name: String!, $attributes: Json!) {
+    createFixture(propertyId: $propertyId, name: $name, attributes: $attributes) {
+        id
+        attributes
+        created
+    }
+}
