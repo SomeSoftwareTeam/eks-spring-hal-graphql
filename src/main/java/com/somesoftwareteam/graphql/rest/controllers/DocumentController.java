@@ -11,6 +11,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +33,7 @@ public class DocumentController {
     }
 
     @PostMapping(value = "/documents", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAuthority('SCOPE_write:documents')")
     public ResponseEntity<?> uploadFile(@RequestPart(value = "file") MultipartFile file) {
         String url = this.amazonWrapper.uploadFile(file);
         Document document = new Document(null, url, JacksonUtil.toJsonNode("{}"));
