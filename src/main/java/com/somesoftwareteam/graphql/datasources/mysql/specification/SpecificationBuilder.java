@@ -1,5 +1,6 @@
 package com.somesoftwareteam.graphql.datasources.mysql.specification;
 
+import com.somesoftwareteam.graphql.graphql.DocumentFilter;
 import com.somesoftwareteam.graphql.graphql.FixtureFilter;
 import com.somesoftwareteam.graphql.graphql.PropertyFilter;
 import com.somesoftwareteam.graphql.graphql.VerificationFilter;
@@ -12,52 +13,36 @@ import java.util.Objects;
 @Component
 public class SpecificationBuilder<T> {
 
+    public Specification<T> createSpecFromFilter(DocumentFilter filter) {
+        if (Objects.isNull(filter)) return emptyConjunction();
+        return something(filter.getIds(), filter.getQ());
+    }
+
     public Specification<T> createSpecFromFilter(FixtureFilter filter) {
-
-        Specification<T> spec = emptyConjunction();
-
-        if (Objects.isNull(filter)) return spec;
-
-        if (!Objects.isNull(filter.getQ())) {
-            spec = spec.and(nameContains(filter.getQ()));
-        }
-
-        if (!Objects.isNull(filter.getIds())) {
-            spec = spec.and(idIsIn(filter.getIds()));
-        }
-
-        return spec;
+        if (Objects.isNull(filter)) return emptyConjunction();
+        return something(filter.getIds(), filter.getQ());
     }
 
     public Specification<T> createSpecFromFilter(PropertyFilter filter) {
-
-        Specification<T> spec = emptyConjunction();
-
-        if (Objects.isNull(filter)) return spec;
-
-        if (!Objects.isNull(filter.getQ())) {
-            spec = spec.and(nameContains(filter.getQ()));
-        }
-
-        if (!Objects.isNull(filter.getIds())) {
-            spec = spec.and(idIsIn(filter.getIds()));
-        }
-
-        return spec;
+        if (Objects.isNull(filter)) return emptyConjunction();
+        return something(filter.getIds(), filter.getQ());
     }
 
     public Specification<T> createSpecFromFilter(VerificationFilter filter) {
+        if (Objects.isNull(filter)) return emptyConjunction();
+        return something(filter.getIds(), filter.getQ());
+    }
+
+    private Specification<T> something(List<Long> ids, String q) {
 
         Specification<T> spec = emptyConjunction();
 
-        if (Objects.isNull(filter)) return spec;
-
-        if (!Objects.isNull(filter.getQ())) {
-            spec = spec.and(nameContains(filter.getQ()));
+        if (!Objects.isNull(q)) {
+            spec = spec.and(nameContains(q));
         }
 
-        if (!Objects.isNull(filter.getIds())) {
-            spec = spec.and(idIsIn(filter.getIds()));
+        if (!Objects.isNull(ids)) {
+            spec = spec.and(idIsIn(ids));
         }
 
         return spec;

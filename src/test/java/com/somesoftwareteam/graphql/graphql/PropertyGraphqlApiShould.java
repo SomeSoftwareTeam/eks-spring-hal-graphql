@@ -1,4 +1,4 @@
-package com.somesoftwareteam.graphql;
+package com.somesoftwareteam.graphql.graphql;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -13,7 +13,8 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 
 import static com.somesoftwareteam.graphql.utility.TestTokenProvider.getToken;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * https://www.baeldung.com/spring-boot-testing
