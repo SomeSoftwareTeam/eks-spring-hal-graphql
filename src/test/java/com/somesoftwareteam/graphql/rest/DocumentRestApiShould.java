@@ -27,8 +27,9 @@ class DocumentRestApiShould extends RestResourceBase<Document> {
         String token = getToken();
 
         MultipartBodyBuilder multipartBodyBuilder = new MultipartBodyBuilder();
-        multipartBodyBuilder.part("file", new ClassPathResource("somefile.txt"))
-                .contentType(MediaType.MULTIPART_FORM_DATA);
+        multipartBodyBuilder.part("file", new ClassPathResource("somefile.txt"));
+        multipartBodyBuilder.part("name", "some file");
+        multipartBodyBuilder.part("description", "some description");
 
         Document resultFromPost = webTestClient
                 .post()

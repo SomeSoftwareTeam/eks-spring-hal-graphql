@@ -1,6 +1,5 @@
 package com.somesoftwareteam.graphql.rest.controllers;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.somesoftwareteam.graphql.datasources.aws.AmazonWrapper;
 import com.somesoftwareteam.graphql.datasources.mysql.acl.MyAclService;
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Document;
@@ -19,6 +18,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Objects;
 
 /**
  * https://spring.io/guides/gs/uploading-files/
@@ -45,11 +46,13 @@ public class DocumentController {
     @PostMapping(value = "/documents", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('SCOPE_write:documents')")
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file,
-                                        @RequestParam("propertyId") Long propertyId,
+                                        @RequestParam(value = "propertyId", required = false) Long propertyId,
                                         @RequestParam("name") String name,
                                         @RequestParam("description") String description) {
         String url = this.amazonWrapper.uploadFile(file);
-        Property property = propertyRepository.findById(propertyId).orElseThrow(ResourceNotFoundException::new);
+        Property property = Objects.isNull(propertyId)
+                ? null
+                : propertyRepository.findById(propertyId).orElseThrow(ResourceNotFoundException::new);
         Document document = new Document(name, null, url, description, JacksonUtil.toJsonNode("{}"), property);
         Document newDocument = entityCreator.setOwnerAndPersistEntity(document);
         myAclService.createAccessControlList(Document.class, newDocument.getId());
