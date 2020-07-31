@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "fixture")
@@ -30,7 +31,7 @@ public class Fixture {
 
     private String owner;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "property_id")
     private Property property;
 
@@ -51,6 +52,14 @@ public class Fixture {
         this.owner = owner;
         this.attributes = attributes;
         this.property = property;
+    }
+
+    public JsonNode getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(JsonNode attributes) {
+        this.attributes = attributes;
     }
 
     public ZonedDateTime getCreated() {
@@ -85,12 +94,17 @@ public class Fixture {
         this.owner = owner;
     }
 
-    public JsonNode getAttributes() {
-        return attributes;
+    public Property getProperty() {
+        return property;
     }
 
-    public void setAttributes(JsonNode properties) {
-        this.attributes = properties;
+    public void setProperty(Property property) {
+        this.property = property;
+    }
+
+    // TODO: remove when using hal properly
+    public Long getPropertyId() {
+        return Objects.isNull(property) ? null : property.getId();
     }
 
     public ZonedDateTime getUpdated() {
@@ -99,13 +113,5 @@ public class Fixture {
 
     public void setUpdated(ZonedDateTime updated) {
         this.updated = updated;
-    }
-
-    public Property getProperty() {
-        return property;
-    }
-
-    public void setProperty(Property property) {
-        this.property = property;
     }
 }

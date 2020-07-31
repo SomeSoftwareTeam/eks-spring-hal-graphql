@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "verification")
@@ -31,7 +32,7 @@ public class Verification {
 
     private String owner;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     private Property property;
 
     @UpdateTimestamp
@@ -53,12 +54,12 @@ public class Verification {
         this.property = property;
     }
 
-    public String getOwner() {
-        return owner;
+    public JsonNode getAttributes() {
+        return attributes;
     }
 
-    public void setOwner(String owner) {
-        this.owner = owner;
+    public void setAttributes(JsonNode attributes) {
+        this.attributes = attributes;
     }
 
     public ZonedDateTime getCreated() {
@@ -85,12 +86,12 @@ public class Verification {
         this.name = name;
     }
 
-    public JsonNode getAttributes() {
-        return attributes;
+    public String getOwner() {
+        return owner;
     }
 
-    public void setAttributes(JsonNode properties) {
-        this.attributes = properties;
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public Property getProperty() {
@@ -99,6 +100,11 @@ public class Verification {
 
     public void setProperty(Property property) {
         this.property = property;
+    }
+
+    // TODO: remove when using hal properly
+    public Long getPropertyId() {
+        return Objects.isNull(property) ? null : property.getId();
     }
 
     public ZonedDateTime getUpdated() {

@@ -44,8 +44,10 @@ create table document
 (
     created timestamp not null default current_timestamp,
     deleted boolean not null default false,
+    description varchar(255) not null,
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     attributes json not null,
+    name varchar(255) not null,
     owner varchar(255) not null,
     property_id bigint unsigned,
     updated timestamp not null default current_timestamp,

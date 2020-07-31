@@ -3,12 +3,10 @@ package com.somesoftwareteam.graphql.graphql;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.somesoftwareteam.graphql.datasources.mysql.acl.MyAclService;
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Document;
-import com.somesoftwareteam.graphql.datasources.mysql.entities.Property;
 import com.somesoftwareteam.graphql.datasources.mysql.repositories.DocumentRepository;
 import com.somesoftwareteam.graphql.datasources.mysql.repositories.EntityCreator;
 import com.somesoftwareteam.graphql.datasources.mysql.repositories.PropertyRepository;
 import com.somesoftwareteam.graphql.datasources.mysql.specification.SpecificationBuilder;
-import com.somesoftwareteam.graphql.security.AuthenticationFacade;
 import io.leangen.graphql.annotations.GraphQLId;
 import io.leangen.graphql.annotations.GraphQLMutation;
 import io.leangen.graphql.annotations.GraphQLNonNull;
@@ -34,17 +32,15 @@ import static com.somesoftwareteam.graphql.graphql.ResolverUtils.createSort;
 @PreAuthorize("hasAuthority('SCOPE_read:documents')")
 public class DocumentResolver {
 
-    private final AuthenticationFacade authenticationFacade;
     private final EntityCreator entityCreator;
     private final MyAclService myAclService;
     private final DocumentRepository documentRepository;
     private final PropertyRepository propertyRepository;
     private final SpecificationBuilder<Document> specificationBuilder;
 
-    public DocumentResolver(AuthenticationFacade authenticationFacade, EntityCreator entityCreator,
+    public DocumentResolver(EntityCreator entityCreator,
                             MyAclService myAclService, DocumentRepository documentRepository,
                             PropertyRepository propertyRepository, SpecificationBuilder<Document> specificationBuilder) {
-        this.authenticationFacade = authenticationFacade;
         this.entityCreator = entityCreator;
         this.myAclService = myAclService;
         this.documentRepository = documentRepository;
@@ -75,21 +71,12 @@ public class DocumentResolver {
     }
 
     @PreAuthorize("hasAuthority('SCOPE_write:documents')")
-    @GraphQLMutation(name = "createDocument", description = "Create a new document record")
-    public Document createDocument(@GraphQLId @GraphQLNonNull Long propertyId, @GraphQLNonNull String name,
-                                   JsonNode attributes) {
-        String owner = authenticationFacade.getCurrentPrincipalName();
-        Property property = propertyRepository.findById(propertyId).orElseThrow(ResourceNotFoundException::new);
-        Document document = new Document(name, owner, attributes, property);
-        entityCreator.setOwnerAndPersistEntity(document);
-        myAclService.createAccessControlList(Document.class, document.getId());
-        return document;
-    }
-
-    @PreAuthorize("hasAuthority('SCOPE_write:documents')")
     @GraphQLMutation(name = "updateDocument", description = "Update a document record")
-    public Document updateDocument(@GraphQLId @GraphQLNonNull Long id, String name, JsonNode attributes) {
+    public Document updateDocument(@GraphQLId @GraphQLNonNull Long id, String name, String description,
+                                   JsonNode attributes) {
         Document document = documentRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        document.setName(name);
+        document.setDescription(description);
         document.setAttributes(attributes);
         documentRepository.save(document);
         return document;

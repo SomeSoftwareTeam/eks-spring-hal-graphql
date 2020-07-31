@@ -7,7 +7,6 @@ import com.somesoftwareteam.graphql.datasources.mysql.entities.Property;
 import com.somesoftwareteam.graphql.datasources.mysql.repositories.EntityCreator;
 import com.somesoftwareteam.graphql.datasources.mysql.repositories.FixtureRepository;
 import com.somesoftwareteam.graphql.datasources.mysql.repositories.PropertyRepository;
-import com.somesoftwareteam.graphql.security.AuthenticationFacade;
 import com.somesoftwareteam.graphql.datasources.mysql.specification.SpecificationBuilder;
 import io.leangen.graphql.annotations.GraphQLId;
 import io.leangen.graphql.annotations.GraphQLMutation;
@@ -34,17 +33,15 @@ import static com.somesoftwareteam.graphql.graphql.ResolverUtils.createSort;
 @PreAuthorize("hasAuthority('SCOPE_read:fixtures')")
 public class FixtureResolver {
 
-    private final AuthenticationFacade authenticationFacade;
     private final EntityCreator entityCreator;
     private final MyAclService myAclService;
     private final FixtureRepository fixtureRepository;
     private final PropertyRepository propertyRepository;
     private final SpecificationBuilder<Fixture> specificationBuilder;
 
-    public FixtureResolver(AuthenticationFacade authenticationFacade, EntityCreator entityCreator,
+    public FixtureResolver(EntityCreator entityCreator,
                            MyAclService myAclService, FixtureRepository fixtureRepository,
                            PropertyRepository propertyRepository, SpecificationBuilder<Fixture> specificationBuilder) {
-        this.authenticationFacade = authenticationFacade;
         this.entityCreator = entityCreator;
         this.myAclService = myAclService;
         this.fixtureRepository = fixtureRepository;
@@ -78,9 +75,8 @@ public class FixtureResolver {
     @GraphQLMutation(name = "createFixture", description = "Create a new fixture record")
     public Fixture createFixture(@GraphQLId @GraphQLNonNull Long propertyId, @GraphQLNonNull String name,
                                  JsonNode attributes) {
-        String owner = authenticationFacade.getCurrentPrincipalName();
         Property property = propertyRepository.findById(propertyId).orElseThrow(ResourceNotFoundException::new);
-        Fixture fixture = new Fixture(name, owner, attributes, property);
+        Fixture fixture = new Fixture(name, null, attributes, property);
         entityCreator.setOwnerAndPersistEntity(fixture);
         myAclService.createAccessControlList(Fixture.class, fixture.getId());
         return fixture;

@@ -61,7 +61,7 @@ public class IntegrationTestBase {
     public int port;
 
     public Document createTestDocumentWithAccessControlListForUser(String username) {
-        Document document = new Document(username, "url", JacksonUtil.toJsonNode("{}"));
+        Document document = new Document("name", username, "url", "description", JacksonUtil.toJsonNode("{}"));
         entityManager.persist(document);
         configureAccessControlList(username, Document.class, document.getId());
         return document;
