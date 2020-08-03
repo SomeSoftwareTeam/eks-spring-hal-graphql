@@ -27,8 +27,8 @@ public class Auth0Wrapper {
 
         authAPI = new AuthAPI(
                 "somesoftwareteam.auth0.com",
-                System.getenv("CLIENT_ID"),
-                System.getenv("CLIENT_SECRET"));
+                System.getenv("AUTH0_CLIENT_ID"),
+                System.getenv("AUTH0_CLIENT_SECRET"));
     }
 
     public List<User> getAuth0Users() throws Auth0Exception {
