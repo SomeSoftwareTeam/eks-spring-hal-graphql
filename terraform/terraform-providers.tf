@@ -2,7 +2,7 @@ terraform {
   backend "remote" {
     organization = "SomeSoftwareTeam"
     workspaces {
-      name = "eks-spring-graphql"
+      name = "eks-spring-hal-graphql"
     }
   }
 }

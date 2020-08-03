@@ -35,49 +35,10 @@ resource "kubernetes_deployment" "graphql" {
             container_port = 8080
           }
 
-          env {
-            name  = "AUTH0_CLIENT_ID"
-            value = var.auth0_client_id
-          }
-
-          env {
-            name  = "AUTH0_CLIENT_SECRET"
-            value = var.auth0_client_secret
-          }
-
-          env {
-            name  = "SPRING_DATASOURCE_URL"
-            value = var.spring_datasource_url
-          }
-
-          env {
-            name  = "SPRING_DATASOURCE_USERNAME"
-            value = var.spring_datasource_username
-          }
-
-          env {
-            name  = "SPRING_DATASOURCE_PASSWORD"
-            value = var.spring_datasource_password
-          }
-
-          env {
-            name = "GRAPHQL_S3_ACCESS_KEY"
-            value = var.graphql_s3_access_key
-          }
-
-          env {
-            name = "GRAPHQL_S3_SECRET_KEY"
-            value = var.graphql_s3_secret_key
-          }
-
-          env {
-            name = "GRAPHQL_S3_ENDPOINT"
-            value = var.graphql_s3_endpoint
-          }
-
-          env {
-            name = "GRAPHQL_S3_BUCKET"
-            value = var.graphql_s3_bucket
+          env_from {
+            secret_ref {
+              name = "graphql"
+            }
           }
 
           resources {
