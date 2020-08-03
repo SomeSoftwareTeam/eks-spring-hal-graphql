@@ -1,31 +1,32 @@
 package com.somesoftwareteam.graphql.rest;
 
-import com.somesoftwareteam.graphql.utility.IntegrationTestBase;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 /**
  * https://docs.spring.io/spring/docs/current/spring-framework-reference/pdf/testing-webtestclient.pdf
+ * https://docs.spring.io/spring-hateoas/docs/current/reference/html/#client.web-test-client
  */
-class RestApiShould extends IntegrationTestBase {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class RestApiShould {
 
-    private WebTestClient webTestClient;
-
-    @BeforeEach
-    public void configureWebTestClient() {
-        webTestClient = WebTestClient.bindToServer().baseUrl("http://localhost:" + port).build();
-    }
+    @LocalServerPort
+    public int port;
 
     @Test
     public void passHealthCheckWithoutAuth() {
-        webTestClient.get().uri("/health").exchange().expectStatus().is2xxSuccessful();
+        WebTestClient client = WebTestClient.bindToServer().baseUrl("http://localhost:" + port).build();
+        client.get().uri("actuator/health").exchange().expectStatus().is2xxSuccessful();
     }
 
     @Test
     public void sendUnauthorizedWhenNoToken() {
-        webTestClient.get().uri("/rest/fixtures").exchange().expectStatus().isUnauthorized();
-        webTestClient.get().uri("/rest/properties").exchange().expectStatus().isUnauthorized();
-        webTestClient.get().uri("/rest/verifications").exchange().expectStatus().isUnauthorized();
+        WebTestClient client = WebTestClient.bindToServer().baseUrl("http://localhost:" + port).build();
+        client.get().uri("/rest/fixtures").exchange().expectStatus().isUnauthorized();
+        client.get().uri("/rest/properties").exchange().expectStatus().isUnauthorized();
+        client.get().uri("/rest/verifications").exchange().expectStatus().isUnauthorized();
+        client.get().uri("/rest/documents").exchange().expectStatus().isUnauthorized();
     }
 }

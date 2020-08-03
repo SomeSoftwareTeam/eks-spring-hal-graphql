@@ -22,7 +22,7 @@ public class Document {
     private JsonNode attributes;
 
     @CreationTimestamp
-    private ZonedDateTime created;
+    private ZonedDateTime createdAt;
 
     private String description;
 
@@ -63,6 +63,11 @@ public class Document {
         this.property = property;
     }
 
+    // TODO: remove when using hal properly
+    public Long getPropertyId() {
+        return Objects.isNull(property) ? null : property.getId();
+    }
+
     public JsonNode getAttributes() {
         return attributes;
     }
@@ -71,12 +76,12 @@ public class Document {
         this.attributes = attributes;
     }
 
-    public ZonedDateTime getCreated() {
-        return created;
+    public ZonedDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated(ZonedDateTime created) {
-        this.created = created;
+    public void setCreatedAt(ZonedDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public String getDescription() {
@@ -117,11 +122,6 @@ public class Document {
 
     public void setProperty(Property property) {
         this.property = property;
-    }
-
-    // TODO: remove when using hal properly
-    public Long getPropertyId() {
-        return Objects.isNull(property) ? null : property.getId();
     }
 
     public ZonedDateTime getUpdated() {

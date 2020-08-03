@@ -22,7 +22,7 @@ public class Verification {
     private JsonNode attributes;
 
     @CreationTimestamp
-    private ZonedDateTime created;
+    private ZonedDateTime createdAt;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,6 +54,11 @@ public class Verification {
         this.property = property;
     }
 
+    // TODO: remove when using hal properly
+    public Long getPropertyId() {
+        return Objects.isNull(property) ? null : property.getId();
+    }
+
     public JsonNode getAttributes() {
         return attributes;
     }
@@ -62,12 +67,12 @@ public class Verification {
         this.attributes = attributes;
     }
 
-    public ZonedDateTime getCreated() {
-        return created;
+    public ZonedDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated(ZonedDateTime created) {
-        this.created = created;
+    public void setCreatedAt(ZonedDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Long getId() {
@@ -100,11 +105,6 @@ public class Verification {
 
     public void setProperty(Property property) {
         this.property = property;
-    }
-
-    // TODO: remove when using hal properly
-    public Long getPropertyId() {
-        return Objects.isNull(property) ? null : property.getId();
     }
 
     public ZonedDateTime getUpdated() {

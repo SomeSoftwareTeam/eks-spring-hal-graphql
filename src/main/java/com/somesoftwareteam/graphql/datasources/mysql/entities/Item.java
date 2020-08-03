@@ -3,19 +3,20 @@ package com.somesoftwareteam.graphql.datasources.mysql.entities;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import io.leangen.graphql.annotations.types.GraphQLType;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "fixture")
+@Table(name = "item")
 @TypeDef(name = "json-string", typeClass = JsonStringType.class)
-@GraphQLType(description = "Physical items belonging to an owner permanently related to a property")
-public class Fixture {
+@GraphQLType(description = "Physical items belonging to an owner")
+public class Item {
 
     @Type(type = "json-string")
     private JsonNode attributes;
@@ -38,16 +39,16 @@ public class Fixture {
     @UpdateTimestamp
     private ZonedDateTime updated;
 
-    public Fixture() {
+    public Item() {
     }
 
-    public Fixture(String name, String owner, JsonNode attributes) {
+    public Item(String name, String owner, JsonNode attributes) {
         this.name = name;
         this.owner = owner;
         this.attributes = attributes;
     }
 
-    public Fixture(String name, String owner, JsonNode attributes, Property property) {
+    public Item(String name, String owner, JsonNode attributes, Property property) {
         this.name = name;
         this.owner = owner;
         this.attributes = attributes;

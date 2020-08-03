@@ -2,7 +2,6 @@ package com.somesoftwareteam.graphql.datasources.auth0;
 
 import com.auth0.client.auth.AuthAPI;
 import com.auth0.client.mgmt.ManagementAPI;
-import com.auth0.client.mgmt.UsersEntity;
 import com.auth0.client.mgmt.filter.UserFilter;
 import com.auth0.exception.APIException;
 import com.auth0.exception.Auth0Exception;
@@ -13,7 +12,6 @@ import com.auth0.net.AuthRequest;
 import com.auth0.net.Request;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,29 +19,25 @@ import java.util.List;
  * https://github.com/auth0/auth0-java
  */
 @Service
-public class UserDataAccessObject {
+public class Auth0Wrapper {
 
-    public UserDataAccessObject() {
+    private final AuthAPI authAPI;
 
-    }
+    public Auth0Wrapper() {
 
-    public List<User> getUsers() throws APIException, Auth0Exception {
-
-        AuthAPI authAPI = new AuthAPI(
+        authAPI = new AuthAPI(
                 "somesoftwareteam.auth0.com",
                 System.getenv("CLIENT_ID"),
                 System.getenv("CLIENT_SECRET"));
+    }
 
+    public List<User> getAuth0Users() throws Auth0Exception {
         AuthRequest authRequest = authAPI.requestToken("https://somesoftwareteam.auth0.com/api/v2/");
         TokenHolder holder = authRequest.execute();
         ManagementAPI mgmt = new ManagementAPI("somesoftwareteam.auth0.com", holder.getAccessToken());
-
         UserFilter filter = new UserFilter().withPage(0, 20);
-
         Request<UsersPage> request = mgmt.users().list(filter);
-
         UsersPage page = request.execute();
-
         return page.getItems();
     }
 }

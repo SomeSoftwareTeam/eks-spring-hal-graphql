@@ -15,7 +15,6 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.security.acls.domain.ObjectIdentityImpl;
 import org.springframework.security.acls.domain.PrincipalSid;
@@ -36,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * https://www.baeldung.com/spring-boot-testcontainers-integration-test
  * https://github.com/eugenp/tutorials/blob/master/spring-security-modules/spring-security-acl/src/test/java/com/baeldung/acl/SpringACLIntegrationTest.java
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 public class IntegrationTestBase {
 
     @ClassRule
@@ -57,9 +56,6 @@ public class IntegrationTestBase {
     @Autowired
     public MyAclService myAclService;
 
-    @LocalServerPort
-    public int port;
-
     public Document createTestDocumentWithAccessControlListForUser(String username) {
         Document document = new Document("name", username, "url", "description", JacksonUtil.toJsonNode("{}"));
         entityManager.persist(document);
@@ -76,13 +72,7 @@ public class IntegrationTestBase {
     }
 
     public Fixture createTestFixtureWithAccessControlListForUser(String username) {
-        Fixture fixture = new Fixture("TestEntity", username, JacksonUtil.toJsonNode("{}"));
-        entityManager.persist(fixture);
-        configureAccessControlList(username, Fixture.class, fixture.getId());
-        return fixture;
-    }
-
-    public Fixture createTestFixtureWithAccessControlListForUser(String username, Property property) {
+        Property property = createTestPropertyWithAccessControlListForUser(username);
         Fixture fixture = new Fixture("TestEntity", username, JacksonUtil.toJsonNode("{}"), property);
         entityManager.persist(fixture);
         configureAccessControlList(username, Fixture.class, fixture.getId());
@@ -90,7 +80,8 @@ public class IntegrationTestBase {
     }
 
     public Verification createTestVerificationWithAccessControlListForUser(String username) {
-        Verification verification = new Verification("TestEntity", username, JacksonUtil.toJsonNode(""));
+        Property property = createTestPropertyWithAccessControlListForUser(username);
+        Verification verification = new Verification("TestEntity", username, JacksonUtil.toJsonNode(""), property);
         entityManager.persist(verification);
         configureAccessControlList(username, Verification.class, verification.getId());
         return verification;

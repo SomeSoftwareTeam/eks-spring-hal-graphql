@@ -52,6 +52,9 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-acl'
 	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
 
+	// https://www.baeldung.com/entity-to-and-from-dto-for-a-java-spring-application
+	implementation group: 'org.modelmapper', name: 'modelmapper', version: '0.7.5'
+
 	// access control
 	implementation 'net.sf.ehcache:ehcache-core:2.6.11'
 
@@ -78,6 +81,7 @@ dependencies {
 	testCompile "org.testcontainers:mysql:1.14.3"
 
 	// test
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'com.graphql-java-kickstart:graphql-spring-boot-starter-test:5.7.1'
 	testImplementation 'io.projectreactor:reactor-test'
 	implementation('org.springframework.boot:spring-boot-starter-test') {

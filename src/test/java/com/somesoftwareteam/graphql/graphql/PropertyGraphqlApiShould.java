@@ -7,6 +7,7 @@ import com.graphql.spring.boot.test.GraphQLTestTemplate;
 import com.somesoftwareteam.graphql.utility.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import javax.transaction.Transactional;
@@ -23,7 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * https://github.com/eugenp/tutorials/blob/master/spring-security-modules/spring-security-acl/src/test/java/com/baeldung/acl/SpringACLIntegrationTest.java
  * https://github.com/graphql-java-kickstart/graphql-spring-boot/blob/master/example-graphql-tools/src/test/java/com/graphql/sample/boot/GraphQLToolsSampleApplicationTest.java
  */
-class PropertyGraphqlApiShould extends IntegrationTestBase {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class PropertyGraphqlApiShould {
 
     @Autowired
     private GraphQLTestTemplate graphQLTestTemplate;

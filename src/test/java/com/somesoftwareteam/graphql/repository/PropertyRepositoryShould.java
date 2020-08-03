@@ -18,7 +18,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Help from:
  * https://www.baeldung.com/spring-boot-testing
  * https://www.baeldung.com/spring-jpa-test-in-memory-database
  * https://vladmihalcea.com/jpa-persist-and-merge/

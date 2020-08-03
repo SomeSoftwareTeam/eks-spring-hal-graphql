@@ -1,12 +1,10 @@
 package com.somesoftwareteam.graphql.rest;
 
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Document;
-import com.somesoftwareteam.graphql.utility.RestResourceBase;
+import com.somesoftwareteam.graphql.utility.HalResourceBase;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -16,22 +14,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * https://docs.spring.io/spring/docs/current/spring-framework-reference/pdf/testing-webtestclient.pdf
+ * https://docs.spring.io/spring-hateoas/docs/current/reference/html/#client.web-test-client
  */
-class DocumentRestApiShould extends RestResourceBase<Document> {
+class DocumentHalApiShould extends HalResourceBase<Document> {
 
     @Test
-    @AutoConfigureWebTestClient(timeout = "10000")
     public void createReadUpdateDelete() {
 
-        WebTestClient webTestClient = WebTestClient.bindToServer().baseUrl("http://localhost:" + port).build();
         String token = getToken();
+
+        WebTestClient client = WebTestClient.bindToServer()
+                .baseUrl("http://localhost:" + port)
+                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .apply(configurer)
+                .build();
 
         MultipartBodyBuilder multipartBodyBuilder = new MultipartBodyBuilder();
         multipartBodyBuilder.part("file", new ClassPathResource("somefile.txt"));
         multipartBodyBuilder.part("name", "some file");
         multipartBodyBuilder.part("description", "some description");
 
-        Document resultFromPost = webTestClient
+        Document resultFromPost = client
                 .post()
                 .uri("rest/documents")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)

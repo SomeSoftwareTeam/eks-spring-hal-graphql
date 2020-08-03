@@ -25,7 +25,9 @@ public class EntityCreatorShould extends IntegrationTestBase {
     @Test
     @WithMockUser("google|12345")
     public void createNewFixtureWithCorrectOwner() {
-        Fixture fixture = new Fixture("TestName", null, JacksonUtil.toJsonNode("{}"));
+        Property property = new Property("TestName", null, JacksonUtil.toJsonNode("{}"));
+        entityCreator.setOwnerAndPersistEntity(property);
+        Fixture fixture = new Fixture("TestName", null, JacksonUtil.toJsonNode("{}"), property);
         entityCreator.setOwnerAndPersistEntity(fixture);
         myAclService.createAccessControlList(Fixture.class, fixture.getId());
         assertThat(fixture.getId()).isNotZero();
@@ -35,7 +37,9 @@ public class EntityCreatorShould extends IntegrationTestBase {
     @Test
     @WithMockUser("google|12345")
     public void createNewVerificationWithCorrectOwner() {
-        Verification verification = new Verification("TestName", null, JacksonUtil.toJsonNode("{}"));
+        Property property = new Property("TestName", null, JacksonUtil.toJsonNode("{}"));
+        entityCreator.setOwnerAndPersistEntity(property);
+        Verification verification = new Verification("TestName", null, JacksonUtil.toJsonNode("{}"), property);
         entityCreator.setOwnerAndPersistEntity(verification);
         myAclService.createAccessControlList(Verification.class, verification.getId());
         assertThat(verification.getId()).isNotZero();

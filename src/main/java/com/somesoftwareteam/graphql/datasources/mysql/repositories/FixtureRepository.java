@@ -25,8 +25,6 @@ import java.util.Optional;
 @PreAuthorize("hasAuthority('SCOPE_read:fixtures')")
 public interface FixtureRepository extends JpaRepository<Fixture, Long>, JpaSpecificationExecutor<Fixture> {
 
-    Page<Fixture> findByName(@NonNull String name, Pageable pageable);
-
     @NonNull
     @Query("select f from Fixture f where f.owner = ?#{ authentication.name }")
     Page<Fixture> findAll(@NonNull Pageable pageable);

@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.locationtech.jts.geom.Point;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -25,13 +26,13 @@ public class Property {
     private JsonNode attributes;
 
     @CreationTimestamp
-    private ZonedDateTime created;
+    private ZonedDateTime createdAt;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    private Point location;
+    private Point location;
 
     private String name;
 
@@ -49,12 +50,20 @@ public class Property {
         this.attributes = attributes;
     }
 
-    public ZonedDateTime getCreated() {
-        return created;
+    public JsonNode getAttributes() {
+        return attributes;
     }
 
-    public void setCreated(ZonedDateTime created) {
-        this.created = created;
+    public void setAttributes(JsonNode attributes) {
+        this.attributes = attributes;
+    }
+
+    public ZonedDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(ZonedDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Long getId() {
@@ -63,6 +72,14 @@ public class Property {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Point getLocation() {
+        return location;
+    }
+
+    public void setLocation(Point location) {
+        this.location = location;
     }
 
     public String getName() {
@@ -79,14 +96,6 @@ public class Property {
 
     public void setOwner(String owner) {
         this.owner = owner;
-    }
-
-    public JsonNode getAttributes() {
-        return attributes;
-    }
-
-    public void setAttributes(JsonNode properties) {
-        this.attributes = properties;
     }
 
     public ZonedDateTime getUpdated() {

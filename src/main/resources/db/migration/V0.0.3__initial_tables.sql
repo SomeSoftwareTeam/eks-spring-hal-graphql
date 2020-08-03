@@ -1,10 +1,10 @@
 # https://dev.mysql.com/doc/refman/8.0/en/create-table.html
 create table property
 (
-    created timestamp not null default current_timestamp,
+    created_at timestamp not null default current_timestamp,
     deleted boolean not null default false,
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    location point srid 0,
+    location point srid 3857,
     name varchar(255) not null,
     owner varchar(255) not null,
     attributes json not null,
@@ -14,7 +14,7 @@ create table property
 
 create table verification
 (
-    created timestamp not null default current_timestamp,
+    created_at timestamp not null default current_timestamp,
     deleted boolean not null default false,
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name varchar(255) not null,
@@ -28,7 +28,21 @@ create table verification
 
 create table fixture
 (
-    created timestamp not null default current_timestamp,
+    created_at timestamp not null default current_timestamp,
+    deleted boolean not null default false,
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name varchar(255) not null,
+    owner varchar(255) not null,
+    attributes json not null,
+    property_id bigint unsigned,
+    updated timestamp not null default current_timestamp,
+    FOREIGN KEY (property_id) REFERENCES property(id),
+    index property_owner_index (owner)
+);
+
+create table item
+(
+    created_at timestamp not null default current_timestamp,
     deleted boolean not null default false,
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name varchar(255) not null,
@@ -42,7 +56,7 @@ create table fixture
 
 create table document
 (
-    created timestamp not null default current_timestamp,
+    created_at timestamp not null default current_timestamp,
     deleted boolean not null default false,
     description varchar(255) not null,
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,

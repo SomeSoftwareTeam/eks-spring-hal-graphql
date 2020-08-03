@@ -1,9 +1,6 @@
 package com.somesoftwareteam.graphql.security;
 
-import com.somesoftwareteam.graphql.datasources.mysql.entities.Document;
-import com.somesoftwareteam.graphql.datasources.mysql.entities.Fixture;
-import com.somesoftwareteam.graphql.datasources.mysql.entities.Property;
-import com.somesoftwareteam.graphql.datasources.mysql.entities.Verification;
+import com.somesoftwareteam.graphql.datasources.mysql.entities.*;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
@@ -25,6 +22,7 @@ public class RepositoryConfiguration implements RepositoryRestConfigurer {
 
         config
                 .exposeIdsFor(Document.class)
+                .exposeIdsFor(Item.class)
                 .exposeIdsFor(Fixture.class)
                 .exposeIdsFor(Property.class)
                 .exposeIdsFor(Verification.class);
