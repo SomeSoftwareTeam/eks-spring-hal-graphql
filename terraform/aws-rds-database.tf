@@ -11,7 +11,7 @@ resource "aws_db_instance" "graphql" {
   allow_major_version_upgrade = true
   storage_type                = "gp2"
   engine                      = "mysql"
-  engine_version              = "8.0.17"
+  engine_version              = "8.0.20"
   instance_class              = "db.t2.micro"
   name                        = "graphql"
   username                    = var.mysql_username
