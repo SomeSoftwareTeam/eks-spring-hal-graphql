@@ -20,8 +20,8 @@ public class TestTokenProvider {
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "client_credentials");
-        params.add("client_id", System.getenv("CLIENT_ID"));
-        params.add("client_secret", System.getenv("CLIENT_SECRET"));
+        params.add("client_id", System.getenv("AUTH0_CLIENT_ID"));
+        params.add("client_secret", System.getenv("AUTH0_CLIENT_SECRET"));
         params.add("audience", "https://api.somesoftwareteam.com");
 
         WebTestClient webTestClient = WebTestClient.bindToServer().baseUrl("https://somesoftwareteam.auth0.com").build();

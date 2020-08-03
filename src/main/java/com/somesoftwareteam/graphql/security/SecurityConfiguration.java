@@ -40,7 +40,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         an OAuth2 Resource Server, using JWT validation.
         */
         http.cors().and().authorizeRequests()
-                .mvcMatchers("/health").permitAll()
+                .mvcMatchers("/actuator/health").permitAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -68,5 +68,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         Spring Security provides Spring Data integration that allows referring to the current user within your queries.
          */
         return new SecurityEvaluationContextExtension();
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry
+                        .addMapping("/**")
+                        .allowedOrigins("http://localhost:3000", "https://leslie.somesoftwareteam.com");
+            }
+        };
     }
 }

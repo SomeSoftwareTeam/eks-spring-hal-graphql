@@ -14,7 +14,7 @@ import org.springframework.hateoas.config.HypermediaWebTestClientConfigurer;
 class ItemRestApiShould extends HalResourceBase<Item> {
 
     @Test
-    public void createReadUpdateDelete(@Autowired HypermediaWebTestClientConfigurer configurer) {
+    public void createReadUpdateDelete() {
         Item item = new Item("TestEntity", null, JacksonUtil.toJsonNode("{}"));
         createReadUpdateDelete(item, "items");
     }
