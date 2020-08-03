@@ -16,3 +16,5 @@ variable "spring_datasource_url" {}
 variable "spring_datasource_username" {}
 variable "spring_datasource_password" {}
 variable "ssl_cert_arn" {}
+variable "auth0_client_id" {}
+variable "auth0_client_secret" {}

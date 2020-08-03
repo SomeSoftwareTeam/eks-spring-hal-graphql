@@ -36,6 +36,16 @@ resource "kubernetes_deployment" "graphql" {
           }
 
           env {
+            name  = "AUTH0_CLIENT_ID"
+            value = var.auth0_client_id
+          }
+
+          env {
+            name  = "AUTH0_CLIENT_SECRET"
+            value = var.auth0_client_secret
+          }
+
+          env {
             name  = "SPRING_DATASOURCE_URL"
             value = var.spring_datasource_url
           }

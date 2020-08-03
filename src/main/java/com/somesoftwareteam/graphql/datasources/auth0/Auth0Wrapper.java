@@ -34,9 +34,9 @@ public class Auth0Wrapper {
     public List<User> getAuth0Users() throws Auth0Exception {
         AuthRequest authRequest = authAPI.requestToken("https://somesoftwareteam.auth0.com/api/v2/");
         TokenHolder holder = authRequest.execute();
-        ManagementAPI mgmt = new ManagementAPI("somesoftwareteam.auth0.com", holder.getAccessToken());
+        ManagementAPI managementAPI = new ManagementAPI("somesoftwareteam.auth0.com", holder.getAccessToken());
         UserFilter filter = new UserFilter().withPage(0, 20);
-        Request<UsersPage> request = mgmt.users().list(filter);
+        Request<UsersPage> request = managementAPI.users().list(filter);
         UsersPage page = request.execute();
         return page.getItems();
     }
