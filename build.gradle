@@ -71,6 +71,9 @@ dependencies {
 	implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.163')
 	implementation 'com.amazonaws:aws-java-sdk-s3'
 
+	// https://github.com/googlemaps/google-maps-services-java
+	implementation 'com.google.maps:google-maps-services:0.14.0'
+
 	// test containers https://www.testcontainers.org/quickstart/junit_5_quickstart/
 	def junitJupiterVersion = '5.4.2'
 	testCompile "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion"

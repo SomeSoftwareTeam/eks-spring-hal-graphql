@@ -2,7 +2,6 @@ package com.somesoftwareteam.graphql.rest;
 
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Verification;
 import com.somesoftwareteam.graphql.utility.HalResourceBase;
-import com.vladmihalcea.hibernate.type.json.internal.JacksonUtil;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -13,7 +12,7 @@ class VerificationHalApiShould extends HalResourceBase<Verification> {
 
     @Test
     public void createReadUpdateDelete() {
-        Verification verification = new Verification("TestVerification", null, JacksonUtil.toJsonNode("{}"));
+        Verification verification = verificationBuilder.createNewVerificationWithDefaults().build();
         createReadUpdateDelete(verification, "verifications");
     }
 }

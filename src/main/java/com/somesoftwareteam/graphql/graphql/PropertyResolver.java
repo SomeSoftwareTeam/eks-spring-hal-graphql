@@ -1,6 +1,5 @@
 package com.somesoftwareteam.graphql.graphql;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.somesoftwareteam.graphql.datasources.mysql.acl.MyAclService;
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Property;
 import com.somesoftwareteam.graphql.datasources.mysql.repositories.EntityCreator;
@@ -8,7 +7,6 @@ import com.somesoftwareteam.graphql.datasources.mysql.repositories.PropertyRepos
 import com.somesoftwareteam.graphql.datasources.mysql.specification.SpecificationBuilder;
 import com.somesoftwareteam.graphql.security.AuthenticationFacade;
 import io.leangen.graphql.annotations.GraphQLId;
-import io.leangen.graphql.annotations.GraphQLMutation;
 import io.leangen.graphql.annotations.GraphQLNonNull;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import io.leangen.graphql.spqr.spring.annotations.GraphQLApi;
@@ -70,31 +68,31 @@ public class PropertyResolver {
         return new ListMetadata(count);
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_write:properties')")
-    @GraphQLMutation(name = "createProperty", description = "Create a new property record")
-    public Property createProperty(@GraphQLNonNull String name, JsonNode attributes) {
-        String owner = authenticationFacade.getCurrentPrincipalName();
-        Property property = new Property(name, owner, attributes);
-        Property newProperty = entityCreator.setOwnerAndPersistEntity(property);
-        myAclService.createAccessControlList(Property.class, newProperty.getId());
-        return newProperty;
-    }
-
-    @PreAuthorize("hasAuthority('SCOPE_write:properties')")
-    @GraphQLMutation(name = "updateProperty", description = "Update a property record")
-    public Property updateProperty(@GraphQLId @GraphQLNonNull Long id, String name, JsonNode attributes) {
-        Property property = propertyRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
-        property.setAttributes(attributes);
-        property.setName(name);
-        propertyRepository.save(property);
-        return property;
-    }
-
-    @PreAuthorize("hasAuthority('SCOPE_write:properties')")
-    @GraphQLMutation(name = "deleteProperty", description = "Delete a property record")
-    public Property deleteProperty(@GraphQLId @GraphQLNonNull Long id) {
-        Property property = propertyRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
-        propertyRepository.deleteById(id);
-        return property;
-    }
+//    @PreAuthorize("hasAuthority('SCOPE_write:properties')")
+//    @GraphQLMutation(name = "createProperty", description = "Create a new property record")
+//    public Property createProperty(@GraphQLNonNull String name, JsonNode attributes) {
+//        String owner = authenticationFacade.getCurrentPrincipalName();
+//        Property property = new Property(name, owner, attributes);
+//        Property newProperty = entityCreator.setOwnerAndPersistEntity(property);
+//        myAclService.createAccessControlList(Property.class, newProperty.getId());
+//        return newProperty;
+//    }
+//
+//    @PreAuthorize("hasAuthority('SCOPE_write:properties')")
+//    @GraphQLMutation(name = "updateProperty", description = "Update a property record")
+//    public Property updateProperty(@GraphQLId @GraphQLNonNull Long id, String name, JsonNode attributes) {
+//        Property property = propertyRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+//        property.setAttributes(attributes);
+//        property.setName(name);
+//        propertyRepository.save(property);
+//        return property;
+//    }
+//
+//    @PreAuthorize("hasAuthority('SCOPE_write:properties')")
+//    @GraphQLMutation(name = "deleteProperty", description = "Delete a property record")
+//    public Property deleteProperty(@GraphQLId @GraphQLNonNull Long id) {
+//        Property property = propertyRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+//        propertyRepository.deleteById(id);
+//        return property;
+//    }
 }

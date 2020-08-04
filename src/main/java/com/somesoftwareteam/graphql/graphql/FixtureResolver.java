@@ -1,15 +1,12 @@
 package com.somesoftwareteam.graphql.graphql;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.somesoftwareteam.graphql.datasources.mysql.acl.MyAclService;
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Fixture;
-import com.somesoftwareteam.graphql.datasources.mysql.entities.Property;
 import com.somesoftwareteam.graphql.datasources.mysql.repositories.EntityCreator;
 import com.somesoftwareteam.graphql.datasources.mysql.repositories.FixtureRepository;
 import com.somesoftwareteam.graphql.datasources.mysql.repositories.PropertyRepository;
 import com.somesoftwareteam.graphql.datasources.mysql.specification.SpecificationBuilder;
 import io.leangen.graphql.annotations.GraphQLId;
-import io.leangen.graphql.annotations.GraphQLMutation;
 import io.leangen.graphql.annotations.GraphQLNonNull;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import io.leangen.graphql.spqr.spring.annotations.GraphQLApi;
@@ -71,34 +68,34 @@ public class FixtureResolver {
         return new ListMetadata(count);
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_write:fixtures')")
-    @GraphQLMutation(name = "createFixture", description = "Create a new fixture record")
-    public Fixture createFixture(@GraphQLId @GraphQLNonNull Long propertyId, @GraphQLNonNull String name,
-                                 JsonNode attributes) {
-        Property property = propertyRepository.findById(propertyId).orElseThrow(ResourceNotFoundException::new);
-        Fixture fixture = new Fixture(name, null, attributes, property);
-        entityCreator.setOwnerAndPersistEntity(fixture);
-        myAclService.createAccessControlList(Fixture.class, fixture.getId());
-        return fixture;
-    }
-
-    @PreAuthorize("hasAuthority('SCOPE_write:fixtures')")
-    @GraphQLMutation(name = "updateFixture", description = "Update a fixture record")
-    public Fixture updateFixture(@GraphQLId @GraphQLNonNull Long id, String name, JsonNode attributes) {
-        Fixture fixture = fixtureRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
-        fixture.setAttributes(attributes);
-        fixture.setName(name);
-        fixtureRepository.save(fixture);
-        return fixture;
-    }
-
-    @PreAuthorize("hasAuthority('SCOPE_write:fixtures')")
-    @GraphQLMutation(name = "deleteFixture", description = "Delete a fixture record")
-    public Fixture deleteFixture(@GraphQLId @GraphQLNonNull Long id) {
-        Fixture fixture = fixtureRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
-        fixtureRepository.deleteById(id);
-        return fixture;
-    }
+//    @PreAuthorize("hasAuthority('SCOPE_write:fixtures')")
+//    @GraphQLMutation(name = "createFixture", description = "Create a new fixture record")
+//    public Fixture createFixture(@GraphQLId @GraphQLNonNull Long propertyId, @GraphQLNonNull String name,
+//                                 JsonNode attributes) {
+//        Property property = propertyRepository.findById(propertyId).orElseThrow(ResourceNotFoundException::new);
+//        Fixture fixture = new Fixture(name, null, attributes, property);
+//        entityCreator.setOwnerAndPersistEntity(fixture);
+//        myAclService.createAccessControlList(Fixture.class, fixture.getId());
+//        return fixture;
+//    }
+//
+//    @PreAuthorize("hasAuthority('SCOPE_write:fixtures')")
+//    @GraphQLMutation(name = "updateFixture", description = "Update a fixture record")
+//    public Fixture updateFixture(@GraphQLId @GraphQLNonNull Long id, String name, JsonNode attributes) {
+//        Fixture fixture = fixtureRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+//        fixture.setAttributes(attributes);
+//        fixture.setName(name);
+//        fixtureRepository.save(fixture);
+//        return fixture;
+//    }
+//
+//    @PreAuthorize("hasAuthority('SCOPE_write:fixtures')")
+//    @GraphQLMutation(name = "deleteFixture", description = "Delete a fixture record")
+//    public Fixture deleteFixture(@GraphQLId @GraphQLNonNull Long id) {
+//        Fixture fixture = fixtureRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+//        fixtureRepository.deleteById(id);
+//        return fixture;
+//    }
 }
 
 

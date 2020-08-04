@@ -1,6 +1,5 @@
 package com.somesoftwareteam.graphql.graphql;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.somesoftwareteam.graphql.datasources.mysql.acl.MyAclService;
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Document;
 import com.somesoftwareteam.graphql.datasources.mysql.repositories.DocumentRepository;
@@ -8,7 +7,6 @@ import com.somesoftwareteam.graphql.datasources.mysql.repositories.EntityCreator
 import com.somesoftwareteam.graphql.datasources.mysql.repositories.PropertyRepository;
 import com.somesoftwareteam.graphql.datasources.mysql.specification.SpecificationBuilder;
 import io.leangen.graphql.annotations.GraphQLId;
-import io.leangen.graphql.annotations.GraphQLMutation;
 import io.leangen.graphql.annotations.GraphQLNonNull;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import io.leangen.graphql.spqr.spring.annotations.GraphQLApi;
@@ -70,25 +68,25 @@ public class DocumentResolver {
         return new ListMetadata(count);
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_write:documents')")
-    @GraphQLMutation(name = "updateDocument", description = "Update a document record")
-    public Document updateDocument(@GraphQLId @GraphQLNonNull Long id, String name, String description,
-                                   JsonNode attributes) {
-        Document document = documentRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
-        document.setName(name);
-        document.setDescription(description);
-        document.setAttributes(attributes);
-        documentRepository.save(document);
-        return document;
-    }
-
-    @PreAuthorize("hasAuthority('SCOPE_write:documents')")
-    @GraphQLMutation(name = "deleteDocument", description = "Delete a document record")
-    public Document deleteDocument(@GraphQLId @GraphQLNonNull Long id) {
-        Document document = documentRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
-        documentRepository.deleteById(id);
-        return document;
-    }
+//    @PreAuthorize("hasAuthority('SCOPE_write:documents')")
+//    @GraphQLMutation(name = "updateDocument", description = "Update a document record")
+//    public Document updateDocument(@GraphQLId @GraphQLNonNull Long id, String name, String description,
+//                                   JsonNode attributes) {
+//        Document document = documentRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+//        document.setName(name);
+//        document.setDescription(description);
+//        document.setAttributes(attributes);
+//        documentRepository.save(document);
+//        return document;
+//    }
+//
+//    @PreAuthorize("hasAuthority('SCOPE_write:documents')")
+//    @GraphQLMutation(name = "deleteDocument", description = "Delete a document record")
+//    public Document deleteDocument(@GraphQLId @GraphQLNonNull Long id) {
+//        Document document = documentRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+//        documentRepository.deleteById(id);
+//        return document;
+//    }
 }
 
 

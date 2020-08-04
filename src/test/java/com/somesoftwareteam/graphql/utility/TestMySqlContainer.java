@@ -6,18 +6,18 @@ import org.testcontainers.containers.MySQLContainer;
  * https://www.testcontainers.org/test_framework_integration/junit_5/
  * https://www.baeldung.com/spring-boot-testcontainers-integration-test
  */
-public class MyTestContainer extends MySQLContainer<MyTestContainer> {
+public class TestMySqlContainer extends MySQLContainer<TestMySqlContainer> {
 
     private static final String IMAGE_VERSION = "mysql:8.0.17";
-    private static MyTestContainer container;
+    private static TestMySqlContainer container;
 
-    private MyTestContainer() {
+    private TestMySqlContainer() {
         super(IMAGE_VERSION);
     }
 
-    public static MyTestContainer getInstance() {
+    public static TestMySqlContainer getInstance() {
         if (container == null) {
-            container = new MyTestContainer();
+            container = new TestMySqlContainer();
             container.start();
         }
         return container;

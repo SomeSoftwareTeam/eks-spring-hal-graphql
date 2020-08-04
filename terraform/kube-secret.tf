@@ -5,6 +5,7 @@ resource "kubernetes_secret" "graphql" {
   }
 
   data = {
+    GRAPHQL_GOOGLE_API_KEY = var.graphql_google_api_key
     AUTH0_CLIENT_ID = var.auth0_client_id
     AUTH0_CLIENT_SECRET = var.auth0_client_secret
     SPRING_DATASOURCE_URL = var.spring_datasource_url

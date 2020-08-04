@@ -1,6 +1,6 @@
 package com.somesoftwareteam.graphql.rest.controllers;
 
-import com.somesoftwareteam.graphql.datasources.aws.AmazonWrapper;
+import com.somesoftwareteam.graphql.datasources.aws.AmazonS3Wrapper;
 import com.somesoftwareteam.graphql.datasources.mysql.acl.MyAclService;
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Document;
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Property;
@@ -27,13 +27,13 @@ import java.util.Objects;
 @RepositoryRestController
 public class DocumentController {
 
-    private final AmazonWrapper amazonWrapper;
+    private final AmazonS3Wrapper amazonWrapper;
     private final DocumentModelAssembler documentModelAssembler;
     private final EntityCreator entityCreator;
     private final MyAclService myAclService;
     private final PropertyRepository propertyRepository;
 
-    public DocumentController(AmazonWrapper amazonWrapper, DocumentModelAssembler documentModelAssembler,
+    public DocumentController(AmazonS3Wrapper amazonWrapper, DocumentModelAssembler documentModelAssembler,
                               EntityCreator entityCreator, MyAclService myAclService,
                               PropertyRepository propertyRepository) {
         this.amazonWrapper = amazonWrapper;

@@ -26,6 +26,24 @@ public class HalResourceBase<T> {
     public int port;
 
     @Autowired
+    public DocumentBuilder documentBuilder;
+
+    @Autowired
+    public ItemBuilder itemBuilder;
+
+    @Autowired
+    public FixtureBuilder fixtureBuilder;
+
+    @Autowired
+    public PropertyBuilder propertyBuilder;
+
+    @Autowired
+    public AccessControlListBuilder accessControlListBuilder;
+
+    @Autowired
+    public VerificationBuilder verificationBuilder;
+
+    @Autowired
     public HypermediaWebTestClientConfigurer configurer;
 
     public void createReadUpdateDelete(T entity, String resourceCollectionName) {
@@ -48,7 +66,7 @@ public class HalResourceBase<T> {
                 .consumeWith(result -> {
                     EntityModel<T> model = result.getResponseBody();
                     assertThat(model).isNotNull();
-//                    assertThat(model.getContent()).isNotNull();
+                    assertThat(model.getContent()).isNotNull();
                     assertThat(model.getRequiredLink(IanaLinkRelations.SELF)).isNotNull();
                 });
 

@@ -23,20 +23,20 @@ import java.util.Date;
  * https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/examples-s3-objects.html
  */
 @Service
-public class AmazonWrapper {
+public class AmazonS3Wrapper {
 
     private AmazonS3 s3;
 
-    @Value("${amazonProperties.endpoint}")
+    @Value("${amazon.s3_endpoint}")
     private String endpointUrl;
 
-    @Value("${amazonProperties.bucket}")
+    @Value("${amazon.s3_bucket}")
     private String bucketName;
 
-    @Value("${amazonProperties.accessKey}")
+    @Value("${amazon.s3_accessKey}")
     private String accessKey;
 
-    @Value("${amazonProperties.secretKey}")
+    @Value("${amazon.s3_secretKey}")
     private String secretKey;
 
     @PostConstruct

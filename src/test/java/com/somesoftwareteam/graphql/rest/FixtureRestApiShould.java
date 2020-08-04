@@ -13,7 +13,7 @@ class FixtureRestApiShould extends HalResourceBase<Fixture> {
 
     @Test
     public void createReadUpdateDelete() {
-        Fixture fixture = new Fixture("TestEntity", null, JacksonUtil.toJsonNode("{}"));
+        Fixture fixture = fixtureBuilder.createNewFixtureWithDefaults().build();
         createReadUpdateDelete(fixture, "fixtures");
     }
 }

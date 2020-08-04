@@ -15,7 +15,7 @@ class ItemRestApiShould extends HalResourceBase<Item> {
 
     @Test
     public void createReadUpdateDelete() {
-        Item item = new Item("TestEntity", null, JacksonUtil.toJsonNode("{}"));
+        Item item = itemBuilder.createNewItemWithDefaults().build();
         createReadUpdateDelete(item, "items");
     }
 }

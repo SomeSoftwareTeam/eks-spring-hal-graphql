@@ -29,45 +29,39 @@ public class FixtureRepositoryShould extends IntegrationTestBase {
     @Autowired
     private FixtureRepository repository;
 
-    @BeforeEach
-    public void before() {
-        myAclService.createNewSecurityIdentityIfNecessary("google|12345");
-        myAclService.createNewSecurityIdentityIfNecessary("google|54321");
-    }
-
     @Test
-    @Transactional
     @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:fixtures"})
     public void findAllForOwner() {
-        createTestFixtureWithAccessControlListForUser("google|12345");
+        Fixture fixture = fixtureBuilder.createNewFixtureWithDefaults().useOwner("google|12345").persist().build();
+        accessControlListBuilder.configureAccessControlList("google|12345", Fixture.class, fixture.getId());
         Page<Fixture> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
         assertThat(resultFromFindAll.getContent().size()).isGreaterThan(0);
     }
 
     @Test
-    @Transactional
     @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:fixtures"})
     public void findNoneForNonOwner() {
-        createTestFixtureWithAccessControlListForUser("google|12345");
+        Fixture fixture = fixtureBuilder.createNewFixtureWithDefaults().useOwner("google|12345").persist().build();
+        accessControlListBuilder.configureAccessControlList("google|12345", Fixture.class, fixture.getId());
         Page<Fixture> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
         assertThat(resultFromFindAll.getContent().size()).isEqualTo(0);
     }
 
     @Test
-    @Transactional
     @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:fixtures"})
     public void findByIdForOwner() {
-        Fixture fixture = createTestFixtureWithAccessControlListForUser("google|12345");
+        Fixture fixture = fixtureBuilder.createNewFixtureWithDefaults().useOwner("google|12345").persist().build();
+        accessControlListBuilder.configureAccessControlList("google|12345", Fixture.class, fixture.getId());
         Fixture resultFromFindById =
                 repository.findById(fixture.getId()).orElseThrow(ResourceNotFoundException::new);
         assertThat(resultFromFindById.getId()).isEqualTo(fixture.getId());
     }
 
     @Test
-    @Transactional
     @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:fixtures"})
     public void notGetFixtureByIdForNonOwner() {
-        Fixture fixture = createTestFixtureWithAccessControlListForUser("google|12345");
+        Fixture fixture = fixtureBuilder.createNewFixtureWithDefaults().useOwner("google|12345").persist().build();
+        accessControlListBuilder.configureAccessControlList("google|12345", Fixture.class, fixture.getId());
         assertThrows(AccessDeniedException.class, () -> repository.findById(fixture.getId()));
     }
 }

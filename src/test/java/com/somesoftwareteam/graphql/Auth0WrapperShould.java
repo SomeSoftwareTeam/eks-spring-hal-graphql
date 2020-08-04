@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * https://auth0.com/docs/extensions/authorization-extension/v2/api-access
  * https://github.com/auth0/auth0-java
  */
-public class UserDataAccessObjectShould extends IntegrationTestBase {
+public class Auth0WrapperShould extends IntegrationTestBase {
 
     @Autowired
     private Auth0Wrapper something;

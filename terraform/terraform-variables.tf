@@ -18,3 +18,4 @@ variable "spring_datasource_password" {}
 variable "ssl_cert_arn" {}
 variable "auth0_client_id" {}
 variable "auth0_client_secret" {}
+variable "graphql_google_api_key" {}

@@ -3,6 +3,8 @@ create table property
 (
     created_at timestamp not null default current_timestamp,
     deleted boolean not null default false,
+    address varchar(255) not null,
+    address_formatted boolean default false,
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     location point srid 3857,
     name varchar(255) not null,

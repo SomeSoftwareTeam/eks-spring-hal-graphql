@@ -3,7 +3,6 @@ package com.somesoftwareteam.graphql.repository;
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Property;
 import com.somesoftwareteam.graphql.datasources.mysql.repositories.PropertyRepository;
 import com.somesoftwareteam.graphql.utility.IntegrationTestBase;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,44 +27,38 @@ public class PropertyRepositoryShould extends IntegrationTestBase {
     @Autowired
     private PropertyRepository repository;
 
-    @BeforeEach
-    public void before() {
-        myAclService.createNewSecurityIdentityIfNecessary("google|12345");
-        myAclService.createNewSecurityIdentityIfNecessary("google|54321");
-    }
-
     @Test
-    @Transactional
     @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:properties"})
     public void findAllForOwner() {
-        createTestPropertyWithAccessControlListForUser("google|12345");
+        Property property = propertyBuilder.createNewPropertyWithDefaults().useName("google|12345").persist().build();
+        accessControlListBuilder.configureAccessControlList("google|12345", Property.class, property.getId());
         Page<Property> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
         assertThat(resultFromFindAll.getContent().size()).isGreaterThan(0);
     }
 
     @Test
-    @Transactional
     @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:properties"})
     public void findNoneForNonOwner() {
-        createTestPropertyWithAccessControlListForUser("google|12345");
+        Property property = propertyBuilder.createNewPropertyWithDefaults().useName("google|12345").persist().build();
+        accessControlListBuilder.configureAccessControlList("google|12345", Property.class, property.getId());
         Page<Property> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
         assertThat(resultFromFindAll.getContent().size()).isEqualTo(0);
     }
 
     @Test
-    @Transactional
     @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:properties"})
     public void findByIdForOwner() {
-        Property fixture = createTestPropertyWithAccessControlListForUser("google|12345");
-        Property resultFromFindById = repository.findById(fixture.getId()).orElseThrow(ResourceNotFoundException::new);
-        assertThat(resultFromFindById.getId()).isEqualTo(fixture.getId());
+        Property property = propertyBuilder.createNewPropertyWithDefaults().useName("google|12345").persist().build();
+        accessControlListBuilder.configureAccessControlList("google|12345", Property.class, property.getId());
+        Property resultFromFindById = repository.findById(property.getId()).orElseThrow(ResourceNotFoundException::new);
+        assertThat(resultFromFindById.getId()).isEqualTo(property.getId());
     }
 
     @Test
-    @Transactional
     @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:properties"})
     public void notGetByIdForNonOwner() {
-        Property property = createTestPropertyWithAccessControlListForUser("google|12345");
+        Property property = propertyBuilder.createNewPropertyWithDefaults().useName("google|12345").persist().build();
+        accessControlListBuilder.configureAccessControlList("google|12345", Property.class, property.getId());
         assertThrows(AccessDeniedException.class, () -> repository.findById(property.getId()));
     }
 }

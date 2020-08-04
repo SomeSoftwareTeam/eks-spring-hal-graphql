@@ -28,6 +28,10 @@ public class Property {
     @CreationTimestamp
     private ZonedDateTime createdAt;
 
+    private String address;
+
+    private boolean addressFormatted;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -44,7 +48,9 @@ public class Property {
     public Property() {
     }
 
-    public Property(String name, String owner, JsonNode attributes) {
+    public Property(String formattedAddress, Point location, String name, String owner, JsonNode attributes) {
+        this.address = formattedAddress;
+        this.location = location;
         this.name = name;
         this.owner = owner;
         this.attributes = attributes;
@@ -64,6 +70,22 @@ public class Property {
 
     public void setCreatedAt(ZonedDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public boolean isAddressFormatted() {
+        return addressFormatted;
+    }
+
+    public void setAddressFormatted(boolean addressFormatted) {
+        this.addressFormatted = addressFormatted;
     }
 
     public Long getId() {
