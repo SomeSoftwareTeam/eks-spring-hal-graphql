@@ -1,6 +1,5 @@
 package com.somesoftwareteam.graphql.rest.assemblers;
 
-import com.somesoftwareteam.graphql.datasources.mysql.entities.Fixture;
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Item;
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Property;
 import org.springframework.data.rest.webmvc.support.RepositoryEntityLinks;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 
 @Component
 public class ItemModelAssembler implements RepresentationModelAssembler<Item, EntityModel<Item>> {

@@ -25,6 +25,9 @@ import java.util.Optional;
 @PreAuthorize("hasAuthority('SCOPE_read:items')")
 public interface ItemRepository extends JpaRepository<Item, Long>, JpaSpecificationExecutor<Item> {
 
+    @Query("select i from Item i where i.owner = ?#{ authentication.name } and i.name like %:input%")
+    Page<Item> findByNameContains(@Param(value = "input") String input, Pageable pageable);
+
     @NonNull
     @Query("select f from Item f where f.owner = ?#{ authentication.name }")
     Page<Item> findAll(@NonNull Pageable pageable);

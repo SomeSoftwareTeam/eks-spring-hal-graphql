@@ -1,5 +1,6 @@
 package com.somesoftwareteam.graphql.datasources.mysql.repositories;
 
+import com.somesoftwareteam.graphql.datasources.mysql.entities.Property;
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Verification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,9 @@ import java.util.Optional;
 @Repository
 @PreAuthorize("hasAuthority('SCOPE_read:verifications')")
 public interface VerificationRepository extends JpaRepository<Verification, Long>, JpaSpecificationExecutor<Verification> {
+
+    @Query("select v from Verification v where v.owner = ?#{ authentication.name } and v.name like %:input%")
+    Page<Verification> findByNameContains(@Param(value = "input") String input, Pageable pageable);
 
     @NonNull
     @Query("select v from Verification v where v.owner = ?#{ authentication.name }")

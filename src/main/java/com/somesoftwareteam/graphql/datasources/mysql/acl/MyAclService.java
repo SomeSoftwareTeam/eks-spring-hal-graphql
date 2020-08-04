@@ -1,8 +1,6 @@
 package com.somesoftwareteam.graphql.datasources.mysql.acl;
 
-import com.somesoftwareteam.graphql.datasources.mysql.entities.Fixture;
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Property;
-import com.somesoftwareteam.graphql.datasources.mysql.entities.Verification;
 import com.somesoftwareteam.graphql.security.AuthenticationFacade;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -37,6 +35,11 @@ public class MyAclService extends JdbcMutableAclService {
     }
 
     @Transactional
+    public Acl getAcl(Class<?> entityClass, Long id) {
+        return getOrCreateAcl(new ObjectIdentityImpl(entityClass, id));
+    }
+
+    @Transactional
     public void createNewSecurityIdentityIfNecessary(String securityIdentity) {
         try {
             readSid(securityIdentity);
@@ -63,6 +66,13 @@ public class MyAclService extends JdbcMutableAclService {
         createOrUpdateAccessControlListToIncludeSecurityIdentity(currentPrincipalName, objectIdentity);
     }
 
+    @Transactional
+    public void createReadPermissionAccessControlEntry(Long id, String name) {
+        ObjectIdentity objectIdentity = new ObjectIdentityImpl(Property.class, id);
+        MutableAcl acl = getOrCreateAcl(objectIdentity);
+        acl.insertAce(acl.getEntries().size(), BasePermission.READ, new PrincipalSid(name), true);
+    }
+
     private void insertSid(String securityIdentity) {
         jdbcTemplate.update("insert into acl_sid (principal, sid) values (?, ?)", true, securityIdentity);
     }
@@ -77,18 +87,22 @@ public class MyAclService extends JdbcMutableAclService {
         // Prepare the information we'd like in our access control entry (ACE)
         Sid sid = new PrincipalSid(username);
 
-        // Create or update the relevant ACL
-        MutableAcl acl;
-        try {
-            acl = (MutableAcl) readAclById(objectIdentity);
-        } catch (NotFoundException nfe) {
-            acl = createAcl(objectIdentity);
-        }
+        MutableAcl acl = getOrCreateAcl(objectIdentity);
 
         // Now grant some permissions via an access control entry (ACE)
         acl.insertAce(acl.getEntries().size(), BasePermission.READ, sid, true);
         acl.insertAce(acl.getEntries().size(), BasePermission.WRITE, sid, true);
         acl.insertAce(acl.getEntries().size(), BasePermission.DELETE, sid, true);
         updateAcl(acl);
+    }
+
+    private MutableAcl getOrCreateAcl(ObjectIdentity objectIdentity) {
+        MutableAcl acl;
+        try {
+            acl = (MutableAcl) readAclById(objectIdentity);
+        } catch (NotFoundException nfe) {
+            acl = createAcl(objectIdentity);
+        }
+        return acl;
     }
 }

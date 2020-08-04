@@ -1,6 +1,7 @@
 package com.somesoftwareteam.graphql.datasources.mysql.repositories;
 
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Property;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -31,7 +32,10 @@ public interface PropertyRepository extends JpaRepository<Property, Long>, JpaSp
     @PostFilter("hasPermission(filterObject, 'read')")
     List<Property> findByOwner(@Param(value = "owner") String owner, Pageable pageable);
 
-    @NonNull
+    @Query("select p from Property p where p.owner = ?#{ authentication.name } and p.name like %:input%")
+    Page<Property> findByNameContains(@Param(value = "input") String input, Pageable pageable);
+
+    @NotNull
     @Query("select p from Property p where p.owner = ?#{ authentication.name }")
     Page<Property> findAll(@NonNull Pageable pageable);
 

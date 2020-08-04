@@ -19,6 +19,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
+/**
+ * https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/examples-s3-objects.html
+ */
 @Service
 public class AmazonWrapper {
 

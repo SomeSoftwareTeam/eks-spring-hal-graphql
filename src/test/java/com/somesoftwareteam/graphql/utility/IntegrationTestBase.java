@@ -1,10 +1,7 @@
 package com.somesoftwareteam.graphql.utility;
 
 import com.somesoftwareteam.graphql.datasources.mysql.acl.MyAclService;
-import com.somesoftwareteam.graphql.datasources.mysql.entities.Document;
-import com.somesoftwareteam.graphql.datasources.mysql.entities.Fixture;
-import com.somesoftwareteam.graphql.datasources.mysql.entities.Property;
-import com.somesoftwareteam.graphql.datasources.mysql.entities.Verification;
+import com.somesoftwareteam.graphql.datasources.mysql.entities.*;
 import com.somesoftwareteam.graphql.datasources.mysql.repositories.EntityCreator;
 import com.somesoftwareteam.graphql.security.AuthenticationFacade;
 import com.vladmihalcea.hibernate.type.json.internal.JacksonUtil;
@@ -69,6 +66,13 @@ public class IntegrationTestBase {
         entityManager.persist(property);
         configureAccessControlList(username, Property.class, property.getId());
         return property;
+    }
+
+    public Item createTestItemWithAccessControlListForUser(String username) {
+        Item item = new Item("TestEntity", username, JacksonUtil.toJsonNode(""));
+        entityManager.persist(item);
+        configureAccessControlList(username, Item.class, item.getId());
+        return item;
     }
 
     public Fixture createTestFixtureWithAccessControlListForUser(String username) {

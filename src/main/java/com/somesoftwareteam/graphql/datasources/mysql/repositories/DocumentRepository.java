@@ -13,7 +13,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.Optional;
 
@@ -25,6 +24,9 @@ import java.util.Optional;
 @Repository
 @PreAuthorize("hasAuthority('SCOPE_read:documents')")
 public interface DocumentRepository extends JpaRepository<Document, Long>, JpaSpecificationExecutor<Document> {
+
+    @Query("select d from Document d where d.owner = ?#{ authentication.name } and d.name like %:input%")
+    Page<Document> findByNameContains(@Param(value = "input") String input, Pageable pageable);
 
     @NonNull
     @Query("select d from Document d where d.owner = ?#{ authentication.name }")

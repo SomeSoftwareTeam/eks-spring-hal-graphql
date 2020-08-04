@@ -4,12 +4,10 @@ import com.auth0.exception.Auth0Exception;
 import com.auth0.json.mgmt.users.User;
 import com.somesoftwareteam.graphql.datasources.auth0.Auth0Wrapper;
 import com.somesoftwareteam.graphql.datasources.auth0.Member;
-import com.somesoftwareteam.graphql.datasources.mysql.entities.Item;
 import com.somesoftwareteam.graphql.rest.assemblers.MemberModelAssembler;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.server.ExposesResourceFor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,19 +32,15 @@ public class MemberController {
     }
 
     @GetMapping(value = "/rest/members")
-    public CollectionModel<EntityModel<Member>> getMembers() throws Auth0Exception {
+    public ResponseEntity<?> getMembers() throws Auth0Exception {
         List<User> users = auth0Wrapper.getAuth0Users();
         List<EntityModel<Member>> models = users.stream().map(this::convertToEntityModel).collect(Collectors.toList());
-        return CollectionModel.of(models);
+        return ResponseEntity.ok(CollectionModel.of(models));
     }
 
     private EntityModel<Member> convertToEntityModel(User user) {
-
         Member member = modelMapper.map(user, Member.class);
-
-        if (user.getIdentities().size() > 0)
-            member.setProvider(user.getIdentities().get(0).getProvider());
-
+        if (user.getIdentities().size() > 0) member.setProvider(user.getIdentities().get(0).getProvider());
         return memberModelAssembler.toModel(member);
     }
 }
