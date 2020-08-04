@@ -11,8 +11,6 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import javax.transaction.Transactional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -31,8 +29,10 @@ public class VerificationRepositoryShould extends IntegrationTestBase {
     @Test
     @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:verifications"})
     public void findAllForOwner() {
-        Verification verification = verificationBuilder.createNewVerificationWithDefaults().useOwner("google|12345").persist().build();
-        accessControlListBuilder.configureAccessControlList("google|12345", Verification.class, verification.getId());
+        Verification verification = verificationBuilder
+                .createNewVerificationWithDefaults().useOwner("google|12345").persist().build();
+        accessControlListBuilder
+                .configureAccessControlList("google|12345", Verification.class, verification.getId());
         Page<Verification> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
         assertThat(resultFromFindAll.getContent().size()).isGreaterThan(0);
     }
@@ -40,8 +40,11 @@ public class VerificationRepositoryShould extends IntegrationTestBase {
     @Test
     @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:verifications"})
     public void findNoneForNonOwner() {
-        Verification verification = verificationBuilder.createNewVerificationWithDefaults().useOwner("google|12345").persist().build();
-        accessControlListBuilder.configureAccessControlList("google|12345", Verification.class, verification.getId());
+        Verification verification = verificationBuilder
+                .createNewVerificationWithDefaults().useOwner("google|12345").persist().build();
+        accessControlListBuilder
+                .configureAccessControlList("google|12345", Verification.class, verification.getId())
+                .addSecurityId("google|54321");
         Page<Verification> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
         assertThat(resultFromFindAll.getContent().size()).isEqualTo(0);
     }
@@ -49,8 +52,10 @@ public class VerificationRepositoryShould extends IntegrationTestBase {
     @Test
     @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:verifications"})
     public void getVerificationByIdForOwner() {
-        Verification verification = verificationBuilder.createNewVerificationWithDefaults().useOwner("google|12345").persist().build();
-        accessControlListBuilder.configureAccessControlList("google|12345", Verification.class, verification.getId());
+        Verification verification = verificationBuilder
+                .createNewVerificationWithDefaults().useOwner("google|12345").persist().build();
+        accessControlListBuilder
+                .configureAccessControlList("google|12345", Verification.class, verification.getId());
         Verification resultFromGetById =
                 repository.findById(verification.getId()).orElseThrow(ResourceNotFoundException::new);
         assertThat(resultFromGetById.getId()).isEqualTo(verification.getId());
@@ -59,8 +64,11 @@ public class VerificationRepositoryShould extends IntegrationTestBase {
     @Test
     @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:verifications"})
     public void notGetFixtureByIdForNonOwner() {
-        Verification verification = verificationBuilder.createNewVerificationWithDefaults().useOwner("google|12345").persist().build();
-        accessControlListBuilder.configureAccessControlList("google|12345", Verification.class, verification.getId());
+        Verification verification = verificationBuilder
+                .createNewVerificationWithDefaults().useOwner("google|12345").persist().build();
+        accessControlListBuilder
+                .configureAccessControlList("google|12345", Verification.class, verification.getId())
+                .addSecurityId("google|54321");
         assertThrows(AccessDeniedException.class, () -> repository.findById(verification.getId()));
     }
 }

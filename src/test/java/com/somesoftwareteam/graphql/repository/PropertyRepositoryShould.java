@@ -40,7 +40,9 @@ public class PropertyRepositoryShould extends IntegrationTestBase {
     @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:properties"})
     public void findNoneForNonOwner() {
         Property property = propertyBuilder.createNewPropertyWithDefaults().useName("google|12345").persist().build();
-        accessControlListBuilder.configureAccessControlList("google|12345", Property.class, property.getId());
+        accessControlListBuilder
+                .configureAccessControlList("google|12345", Property.class, property.getId())
+                .addSecurityId("google|54321");
         Page<Property> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
         assertThat(resultFromFindAll.getContent().size()).isEqualTo(0);
     }
@@ -58,7 +60,9 @@ public class PropertyRepositoryShould extends IntegrationTestBase {
     @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:properties"})
     public void notGetByIdForNonOwner() {
         Property property = propertyBuilder.createNewPropertyWithDefaults().useName("google|12345").persist().build();
-        accessControlListBuilder.configureAccessControlList("google|12345", Property.class, property.getId());
+        accessControlListBuilder
+                .configureAccessControlList("google|12345", Property.class, property.getId())
+                .addSecurityId("google|54321");
         assertThrows(AccessDeniedException.class, () -> repository.findById(property.getId()));
     }
 }

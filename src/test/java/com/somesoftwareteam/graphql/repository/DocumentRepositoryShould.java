@@ -11,8 +11,6 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import javax.transaction.Transactional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -41,7 +39,9 @@ public class DocumentRepositoryShould extends IntegrationTestBase {
     @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:documents"})
     public void findNoneForNonOwner() {
         Document document = documentBuilder.createNewDocumentWithDefaults().useOwner("google|12345").persist().build();
-        accessControlListBuilder.configureAccessControlList("google|12345", Document.class, document.getId());
+        accessControlListBuilder
+                .configureAccessControlList("google|12345", Document.class, document.getId())
+                .addSecurityId("google|54321");
         Page<Document> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
         assertThat(resultFromFindAll.getContent().size()).isEqualTo(0);
     }
@@ -60,7 +60,9 @@ public class DocumentRepositoryShould extends IntegrationTestBase {
     @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:documents"})
     public void notGetDocumentByIdForNonOwner() {
         Document document = documentBuilder.createNewDocumentWithDefaults().useOwner("google|12345").persist().build();
-        accessControlListBuilder.configureAccessControlList("google|12345", Document.class, document.getId());
+        accessControlListBuilder
+                .configureAccessControlList("google|12345", Document.class, document.getId())
+                .addSecurityId("google|54321");
         assertThrows(AccessDeniedException.class, () -> repository.findById(document.getId()));
     }
 }
