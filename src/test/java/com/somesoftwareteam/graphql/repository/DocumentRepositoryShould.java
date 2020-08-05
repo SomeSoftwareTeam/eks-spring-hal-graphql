@@ -1,8 +1,10 @@
 package com.somesoftwareteam.graphql.repository;
 
+import com.somesoftwareteam.graphql.datasources.mysql.acl.MyAclService;
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Document;
 import com.somesoftwareteam.graphql.datasources.mysql.repositories.DocumentRepository;
 import com.somesoftwareteam.graphql.utility.IntegrationTestBase;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,6 +28,12 @@ public class DocumentRepositoryShould extends IntegrationTestBase {
     @Autowired
     private DocumentRepository repository;
 
+    @BeforeEach
+    public void before() {
+        myAclService.createNewSecurityIdentityIfNecessary("google|12345");
+        myAclService.createNewSecurityIdentityIfNecessary("google|54321");
+    }
+
     @Test
     @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:documents"})
     public void findAllForOwner() {
@@ -39,9 +47,7 @@ public class DocumentRepositoryShould extends IntegrationTestBase {
     @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:documents"})
     public void findNoneForNonOwner() {
         Document document = documentBuilder.createNewDocumentWithDefaults().useOwner("google|12345").persist().build();
-        accessControlListBuilder
-                .configureAccessControlList("google|12345", Document.class, document.getId())
-                .addSecurityId("google|54321");
+        accessControlListBuilder.configureAccessControlList("google|12345", Document.class, document.getId());
         Page<Document> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
         assertThat(resultFromFindAll.getContent().size()).isEqualTo(0);
     }
@@ -51,8 +57,7 @@ public class DocumentRepositoryShould extends IntegrationTestBase {
     public void findByIdForOwner() {
         Document document = documentBuilder.createNewDocumentWithDefaults().useOwner("google|12345").persist().build();
         accessControlListBuilder.configureAccessControlList("google|12345", Document.class, document.getId());
-        Document resultFromFindById =
-                repository.findById(document.getId()).orElseThrow(ResourceNotFoundException::new);
+        Document resultFromFindById = repository.findById(document.getId()).orElseThrow(ResourceNotFoundException::new);
         assertThat(resultFromFindById.getId()).isEqualTo(document.getId());
     }
 
@@ -60,9 +65,7 @@ public class DocumentRepositoryShould extends IntegrationTestBase {
     @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:documents"})
     public void notGetDocumentByIdForNonOwner() {
         Document document = documentBuilder.createNewDocumentWithDefaults().useOwner("google|12345").persist().build();
-        accessControlListBuilder
-                .configureAccessControlList("google|12345", Document.class, document.getId())
-                .addSecurityId("google|54321");
+        accessControlListBuilder.configureAccessControlList("google|12345", Document.class, document.getId());
         assertThrows(AccessDeniedException.class, () -> repository.findById(document.getId()));
     }
 }

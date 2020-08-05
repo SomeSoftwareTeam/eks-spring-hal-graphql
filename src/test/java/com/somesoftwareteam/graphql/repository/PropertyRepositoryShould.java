@@ -3,6 +3,7 @@ package com.somesoftwareteam.graphql.repository;
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Property;
 import com.somesoftwareteam.graphql.datasources.mysql.repositories.PropertyRepository;
 import com.somesoftwareteam.graphql.utility.IntegrationTestBase;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,12 @@ public class PropertyRepositoryShould extends IntegrationTestBase {
     @Autowired
     private PropertyRepository repository;
 
+    @BeforeEach
+    public void before() {
+        myAclService.createNewSecurityIdentityIfNecessary("google|12345");
+        myAclService.createNewSecurityIdentityIfNecessary("google|54321");
+    }
+
     @Test
     @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:properties"})
     public void findAllForOwner() {
@@ -40,9 +47,7 @@ public class PropertyRepositoryShould extends IntegrationTestBase {
     @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:properties"})
     public void findNoneForNonOwner() {
         Property property = propertyBuilder.createNewPropertyWithDefaults().useName("google|12345").persist().build();
-        accessControlListBuilder
-                .configureAccessControlList("google|12345", Property.class, property.getId())
-                .addSecurityId("google|54321");
+        accessControlListBuilder.configureAccessControlList("google|12345", Property.class, property.getId());
         Page<Property> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
         assertThat(resultFromFindAll.getContent().size()).isEqualTo(0);
     }
@@ -60,9 +65,7 @@ public class PropertyRepositoryShould extends IntegrationTestBase {
     @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:properties"})
     public void notGetByIdForNonOwner() {
         Property property = propertyBuilder.createNewPropertyWithDefaults().useName("google|12345").persist().build();
-        accessControlListBuilder
-                .configureAccessControlList("google|12345", Property.class, property.getId())
-                .addSecurityId("google|54321");
+        accessControlListBuilder.configureAccessControlList("google|12345", Property.class, property.getId());
         assertThrows(AccessDeniedException.class, () -> repository.findById(property.getId()));
     }
 }

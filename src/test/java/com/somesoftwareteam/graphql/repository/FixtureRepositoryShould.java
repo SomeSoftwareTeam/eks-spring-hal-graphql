@@ -3,6 +3,7 @@ package com.somesoftwareteam.graphql.repository;
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Fixture;
 import com.somesoftwareteam.graphql.datasources.mysql.repositories.FixtureRepository;
 import com.somesoftwareteam.graphql.utility.IntegrationTestBase;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,12 @@ public class FixtureRepositoryShould extends IntegrationTestBase {
     @Autowired
     private FixtureRepository repository;
 
+    @BeforeEach
+    public void before() {
+        myAclService.createNewSecurityIdentityIfNecessary("google|12345");
+        myAclService.createNewSecurityIdentityIfNecessary("google|54321");
+    }
+
     @Test
     @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:fixtures"})
     public void findAllForOwner() {
@@ -39,9 +46,7 @@ public class FixtureRepositoryShould extends IntegrationTestBase {
     @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:fixtures"})
     public void findNoneForNonOwner() {
         Fixture fixture = fixtureBuilder.createNewFixtureWithDefaults().useOwner("google|12345").persist().build();
-        accessControlListBuilder
-                .configureAccessControlList("google|12345", Fixture.class, fixture.getId())
-                .addSecurityId("google|54321");
+        accessControlListBuilder.configureAccessControlList("google|12345", Fixture.class, fixture.getId());
         Page<Fixture> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
         assertThat(resultFromFindAll.getContent().size()).isEqualTo(0);
     }
@@ -51,8 +56,7 @@ public class FixtureRepositoryShould extends IntegrationTestBase {
     public void findByIdForOwner() {
         Fixture fixture = fixtureBuilder.createNewFixtureWithDefaults().useOwner("google|12345").persist().build();
         accessControlListBuilder.configureAccessControlList("google|12345", Fixture.class, fixture.getId());
-        Fixture resultFromFindById =
-                repository.findById(fixture.getId()).orElseThrow(ResourceNotFoundException::new);
+        Fixture resultFromFindById = repository.findById(fixture.getId()).orElseThrow(ResourceNotFoundException::new);
         assertThat(resultFromFindById.getId()).isEqualTo(fixture.getId());
     }
 
@@ -60,9 +64,7 @@ public class FixtureRepositoryShould extends IntegrationTestBase {
     @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:fixtures"})
     public void notGetFixtureByIdForNonOwner() {
         Fixture fixture = fixtureBuilder.createNewFixtureWithDefaults().useOwner("google|12345").persist().build();
-        accessControlListBuilder
-                .configureAccessControlList("google|12345", Fixture.class, fixture.getId())
-                .addSecurityId("google|54321");
+        accessControlListBuilder.configureAccessControlList("google|12345", Fixture.class, fixture.getId());
         assertThrows(AccessDeniedException.class, () -> repository.findById(fixture.getId()));
     }
 }

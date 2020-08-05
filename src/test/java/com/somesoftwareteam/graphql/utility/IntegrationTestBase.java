@@ -36,6 +36,9 @@ public class IntegrationTestBase {
     public FixtureBuilder fixtureBuilder;
 
     @Autowired
+    public MyAclService myAclService;
+
+    @Autowired
     public PropertyBuilder propertyBuilder;
 
     @Autowired

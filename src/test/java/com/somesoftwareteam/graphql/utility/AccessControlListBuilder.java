@@ -45,7 +45,6 @@ public class AccessControlListBuilder {
         return this;
     }
 
-    @Transactional
     public AccessControlListBuilder addSecurityId(String name) {
         myAclService.createNewSecurityIdentityIfNecessary(name);
         return this;
