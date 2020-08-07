@@ -20,7 +20,7 @@ public class EntityCreator {
     }
 
     @Transactional
-    public <T> T setOwnerAndPersistEntity(T entity) {
+    public <T> T persistEntity(T entity) {
         setOwnerOfEntityIfNecessary(entity);
         entityManager.persist(entity);
         return entity;
@@ -28,15 +28,15 @@ public class EntityCreator {
 
     private <T> void setOwnerOfEntityIfNecessary(T entity) {
 
-        try {
-            Method setOwnerMethod = entity.getClass().getDeclaredMethod("setOwner", String.class);
-            String owner = authenticationFacade.getCurrentPrincipalName();
-            setOwnerMethod.invoke(entity, owner);
-        } catch (NoSuchMethodException e) {
-            System.out.println("No owner property to set on type " + entity.getClass().getName());
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            System.out.println("Failed to set owner property on type " + entity.getClass().getName());
-            e.printStackTrace();
-        }
+//        try {
+//            Method setOwnerMethod = entity.getClass().getDeclaredMethod("setOwnerId", String.class);
+//            String ownerId = authenticationFacade.getCurrentPrincipalName();
+//            setOwnerMethod.invoke(entity, ownerId);
+//        } catch (NoSuchMethodException e) {
+//            System.out.println("No owner property to set on type " + entity.getClass().getName());
+//        } catch (IllegalAccessException | InvocationTargetException e) {
+//            System.out.println("Failed to set owner property on type " + entity.getClass().getName());
+//            e.printStackTrace();
+//        }
     }
 }

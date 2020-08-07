@@ -25,9 +25,9 @@ public class VerificationBuilder {
     public VerificationBuilder createNewVerificationWithDefaults() {
         attributes = objectMapper.createObjectNode();
         verification = new Verification();
-        verification.setName("my property");
-        verification.setOwner("google|12345");
         verification.setAttributes(attributes);
+        verification.setName("my property");
+        verification.setOwnerId("google|12345");
         return this;
     }
 
@@ -36,8 +36,7 @@ public class VerificationBuilder {
         return this;
     }
 
-    public VerificationBuilder useOwner(String owner) {
-        verification.setOwner(owner);
+    public VerificationBuilder useGroupId(String groupId) {
         return this;
     }
 

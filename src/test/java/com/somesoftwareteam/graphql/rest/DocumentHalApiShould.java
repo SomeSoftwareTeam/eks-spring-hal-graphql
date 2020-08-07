@@ -33,6 +33,7 @@ class DocumentHalApiShould extends HalResourceBase<Document> {
         multipartBodyBuilder.part("file", new ClassPathResource("somefile.txt"));
         multipartBodyBuilder.part("name", "some file");
         multipartBodyBuilder.part("description", "some description");
+        multipartBodyBuilder.part("groupId", "Trenor Laners");
 
         Document resultFromPost = client
                 .post()
@@ -46,6 +47,5 @@ class DocumentHalApiShould extends HalResourceBase<Document> {
                 .getResponseBody()
                 .blockFirst();
         assertThat(resultFromPost).isNotNull();
-
     }
 }

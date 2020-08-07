@@ -1,12 +1,12 @@
 package com.somesoftwareteam.graphql.rest.controllers;
 
 import com.somesoftwareteam.graphql.datasources.aws.AmazonS3Wrapper;
-import com.somesoftwareteam.graphql.datasources.mysql.acl.MyAclService;
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Document;
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Property;
-import com.somesoftwareteam.graphql.datasources.mysql.repositories.EntityCreator;
+import com.somesoftwareteam.graphql.datasources.mysql.repositories.DocumentRepository;
 import com.somesoftwareteam.graphql.datasources.mysql.repositories.PropertyRepository;
 import com.somesoftwareteam.graphql.rest.assemblers.DocumentModelAssembler;
+import com.somesoftwareteam.graphql.security.AuthenticationFacade;
 import com.vladmihalcea.hibernate.type.json.internal.JacksonUtil;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -28,18 +28,18 @@ import java.util.Objects;
 public class DocumentController {
 
     private final AmazonS3Wrapper amazonWrapper;
+    private final AuthenticationFacade authenticationFacade;
     private final DocumentModelAssembler documentModelAssembler;
-    private final EntityCreator entityCreator;
-    private final MyAclService myAclService;
+    private final DocumentRepository documentRepository;
     private final PropertyRepository propertyRepository;
 
-    public DocumentController(AmazonS3Wrapper amazonWrapper, DocumentModelAssembler documentModelAssembler,
-                              EntityCreator entityCreator, MyAclService myAclService,
+    public DocumentController(AmazonS3Wrapper amazonWrapper, AuthenticationFacade authenticationFacade,
+                              DocumentModelAssembler documentModelAssembler, DocumentRepository documentRepository,
                               PropertyRepository propertyRepository) {
         this.amazonWrapper = amazonWrapper;
+        this.authenticationFacade = authenticationFacade;
         this.documentModelAssembler = documentModelAssembler;
-        this.entityCreator = entityCreator;
-        this.myAclService = myAclService;
+        this.documentRepository = documentRepository;
         this.propertyRepository = propertyRepository;
     }
 
@@ -49,14 +49,21 @@ public class DocumentController {
                                         @RequestParam(value = "propertyId", required = false) Long propertyId,
                                         @RequestParam("name") String name,
                                         @RequestParam("description") String description) {
+
         String url = this.amazonWrapper.uploadFile(file);
+
         Property property = Objects.isNull(propertyId)
                 ? null
                 : propertyRepository.findById(propertyId).orElseThrow(ResourceNotFoundException::new);
-        Document document = new Document(name, null, url, description, JacksonUtil.toJsonNode("{}"), property);
-        Document newDocument = entityCreator.setOwnerAndPersistEntity(document);
-        myAclService.createAccessControlList(Document.class, newDocument.getId());
+
+        String ownerId = authenticationFacade.getCurrentPrincipalName();
+
+        Document document = new Document(name, ownerId, url, description, JacksonUtil.toJsonNode("{}"), property);
+
+        documentRepository.save(document);
+
         EntityModel<Document> model = documentModelAssembler.toModel(document);
+
         return ResponseEntity.created(model.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(model);
     }
 }

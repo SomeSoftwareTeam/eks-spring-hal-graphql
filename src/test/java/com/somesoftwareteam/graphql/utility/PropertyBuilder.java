@@ -30,10 +30,11 @@ public class PropertyBuilder {
         attributes = objectMapper.createObjectNode();
         property = new Property();
         property.setAddress("135 Trenor Ln, Powells Point, NC 27966, USA");
-//        property.setLocation(geometryFactory.createPoint(new Coordinate(-75.833445, 36.1392822)));
-        property.setName("my property");
-        property.setOwner("google|12345");
         property.setAttributes(attributes);
+        property.setGroupName("Trenor Laners");
+        property.setLocation(geometryFactory.createPoint(new Coordinate(-75.833445, 36.1392822)));
+        property.setName("my property");
+        property.setOwnerId("google|12345");
         return this;
     }
 
@@ -47,8 +48,8 @@ public class PropertyBuilder {
         return this;
     }
 
-    public PropertyBuilder useOwner(String owner) {
-        property.setOwner(owner);
+    public PropertyBuilder useGroupName(String groupName) {
+        property.setGroupName(groupName);
         return this;
     }
 

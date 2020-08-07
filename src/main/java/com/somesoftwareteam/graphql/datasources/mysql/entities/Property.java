@@ -2,7 +2,6 @@ package com.somesoftwareteam.graphql.datasources.mysql.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
-import io.leangen.graphql.annotations.types.GraphQLType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -10,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.locationtech.jts.geom.Point;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.ZonedDateTime;
 
 /**
@@ -19,7 +19,6 @@ import java.time.ZonedDateTime;
 @Entity
 @Table(name = "property")
 @TypeDef(name = "json-string", typeClass = JsonStringType.class)
-@GraphQLType(description = "Land and/or structure at a location belonging to an owner")
 public class Property {
 
     @Type(type = "json-string")
@@ -28,9 +27,13 @@ public class Property {
     @CreationTimestamp
     private ZonedDateTime createdAt;
 
+    @NotBlank(message = "Property address cannot be empty.")
     private String address;
 
     private boolean addressFormatted;
+
+    @NotBlank(message = "Property group name cannot be empty.")
+    private String groupName;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,9 +41,11 @@ public class Property {
 
     private Point location;
 
+    @NotBlank(message = "Property name cannot be empty.")
     private String name;
 
-    private String owner;
+    @NotBlank(message = "Property owner id cannot be empty.")
+    private String ownerId;
 
     @UpdateTimestamp
     private ZonedDateTime updated;
@@ -48,11 +53,11 @@ public class Property {
     public Property() {
     }
 
-    public Property(String formattedAddress, Point location, String name, String owner, JsonNode attributes) {
+    public Property(String formattedAddress, Point location, String name, String groupName, JsonNode attributes) {
         this.address = formattedAddress;
         this.location = location;
         this.name = name;
-        this.owner = owner;
+        this.groupName = groupName;
         this.attributes = attributes;
     }
 
@@ -88,6 +93,14 @@ public class Property {
         this.addressFormatted = addressFormatted;
     }
 
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
     public Long getId() {
         return id;
     }
@@ -112,12 +125,12 @@ public class Property {
         this.name = name;
     }
 
-    public String getOwner() {
-        return owner;
+    public String getOwnerId() {
+        return ownerId;
     }
 
-    public void setOwner(String owner) {
-        this.owner = owner;
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
     public ZonedDateTime getUpdated() {

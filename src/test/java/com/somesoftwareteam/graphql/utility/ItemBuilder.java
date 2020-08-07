@@ -26,18 +26,13 @@ public class ItemBuilder {
         attributes = objectMapper.createObjectNode();
         item = new Item();
         item.setName("my property");
-        item.setOwner("google|12345");
+        item.setOwnerId("google|12345");
         item.setAttributes(attributes);
         return this;
     }
 
     public ItemBuilder useAttribute(String key, String value) {
         attributes.put(key, value);
-        return this;
-    }
-
-    public ItemBuilder useOwner(String owner) {
-        item.setOwner(owner);
         return this;
     }
 

@@ -2,7 +2,6 @@ package com.somesoftwareteam.graphql.datasources.mysql.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
-import io.leangen.graphql.annotations.types.GraphQLType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -15,7 +14,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "verification")
 @TypeDef(name = "json-string", typeClass = JsonStringType.class)
-@GraphQLType(description = "Verification of property or fixture ownership")
 public class Verification {
 
     @Type(type = "json-string")
@@ -30,7 +28,7 @@ public class Verification {
 
     private String name;
 
-    private String owner;
+    private String ownerId;
 
     @OneToOne(fetch = FetchType.EAGER)
     private Property property;
@@ -41,15 +39,13 @@ public class Verification {
     public Verification() {
     }
 
-    public Verification(String name, String owner, JsonNode attributes) {
+    public Verification(String name, String groupId, JsonNode attributes) {
         this.name = name;
-        this.owner = owner;
         this.attributes = attributes;
     }
 
-    public Verification(String name, String owner, JsonNode attributes, Property property) {
+    public Verification(String name, String groupId, JsonNode attributes, Property property) {
         this.name = name;
-        this.owner = owner;
         this.attributes = attributes;
         this.property = property;
     }
@@ -91,12 +87,12 @@ public class Verification {
         this.name = name;
     }
 
-    public String getOwner() {
-        return owner;
+    public String getOwnerId() {
+        return ownerId;
     }
 
-    public void setOwner(String owner) {
-        this.owner = owner;
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
     public Property getProperty() {

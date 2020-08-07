@@ -37,8 +37,8 @@ public class ItemRepositoryShould extends IntegrationTestBase {
 
     @Test
     @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:items"})
-    public void findAllForOwner() {
-        Item item = itemBuilder.createNewItemWithDefaults().useOwner("google|12345").persist().build();
+    public void findAllForGroupMember() {
+        Item item = itemBuilder.createNewItemWithDefaults().persist().build();
         accessControlListBuilder.configureAccessControlList("google|12345", Item.class, item.getId());
         Page<Item> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
         assertThat(resultFromFindAll.getContent().size()).isGreaterThan(0);
@@ -46,8 +46,8 @@ public class ItemRepositoryShould extends IntegrationTestBase {
 
     @Test
     @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:items"})
-    public void findNoneForNonOwner() {
-        Item item = itemBuilder.createNewItemWithDefaults().useOwner("google|12345").persist().build();
+    public void findNoneForNonGroupMember() {
+        Item item = itemBuilder.createNewItemWithDefaults().persist().build();
         accessControlListBuilder.configureAccessControlList("google|12345", Item.class, item.getId());
         Page<Item> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
         assertThat(resultFromFindAll.getContent().size()).isEqualTo(0);
@@ -55,8 +55,8 @@ public class ItemRepositoryShould extends IntegrationTestBase {
 
     @Test
     @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:items"})
-    public void findByIdForOwner() {
-        Item item = itemBuilder.createNewItemWithDefaults().useOwner("google|12345").persist().build();
+    public void findByIdForGroupMember() {
+        Item item = itemBuilder.createNewItemWithDefaults().persist().build();
         accessControlListBuilder.configureAccessControlList("google|12345", Item.class, item.getId());
         Item resultFromFindById = repository.findById(item.getId()).orElseThrow(ResourceNotFoundException::new);
         assertThat(resultFromFindById.getId()).isEqualTo(item.getId());
@@ -64,8 +64,8 @@ public class ItemRepositoryShould extends IntegrationTestBase {
 
     @Test
     @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:items"})
-    public void notGetItemByIdForNonOwner() {
-        Item item = itemBuilder.createNewItemWithDefaults().useOwner("google|12345").persist().build();
+    public void notFindItemByIdForNonOwner() {
+        Item item = itemBuilder.createNewItemWithDefaults().persist().build();
         accessControlListBuilder.configureAccessControlList("google|12345", Item.class, item.getId());
         assertThrows(AccessDeniedException.class, () -> repository.findById(item.getId()));
     }

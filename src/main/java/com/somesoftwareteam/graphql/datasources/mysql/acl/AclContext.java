@@ -77,8 +77,21 @@ public class AclContext {
         return new BasicLookupStrategy(dataSource, aclCache(), aclAuthorizationStrategy(), new ConsoleAuditLogger());
     }
 
+//    @Bean
+//    public JdbcMutableAclService aclService() {
+//        return new JdbcMutableAclService(dataSource, lookupStrategy(), aclCache());
+//    }
+
+    // https://stackoverflow.com/questions/54859029/spring-security-acl-object/56275135#56275135
     @Bean
     public JdbcMutableAclService aclService() {
-        return new JdbcMutableAclService(dataSource, lookupStrategy(), aclCache());
+
+        JdbcMutableAclService jdbcMutableAclService = new JdbcMutableAclService(dataSource, lookupStrategy(), aclCache());
+
+        // TODO: for MySQL ONLY
+        jdbcMutableAclService.setClassIdentityQuery("SELECT @@IDENTITY");
+        jdbcMutableAclService.setSidIdentityQuery("SELECT @@IDENTITY");
+
+        return jdbcMutableAclService;
     }
 }

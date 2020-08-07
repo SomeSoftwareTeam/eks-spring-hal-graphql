@@ -2,7 +2,6 @@ package com.somesoftwareteam.graphql.datasources.mysql.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
-import io.leangen.graphql.annotations.types.GraphQLType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -15,7 +14,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "item")
 @TypeDef(name = "json-string", typeClass = JsonStringType.class)
-@GraphQLType(description = "Physical items belonging to an owner")
 public class Item {
 
     @Type(type = "json-string")
@@ -30,7 +28,7 @@ public class Item {
 
     private String name;
 
-    private String owner;
+    private String ownerId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "property_id")
@@ -42,15 +40,13 @@ public class Item {
     public Item() {
     }
 
-    public Item(String name, String owner, JsonNode attributes) {
+    public Item(String name, String groupId, JsonNode attributes) {
         this.name = name;
-        this.owner = owner;
         this.attributes = attributes;
     }
 
-    public Item(String name, String owner, JsonNode attributes, Property property) {
+    public Item(String name, String groupId, JsonNode attributes, Property property) {
         this.name = name;
-        this.owner = owner;
         this.attributes = attributes;
         this.property = property;
     }
@@ -92,12 +88,12 @@ public class Item {
         this.name = name;
     }
 
-    public String getOwner() {
-        return owner;
+    public String getOwnerId() {
+        return ownerId;
     }
 
-    public void setOwner(String owner) {
-        this.owner = owner;
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
     public Property getProperty() {

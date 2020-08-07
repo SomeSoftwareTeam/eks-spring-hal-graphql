@@ -1,9 +1,5 @@
 package com.somesoftwareteam.graphql.datasources.mysql.specification;
 
-import com.somesoftwareteam.graphql.graphql.DocumentFilter;
-import com.somesoftwareteam.graphql.graphql.FixtureFilter;
-import com.somesoftwareteam.graphql.graphql.PropertyFilter;
-import com.somesoftwareteam.graphql.graphql.VerificationFilter;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
@@ -13,25 +9,10 @@ import java.util.Objects;
 @Component
 public class SpecificationBuilder<T> {
 
-    public Specification<T> createSpecFromFilter(DocumentFilter filter) {
-        if (Objects.isNull(filter)) return emptyConjunction();
-        return something(filter.getIds(), filter.getQ());
-    }
-
-    public Specification<T> createSpecFromFilter(FixtureFilter filter) {
-        if (Objects.isNull(filter)) return emptyConjunction();
-        return something(filter.getIds(), filter.getQ());
-    }
-
-    public Specification<T> createSpecFromFilter(PropertyFilter filter) {
-        if (Objects.isNull(filter)) return emptyConjunction();
-        return something(filter.getIds(), filter.getQ());
-    }
-
-    public Specification<T> createSpecFromFilter(VerificationFilter filter) {
-        if (Objects.isNull(filter)) return emptyConjunction();
-        return something(filter.getIds(), filter.getQ());
-    }
+//    public Specification<T> createSpecFromFilter(DocumentFilter filter) {
+//        if (Objects.isNull(filter)) return emptyConjunction();
+//        return something(filter.getIds(), filter.getQ());
+//    }
 
     private Specification<T> something(List<Long> ids, String q) {
 

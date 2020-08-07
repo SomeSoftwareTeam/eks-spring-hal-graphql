@@ -6,7 +6,6 @@ import com.google.maps.PlacesApi;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.FindPlaceFromText;
 import com.google.maps.model.PlacesSearchResult;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -18,16 +17,17 @@ import java.io.IOException;
 @Service
 public class GooglePlacesWrapper {
 
-    @Value("${google.api_key}")
-    private String key;
+    private final GeoApiContext geoApiContext;
+
+    public GooglePlacesWrapper(GeoApiContext geoApiContext) {
+        this.geoApiContext = geoApiContext;
+    }
 
     public PlacesSearchResult getGooglePlaceCandidates(String input)
             throws IllegalArgumentException, IOException, InterruptedException, ApiException {
 
-        GeoApiContext context = new GeoApiContext.Builder().apiKey(key).build();
-
         FindPlaceFromText findPlaceFromText = PlacesApi
-                .findPlaceFromText(context, input, FindPlaceFromTextRequest.InputType.TEXT_QUERY)
+                .findPlaceFromText(geoApiContext, input, FindPlaceFromTextRequest.InputType.TEXT_QUERY)
                 .fields(
                         FindPlaceFromTextRequest.FieldMask.FORMATTED_ADDRESS,
                         FindPlaceFromTextRequest.FieldMask.GEOMETRY)

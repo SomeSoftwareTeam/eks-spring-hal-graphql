@@ -2,19 +2,19 @@ package com.somesoftwareteam.graphql.datasources.mysql.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
-import io.leangen.graphql.annotations.types.GraphQLType;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "fixture")
 @TypeDef(name = "json-string", typeClass = JsonStringType.class)
-@GraphQLType(description = "Physical items belonging to an owner permanently related to a property")
 public class Fixture {
 
     @Type(type = "json-string")
@@ -27,9 +27,11 @@ public class Fixture {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+//    @NotBlank(message = "Fixture name cannot be empty.")
     private String name;
 
-    private String owner;
+//    @NotBlank(message = "Fixture owner id cannot be empty.")
+    private String ownerId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "property_id")
@@ -41,16 +43,14 @@ public class Fixture {
     public Fixture() {
     }
 
-    public Fixture(String name, String owner, JsonNode attributes) {
+    public Fixture(String name, JsonNode attributes) {
         this.name = name;
-        this.owner = owner;
         this.attributes = attributes;
     }
 
-    public Fixture(String name, String owner, JsonNode attributes, Property property) {
-        this.name = name;
-        this.owner = owner;
+    public Fixture(String name, JsonNode attributes, Property property) {
         this.attributes = attributes;
+        this.name = name;
         this.property = property;
     }
 
@@ -91,12 +91,12 @@ public class Fixture {
         this.name = name;
     }
 
-    public String getOwner() {
-        return owner;
+    public String getOwnerId() {
+        return ownerId;
     }
 
-    public void setOwner(String owner) {
-        this.owner = owner;
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
     public Property getProperty() {

@@ -2,7 +2,6 @@ package com.somesoftwareteam.graphql.datasources.mysql.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
-import io.leangen.graphql.annotations.types.GraphQLType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -15,7 +14,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "document")
 @TypeDef(name = "json-string", typeClass = JsonStringType.class)
-@GraphQLType(description = "Media or text document belonging to a property")
 public class Document {
 
     @Type(type = "json-string")
@@ -32,7 +30,7 @@ public class Document {
 
     private String name;
 
-    private String owner;
+    private String ownerId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "property_id")
@@ -46,21 +44,21 @@ public class Document {
     public Document() {
     }
 
-    public Document(String name, String owner, String url, String description, JsonNode attributes) {
-        this.name = name;
-        this.owner = owner;
-        this.url = url;
-        this.description = description;
+    public Document(String name, String ownerId, String url, String description, JsonNode attributes) {
         this.attributes = attributes;
+        this.description = description;
+        this.name = name;
+        this.ownerId = ownerId;
+        this.url = url;
     }
 
-    public Document(String name, String owner, String url, String description, JsonNode attributes, Property property) {
-        this.name = name;
-        this.owner = owner;
-        this.url = url;
-        this.description = description;
+    public Document(String name, String ownerId, String url, String description, JsonNode attributes, Property property) {
         this.attributes = attributes;
+        this.description = description;
+        this.name = name;
+        this.ownerId = ownerId;
         this.property = property;
+        this.url = url;
     }
 
     // TODO: remove when using hal properly
@@ -108,12 +106,12 @@ public class Document {
         this.name = name;
     }
 
-    public String getOwner() {
-        return owner;
+    public String getOwnerId() {
+        return ownerId;
     }
 
-    public void setOwner(String owner) {
-        this.owner = owner;
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
     public Property getProperty() {

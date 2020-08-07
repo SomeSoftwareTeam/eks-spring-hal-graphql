@@ -1,6 +1,6 @@
 package com.somesoftwareteam.graphql.rest.assemblers;
 
-import com.somesoftwareteam.graphql.datasources.mysql.acl.Entry;
+import com.somesoftwareteam.graphql.datasources.auth0.Group;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.EntityLinks;
@@ -12,19 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class AclModelAssembler implements
-        RepresentationModelAssembler<Entry, EntityModel<Entry>> {
+public class GroupModelAssembler implements RepresentationModelAssembler<Group, EntityModel<Group>> {
 
     private final EntityLinks entityLinks;
 
-    public AclModelAssembler(EntityLinks entityLinks) {
+    public GroupModelAssembler(EntityLinks entityLinks) {
         this.entityLinks = entityLinks;
     }
 
     @NonNull
     @Override
-    public EntityModel<Entry> toModel(@NonNull Entry accessControlEntry) {
+    public EntityModel<Group> toModel(@NonNull Group group) {
         List<Link> links = new ArrayList<>();
-        return EntityModel.of(accessControlEntry, links);
+        return EntityModel.of(group, links);
     }
 }

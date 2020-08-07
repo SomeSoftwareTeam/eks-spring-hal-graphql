@@ -25,24 +25,14 @@ import java.util.Optional;
 @PreAuthorize("hasAuthority('SCOPE_read:items')")
 public interface ItemRepository extends JpaRepository<Item, Long>, JpaSpecificationExecutor<Item> {
 
-    @Query("select i from Item i where i.owner = ?#{ authentication.name } and i.name like %:input%")
+    @Query("select i from Item i where i.ownerId = ?#{ authentication.name } and i.name like %:input%")
     Page<Item> findByNameContains(@Param(value = "input") String input, Pageable pageable);
 
     @NonNull
-    @Query("select f from Item f where f.owner = ?#{ authentication.name }")
+    @Query("select f from Item f where f.ownerId = ?#{ authentication.name }")
     Page<Item> findAll(@NonNull Pageable pageable);
 
     @NonNull
-    @RestResource(exported = false)
-    @Query("select f from Item f where f.owner = ?#{ authentication.name }")
-    Page<Item> findAll(Specification<Item> specification, @NonNull Pageable pageable);
-
-    @NonNull
-    @PostAuthorize("hasPermission(returnObject.orElse(null), 'READ')")
+    @PreAuthorize("hasPermission(#id, 'com.somesoftwareteam.graphql.datasources.mysql.entities.Item', 'READ')")
     Optional<Item> findById(@NonNull Long id);
-
-    @NonNull
-    @SuppressWarnings("unchecked")
-    @PreAuthorize("hasPermission(#item, 'WRITE')")
-    Item save(@NonNull @Param("item") Item item);
 }

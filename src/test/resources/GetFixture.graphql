@@ -1,7 +1,0 @@
-query GetFixture($id: ID!) {
-    Fixture(id: $id) {
-        id
-        attributes
-        created
-    }
-}

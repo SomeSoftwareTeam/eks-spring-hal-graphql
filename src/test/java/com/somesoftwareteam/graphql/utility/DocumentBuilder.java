@@ -24,21 +24,16 @@ public class DocumentBuilder {
     public DocumentBuilder createNewDocumentWithDefaults() {
         attributes = objectMapper.createObjectNode();
         document = new Document();
+        document.setAttributes(attributes);
         document.setDescription("my document description");
         document.setName("my property");
-        document.setOwner("google|12345");
-        document.setAttributes(attributes);
+        document.setOwnerId("google|12345");
         document.setUrl("dummy url");
         return this;
     }
 
     public DocumentBuilder useAttribute(String key, String value) {
         attributes.put(key, value);
-        return this;
-    }
-
-    public DocumentBuilder useOwner(String owner) {
-        document.setOwner(owner);
         return this;
     }
 

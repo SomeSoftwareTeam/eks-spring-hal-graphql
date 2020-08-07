@@ -1,7 +1,0 @@
-query GetProperty($id: ID!) {
-    Property(id: $id) {
-        id
-        attributes
-        created
-    }
-}

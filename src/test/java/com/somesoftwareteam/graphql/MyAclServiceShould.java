@@ -28,7 +28,7 @@ public class MyAclServiceShould extends IntegrationTestBase {
     @Transactional
     @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:properties"})
     public void givePermissionToNonOwner() {
-        Property property = propertyBuilder.createNewPropertyWithDefaults().useOwner("google|12345").persist().build();
+        Property property = propertyBuilder.createNewPropertyWithDefaults().useGroupName("google|12345").persist().build();
         myAclService.createReadPermissionAccessControlEntry(property.getId(), "google|54321");
     }
 }

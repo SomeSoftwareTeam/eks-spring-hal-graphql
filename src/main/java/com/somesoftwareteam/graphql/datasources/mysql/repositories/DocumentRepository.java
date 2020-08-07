@@ -25,24 +25,14 @@ import java.util.Optional;
 @PreAuthorize("hasAuthority('SCOPE_read:documents')")
 public interface DocumentRepository extends JpaRepository<Document, Long>, JpaSpecificationExecutor<Document> {
 
-    @Query("select d from Document d where d.owner = ?#{ authentication.name } and d.name like %:input%")
+    @Query("select d from Document d where d.ownerId = ?#{ authentication.name } and d.name like %:input%")
     Page<Document> findByNameContains(@Param(value = "input") String input, Pageable pageable);
 
     @NonNull
-    @Query("select d from Document d where d.owner = ?#{ authentication.name }")
+    @Query("select d from Document d where d.ownerId = ?#{ authentication.name }")
     Page<Document> findAll(@NonNull Pageable pageable);
 
-    @NonNull
-    @RestResource(exported = false)
-    @Query("select f from Document f where f.owner = ?#{ authentication.name }")
-    Page<Document> findAll(Specification<Document> specification, @NonNull Pageable pageable);
-
-    @NonNull
-    @PostAuthorize("hasPermission(returnObject.orElse(null), 'READ')")
-    Optional<Document> findById(@NonNull Long id);
-
-    @NonNull
-    @SuppressWarnings("unchecked")
-    @PreAuthorize("hasPermission(#document, 'WRITE')")
-    Document save(@NonNull @Param("document") Document document);
+//    @NonNull
+//    @PreAuthorize("hasPermission(#id, 'com.somesoftwareteam.graphql.datasources.mysql.entities.Document', 'READ')")
+//    Optional<Document> findById(@NonNull Long id);
 }

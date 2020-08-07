@@ -25,19 +25,14 @@ public class FixtureBuilder {
     public FixtureBuilder createNewFixtureWithDefaults() {
         attributes = objectMapper.createObjectNode();
         fixture = new Fixture();
-        fixture.setName("my property");
-        fixture.setOwner("google|12345");
         fixture.setAttributes(attributes);
+        fixture.setName("my property");
+        fixture.setOwnerId("google|12345");
         return this;
     }
 
     public FixtureBuilder useAttribute(String key, String value) {
         attributes.put(key, value);
-        return this;
-    }
-
-    public FixtureBuilder useOwner(String owner) {
-        fixture.setOwner(owner);
         return this;
     }
 

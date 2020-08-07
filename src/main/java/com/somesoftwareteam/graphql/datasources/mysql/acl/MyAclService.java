@@ -5,6 +5,7 @@ import com.somesoftwareteam.graphql.security.AuthenticationFacade;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.acls.domain.BasePermission;
+import org.springframework.security.acls.domain.GrantedAuthoritySid;
 import org.springframework.security.acls.domain.ObjectIdentityImpl;
 import org.springframework.security.acls.domain.PrincipalSid;
 import org.springframework.security.acls.jdbc.JdbcMutableAclService;
@@ -28,10 +29,14 @@ public class MyAclService extends JdbcMutableAclService {
     private final JdbcTemplate jdbcTemplate;
 
     public MyAclService(AuthenticationFacade authenticationFacade, DataSource dataSource, LookupStrategy lookupStrategy,
-                        AclCache aclCache) {
+                        AclCache aclCache, JdbcTemplate jdbcTemplate) {
         super(dataSource, lookupStrategy, aclCache);
         this.authenticationFacade = authenticationFacade;
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
+        this.jdbcTemplate = jdbcTemplate;
+
+        // https://stackoverflow.com/questions/54859029/spring-security-acl-object/56275135#56275135
+        this.setClassIdentityQuery("SELECT @@IDENTITY");
+        this.setSidIdentityQuery("SELECT @@IDENTITY");
     }
 
     @Transactional
@@ -51,11 +56,6 @@ public class MyAclService extends JdbcMutableAclService {
     @Transactional
     public List<String> getAllSecurityIdentities() {
         return jdbcTemplate.queryForList("select sid from acl_sid", String.class);
-    }
-
-    @Transactional
-    public List<String> getAllAclClasses() {
-        return jdbcTemplate.queryForList("select class from acl_class", String.class);
     }
 
     @Transactional
