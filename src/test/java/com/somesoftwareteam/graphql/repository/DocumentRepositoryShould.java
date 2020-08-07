@@ -27,36 +27,5 @@ public class DocumentRepositoryShould extends IntegrationTestBase {
     @Autowired
     private DocumentRepository repository;
 
-    @BeforeEach
-    public void before() {
-        myAclService.createNewSecurityIdentityIfNecessary("google|12345");
-        myAclService.createNewSecurityIdentityIfNecessary("google|54321");
-    }
 
-    @Test
-    @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:documents"})
-    public void findAllForOwner() {
-        Document document = documentBuilder.createNewDocumentWithDefaults().persist().build();
-        accessControlListBuilder.configureAccessControlList("google|12345", Document.class, document.getId());
-        Page<Document> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
-        assertThat(resultFromFindAll.getContent().size()).isGreaterThan(0);
-    }
-
-    @Test
-    @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:documents"})
-    public void findNoneForNonOwner() {
-        Document document = documentBuilder.createNewDocumentWithDefaults().persist().build();
-        accessControlListBuilder.configureAccessControlList("google|12345", Document.class, document.getId());
-        Page<Document> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
-        assertThat(resultFromFindAll.getContent().size()).isEqualTo(0);
-    }
-
-    @Test
-    @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:documents"})
-    public void findByIdForOwner() {
-        Document document = documentBuilder.createNewDocumentWithDefaults().persist().build();
-        accessControlListBuilder.configureAccessControlList("google|12345", Document.class, document.getId());
-        Document resultFromFindById = repository.findById(document.getId()).orElseThrow(ResourceNotFoundException::new);
-        assertThat(resultFromFindById.getId()).isEqualTo(document.getId());
-    }
 }

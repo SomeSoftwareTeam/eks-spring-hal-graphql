@@ -24,11 +24,11 @@ public class MyAclServiceShould extends IntegrationTestBase {
         assertThat(securityIdentities.contains("google|12345"));
     }
 
-    @Test
-    @Transactional
-    @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:properties"})
-    public void givePermissionToNonOwner() {
-        Property property = propertyBuilder.createNewPropertyWithDefaults().persist().build();
-        myAclService.createReadPermissionAccessControlEntry(property.getId(), "google|54321");
-    }
+//    @Test
+//    @Transactional
+//    @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:properties"})
+//    public void givePermissionToNonOwner() {
+//        Property property = propertyBuilder.createNewPropertyWithDefaults().persist().build();
+//        myAclService.createReadPermissionAccessControlEntry(property.getId(), "google|54321");
+//    }
 }

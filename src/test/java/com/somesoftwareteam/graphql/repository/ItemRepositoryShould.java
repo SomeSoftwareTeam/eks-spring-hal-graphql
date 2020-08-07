@@ -35,30 +35,5 @@ public class ItemRepositoryShould extends IntegrationTestBase {
         myAclService.createNewSecurityIdentityIfNecessary("google|54321");
     }
 
-    @Test
-    @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:items"})
-    public void findAllForGroupMember() {
-        Item item = itemBuilder.createNewItemWithDefaults().persist().build();
-        accessControlListBuilder.configureAccessControlList("google|12345", Item.class, item.getId());
-        Page<Item> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
-        assertThat(resultFromFindAll.getContent().size()).isGreaterThan(0);
-    }
 
-    @Test
-    @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:items"})
-    public void findNoneForNonGroupMember() {
-        Item item = itemBuilder.createNewItemWithDefaults().persist().build();
-        accessControlListBuilder.configureAccessControlList("google|12345", Item.class, item.getId());
-        Page<Item> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
-        assertThat(resultFromFindAll.getContent().size()).isEqualTo(0);
-    }
-
-    @Test
-    @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:items"})
-    public void findByIdForGroupMember() {
-        Item item = itemBuilder.createNewItemWithDefaults().persist().build();
-        accessControlListBuilder.configureAccessControlList("google|12345", Item.class, item.getId());
-        Item resultFromFindById = repository.findById(item.getId()).orElseThrow(ResourceNotFoundException::new);
-        assertThat(resultFromFindById.getId()).isEqualTo(item.getId());
-    }
 }

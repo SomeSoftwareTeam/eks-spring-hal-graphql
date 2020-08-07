@@ -33,30 +33,5 @@ public class FixtureRepositoryShould extends IntegrationTestBase {
         myAclService.createNewSecurityIdentityIfNecessary("google|54321");
     }
 
-    @Test
-    @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:fixtures"})
-    public void findAllForGroupMember() {
-        Fixture fixture = fixtureBuilder.createNewFixtureWithDefaults().persist().build();
-        accessControlListBuilder.configureAccessControlList("google|12345", Fixture.class, fixture.getId());
-        Page<Fixture> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
-        assertThat(resultFromFindAll.getContent().size()).isGreaterThan(0);
-    }
 
-    @Test
-    @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:fixtures"})
-    public void findNoneForNonGroupMember() {
-        Fixture fixture = fixtureBuilder.createNewFixtureWithDefaults().persist().build();
-        accessControlListBuilder.configureAccessControlList("google|12345", Fixture.class, fixture.getId());
-        Page<Fixture> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
-        assertThat(resultFromFindAll.getContent().size()).isEqualTo(0);
-    }
-
-    @Test
-    @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:fixtures"})
-    public void findByIdForGroupMember() {
-        Fixture fixture = fixtureBuilder.createNewFixtureWithDefaults().persist().build();
-        accessControlListBuilder.configureAccessControlList("google|12345", Fixture.class, fixture.getId());
-        Fixture resultFromFindById = repository.findById(fixture.getId()).orElseThrow(ResourceNotFoundException::new);
-        assertThat(resultFromFindById.getId()).isEqualTo(fixture.getId());
-    }
 }

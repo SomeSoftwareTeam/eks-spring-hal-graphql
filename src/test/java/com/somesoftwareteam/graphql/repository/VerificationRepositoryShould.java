@@ -33,37 +33,5 @@ public class VerificationRepositoryShould extends IntegrationTestBase {
         myAclService.createNewSecurityIdentityIfNecessary("google|54321");
     }
 
-    @Test
-    @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:verifications"})
-    public void findAllForOwner() {
-        Verification verification = verificationBuilder
-                .createNewVerificationWithDefaults().useGroupId("google|12345").persist().build();
-        accessControlListBuilder
-                .configureAccessControlList("google|12345", Verification.class, verification.getId());
-        Page<Verification> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
-        assertThat(resultFromFindAll.getContent().size()).isGreaterThan(0);
-    }
 
-    @Test
-    @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:verifications"})
-    public void findNoneForNonOwner() {
-        Verification verification = verificationBuilder
-                .createNewVerificationWithDefaults().useGroupId("google|12345").persist().build();
-        accessControlListBuilder
-                .configureAccessControlList("google|12345", Verification.class, verification.getId());
-        Page<Verification> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
-        assertThat(resultFromFindAll.getContent().size()).isEqualTo(0);
-    }
-
-    @Test
-    @WithMockUser(username = "google|12345", authorities = {"SCOPE_read:verifications"})
-    public void getVerificationByIdForOwner() {
-        Verification verification = verificationBuilder
-                .createNewVerificationWithDefaults().useGroupId("google|12345").persist().build();
-        accessControlListBuilder
-                .configureAccessControlList("google|12345", Verification.class, verification.getId());
-        Verification resultFromGetById = repository
-                .findById(verification.getId()).orElseThrow(ResourceNotFoundException::new);
-        assertThat(resultFromGetById.getId()).isEqualTo(verification.getId());
-    }
 }
