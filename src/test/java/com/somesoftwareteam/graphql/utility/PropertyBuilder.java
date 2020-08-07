@@ -31,7 +31,6 @@ public class PropertyBuilder {
         property = new Property();
         property.setAddress("135 Trenor Ln, Powells Point, NC 27966, USA");
         property.setAttributes(attributes);
-        property.setGroupName("Trenor Laners");
         property.setLocation(geometryFactory.createPoint(new Coordinate(-75.833445, 36.1392822)));
         property.setName("my property");
         property.setOwnerId("google|12345");
@@ -45,11 +44,6 @@ public class PropertyBuilder {
 
     public PropertyBuilder useName(String name) {
         property.setName(name);
-        return this;
-    }
-
-    public PropertyBuilder useGroupName(String groupName) {
-        property.setGroupName(groupName);
         return this;
     }
 

@@ -1,4 +1,4 @@
-package com.somesoftwareteam.graphql.datasources.mysql;
+package com.somesoftwareteam.graphql.datasources.mysql.configuration;
 
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.PrecisionModel;

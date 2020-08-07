@@ -1,15 +1,11 @@
 package com.somesoftwareteam.graphql.utility;
 
 import com.somesoftwareteam.graphql.datasources.mysql.acl.MyAclService;
-import com.somesoftwareteam.graphql.datasources.mysql.repositories.EntityCreator;
-import com.somesoftwareteam.graphql.security.AuthenticationFacade;
 import org.junit.ClassRule;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.testcontainers.containers.MySQLContainer;
-
-import javax.persistence.EntityManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

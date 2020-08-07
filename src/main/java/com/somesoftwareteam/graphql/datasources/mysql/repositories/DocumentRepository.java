@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Spring Security provides Spring Data integration that allows referring to the current user within your queries:
@@ -23,12 +24,5 @@ import java.util.Optional;
  */
 @Repository
 @PreAuthorize("hasAuthority('SCOPE_read:documents')")
-public interface DocumentRepository extends JpaRepository<Document, Long>, JpaSpecificationExecutor<Document> {
-
-    @Query("select d from Document d where d.ownerId = ?#{ authentication.name } and d.name like %:input%")
-    Page<Document> findByNameContains(@Param(value = "input") String input, Pageable pageable);
-
-    @NonNull
-    @Query("select d from Document d where d.ownerId = ?#{ authentication.name }")
-    Page<Document> findAll(@NonNull Pageable pageable);
+public interface DocumentRepository extends JpaRepository<Document, UUID>, JpaSpecificationExecutor<Document> {
 }

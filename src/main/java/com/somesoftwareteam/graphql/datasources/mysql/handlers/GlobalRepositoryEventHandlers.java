@@ -5,31 +5,25 @@ import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import org.springframework.stereotype.Component;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Set;
 
 /**
  * https://docs.spring.io/spring-data/rest/docs/current/reference/html/#events
  */
 @Component
 @RepositoryEventHandler
-public class GlobalRepositoryEventListeners {
+public class GlobalRepositoryEventHandlers {
 
     private final AuthenticationFacade authenticationFacade;
-    private final Validator validator;
 
-    public GlobalRepositoryEventListeners(AuthenticationFacade authenticationFacade, Validator validator) {
+    public GlobalRepositoryEventHandlers(AuthenticationFacade authenticationFacade) {
         this.authenticationFacade = authenticationFacade;
-        this.validator = validator;
     }
 
     @HandleBeforeCreate
-    public void handleEntitySave(Object entity) {
+    public void handleBeforeCreate(Object entity) {
         setOwnerId(entity);
-//        validate(entity);
     }
 
     private void setOwnerId(Object entity) {
@@ -44,9 +38,4 @@ public class GlobalRepositoryEventListeners {
             e.printStackTrace();
         }
     }
-
-//    private void validate(Object entity) {
-//        Set<ConstraintViolation<Object>> violations = validator.validate(entity);
-//        violations.forEach(v -> System.out.println(v.getMessage()));
-//    }
 }

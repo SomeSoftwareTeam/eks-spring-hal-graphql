@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * https://spring.io/guides/gs/uploading-files/
@@ -46,7 +47,7 @@ public class DocumentController {
     @PostMapping(value = "/documents", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('SCOPE_write:documents')")
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file,
-                                        @RequestParam(value = "propertyId", required = false) Long propertyId,
+                                        @RequestParam(value = "propertyId", required = false) UUID propertyId,
                                         @RequestParam("name") String name,
                                         @RequestParam("description") String description) {
 

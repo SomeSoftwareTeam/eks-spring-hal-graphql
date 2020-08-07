@@ -11,28 +11,25 @@ import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import org.springframework.stereotype.Component;
 
-import javax.validation.Validator;
-
 /**
  * https://docs.spring.io/spring-data/rest/docs/current/reference/html/#events
  */
 @Component
 @RepositoryEventHandler
-public class PropertyRepositoryEventListeners {
+public class PropertyRepositoryEventHandlers {
 
     private final GeometryFactory geometryFactory;
     private final GooglePlacesWrapper googlePlacesWrapper;
     private final Logger logger;
 
-    public PropertyRepositoryEventListeners(GeometryFactory geometryFactory, GooglePlacesWrapper googlePlacesWrapper,
-                                            Validator validator) {
+    public PropertyRepositoryEventHandlers(GeometryFactory geometryFactory, GooglePlacesWrapper googlePlacesWrapper) {
         this.geometryFactory = geometryFactory;
         this.googlePlacesWrapper = googlePlacesWrapper;
         this.logger = LoggerFactory.getLogger("PropertyRepositoryEventListeners");
     }
 
     @HandleBeforeCreate
-    public void handlePropertySave(Property property) {
+    public void handleBeforeSave(Property property) {
         attemptPropertyGeocode(property);
     }
 

@@ -2,15 +2,15 @@ package com.somesoftwareteam.graphql.datasources.mysql.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 import org.locationtech.jts.geom.Point;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 /**
  * https://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#spatial
@@ -24,6 +24,13 @@ public class Property {
     @Type(type = "json-string")
     private JsonNode attributes;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "club_id", insertable = false, updatable = false)
+    private Club club;
+
+    @Column(name = "club_id")
+    private UUID clubId;
+
     @CreationTimestamp
     private ZonedDateTime createdAt;
 
@@ -32,12 +39,11 @@ public class Property {
 
     private boolean addressFormatted;
 
-    @NotBlank(message = "Property group name cannot be empty.")
-    private String groupName;
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id", updatable = false, nullable = false)
+    private UUID id;
 
     private Point location;
 
@@ -50,23 +56,28 @@ public class Property {
     @UpdateTimestamp
     private ZonedDateTime updated;
 
-    public Property() {
-    }
-
-    public Property(String formattedAddress, Point location, String name, String groupName, JsonNode attributes) {
-        this.address = formattedAddress;
-        this.location = location;
-        this.name = name;
-        this.groupName = groupName;
-        this.attributes = attributes;
-    }
-
     public JsonNode getAttributes() {
         return attributes;
     }
 
     public void setAttributes(JsonNode attributes) {
         this.attributes = attributes;
+    }
+
+    public Club getClub() {
+        return club;
+    }
+
+    public void setClub(Club club) {
+        this.club = club;
+    }
+
+    public UUID getClubId() {
+        return clubId;
+    }
+
+    public void setClubId(UUID clubId) {
+        this.clubId = clubId;
     }
 
     public ZonedDateTime getCreatedAt() {
@@ -93,19 +104,11 @@ public class Property {
         this.addressFormatted = addressFormatted;
     }
 
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

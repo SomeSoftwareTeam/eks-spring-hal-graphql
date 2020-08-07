@@ -9,13 +9,17 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import java.time.ZonedDateTime;
-import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
+/**
+ * https://thorben-janssen.com/generate-uuids-primary-keys-hibernate/
+ * https://www.maxenglander.com/2017/09/01/optimized-uuid-with-hibernate.html
+ */
 @Entity
-@Table(name = "fixture")
+@Table(name = "club")
 @TypeDef(name = "json-string", typeClass = JsonStringType.class)
-public class Fixture {
+public class Club {
 
     @Type(type = "json-string")
     private JsonNode attributes;
@@ -23,41 +27,26 @@ public class Fixture {
     @CreationTimestamp
     private ZonedDateTime createdAt;
 
+    @NotBlank(message = "Club description cannot be empty.")
+    private String description;
+
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(name = "id")
     private UUID id;
 
-    @NotBlank(message = "Fixture name cannot be empty.")
+    @NotBlank(message = "Club name cannot be empty.")
     private String name;
 
-    @NotBlank(message = "Fixture owner id cannot be empty.")
+    @NotBlank(message = "Club owner id cannot be empty.")
     private String ownerId;
 
-    @ManyToOne
-    @JoinColumn(name = "property_id", updatable = false, insertable = false)
-    private Property property;
-
-    @Column(name = "property_id")
-    private UUID propertyId;
+    @OneToMany(mappedBy = "club")
+    private Set<Property> properties;
 
     @UpdateTimestamp
     private ZonedDateTime updated;
-
-    public Fixture() {
-    }
-
-    public Fixture(String name, JsonNode attributes) {
-        this.name = name;
-        this.attributes = attributes;
-    }
-
-    public Fixture(String name, JsonNode attributes, Property property) {
-        this.attributes = attributes;
-        this.name = name;
-        this.property = property;
-    }
 
     public JsonNode getAttributes() {
         return attributes;
@@ -73,6 +62,14 @@ public class Fixture {
 
     public void setCreatedAt(ZonedDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public UUID getId() {
@@ -99,20 +96,12 @@ public class Fixture {
         this.ownerId = ownerId;
     }
 
-    public Property getProperty() {
-        return property;
+    public Set<Property> getProperties() {
+        return properties;
     }
 
-    public void setProperty(Property property) {
-        this.property = property;
-    }
-
-    public UUID getPropertyId() {
-        return propertyId;
-    }
-
-    public void setPropertyId(UUID propertyId) {
-        this.propertyId = propertyId;
+    public void setProperties(Set<Property> properties) {
+        this.properties = properties;
     }
 
     public ZonedDateTime getUpdated() {

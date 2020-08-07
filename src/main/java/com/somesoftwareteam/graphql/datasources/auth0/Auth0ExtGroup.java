@@ -2,24 +2,26 @@ package com.somesoftwareteam.graphql.datasources.auth0;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 
+import java.util.UUID;
+
 /**
  * https://www.baeldung.com/jackson-annotations
  */
-public class Group {
+public class Auth0ExtGroup {
 
-//    @JsonAlias("_id")
-//    private String id;
+    @JsonAlias("_id")
+    private UUID id;
     private String name;
     private String description;
     private String[] members;
 
-//    public String getId() {
-//        return id;
-//    }
-//
-//    public void setId(String id) {
-//        this.id = id;
-//    }
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

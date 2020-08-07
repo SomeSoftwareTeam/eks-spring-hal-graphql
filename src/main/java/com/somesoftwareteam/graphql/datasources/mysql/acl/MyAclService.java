@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * https://docs.spring.io/spring-security/site/docs/3.0.x/reference/domain-acls.html
@@ -59,7 +60,7 @@ public class MyAclService extends JdbcMutableAclService {
     }
 
     @Transactional
-    public void createAccessControlList(Class<?> entityClass, Long entityId) {
+    public void createAccessControlList(Class<?> entityClass, UUID entityId) {
         ObjectIdentity objectIdentity = new ObjectIdentityImpl(entityClass, entityId);
         String currentPrincipalName = authenticationFacade.getCurrentPrincipalName();
         createNewSecurityIdentityIfNecessary(currentPrincipalName);
@@ -67,7 +68,7 @@ public class MyAclService extends JdbcMutableAclService {
     }
 
     @Transactional
-    public void createReadPermissionAccessControlEntry(Long id, String name) {
+    public void createReadPermissionAccessControlEntry(UUID id, String name) {
         ObjectIdentity objectIdentity = new ObjectIdentityImpl(Property.class, id);
         MutableAcl acl = getOrCreateAcl(objectIdentity);
         acl.insertAce(acl.getEntries().size(), BasePermission.READ, new PrincipalSid(name), true);

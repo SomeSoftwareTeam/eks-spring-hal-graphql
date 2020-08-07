@@ -2,14 +2,14 @@ package com.somesoftwareteam.graphql.datasources.mysql.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.ZonedDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "document")
@@ -25,16 +25,21 @@ public class Document {
     private String description;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id", updatable = false, nullable = false)
+    private UUID id;
 
     private String name;
 
     private String ownerId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "property_id")
+    @ManyToOne
+    @JoinColumn(name = "property_id", updatable = false, insertable = false)
     private Property property;
+
+    @Column(name = "property_id")
+    private UUID propertyId;
 
     @UpdateTimestamp
     private ZonedDateTime updated;
@@ -61,11 +66,6 @@ public class Document {
         this.url = url;
     }
 
-    // TODO: remove when using hal properly
-    public Long getPropertyId() {
-        return Objects.isNull(property) ? null : property.getId();
-    }
-
     public JsonNode getAttributes() {
         return attributes;
     }
@@ -90,11 +90,11 @@ public class Document {
         this.description = description;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -120,6 +120,14 @@ public class Document {
 
     public void setProperty(Property property) {
         this.property = property;
+    }
+
+    public UUID getPropertyId() {
+        return propertyId;
+    }
+
+    public void setPropertyId(UUID propertyId) {
+        this.propertyId = propertyId;
     }
 
     public ZonedDateTime getUpdated() {

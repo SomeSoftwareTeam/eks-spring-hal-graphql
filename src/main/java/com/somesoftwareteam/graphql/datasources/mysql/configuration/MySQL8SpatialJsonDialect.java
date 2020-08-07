@@ -1,4 +1,4 @@
-package com.somesoftwareteam.graphql.datasources.mysql;
+package com.somesoftwareteam.graphql.datasources.mysql.configuration;
 
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import org.hibernate.dialect.MySQL8Dialect;

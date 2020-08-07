@@ -12,6 +12,7 @@ import org.springframework.security.acls.model.Sid;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.UUID;
 
 @Service
 public class AccessControlListBuilder {
@@ -20,7 +21,7 @@ public class AccessControlListBuilder {
     private MyAclService myAclService;
 
     @Transactional
-    public AccessControlListBuilder configureAccessControlList(String username, Class<?> entityClass, Long entityId) {
+    public AccessControlListBuilder configureAccessControlList(String username, Class<?> entityClass, UUID entityId) {
 
         myAclService.createNewSecurityIdentityIfNecessary(username);
 

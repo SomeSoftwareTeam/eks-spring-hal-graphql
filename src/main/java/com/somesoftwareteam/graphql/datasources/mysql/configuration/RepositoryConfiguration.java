@@ -1,4 +1,4 @@
-package com.somesoftwareteam.graphql.security;
+package com.somesoftwareteam.graphql.datasources.mysql.configuration;
 
 import com.somesoftwareteam.graphql.datasources.mysql.entities.*;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +21,7 @@ public class RepositoryConfiguration implements RepositoryRestConfigurer {
                 .allowedMethods("GET", "PUT", "POST", "DELETE");
 
         config
+                .exposeIdsFor(Club.class)
                 .exposeIdsFor(Document.class)
                 .exposeIdsFor(Item.class)
                 .exposeIdsFor(Fixture.class)
