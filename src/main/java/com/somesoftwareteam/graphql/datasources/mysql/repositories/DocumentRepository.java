@@ -31,8 +31,4 @@ public interface DocumentRepository extends JpaRepository<Document, Long>, JpaSp
     @NonNull
     @Query("select d from Document d where d.ownerId = ?#{ authentication.name }")
     Page<Document> findAll(@NonNull Pageable pageable);
-
-//    @NonNull
-//    @PreAuthorize("hasPermission(#id, 'com.somesoftwareteam.graphql.datasources.mysql.entities.Document', 'READ')")
-//    Optional<Document> findById(@NonNull Long id);
 }

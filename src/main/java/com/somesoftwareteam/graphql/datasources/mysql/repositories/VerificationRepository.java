@@ -28,8 +28,4 @@ public interface VerificationRepository extends JpaRepository<Verification, Long
     @NonNull
     @Query("select v from Verification v where v.ownerId = ?#{ authentication.name }")
     Page<Verification> findAll(@NonNull Pageable pageable);
-
-    @NonNull
-    @PreAuthorize("hasPermission(#id, 'com.somesoftwareteam.graphql.datasources.mysql.entities.Verification', 'READ')")
-    Optional<Verification> findById(@NonNull Long id);
 }

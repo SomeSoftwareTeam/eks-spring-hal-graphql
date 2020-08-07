@@ -31,8 +31,4 @@ public interface ItemRepository extends JpaRepository<Item, Long>, JpaSpecificat
     @NonNull
     @Query("select f from Item f where f.ownerId = ?#{ authentication.name }")
     Page<Item> findAll(@NonNull Pageable pageable);
-
-    @NonNull
-    @PreAuthorize("hasPermission(#id, 'com.somesoftwareteam.graphql.datasources.mysql.entities.Item', 'READ')")
-    Optional<Item> findById(@NonNull Long id);
 }

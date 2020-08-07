@@ -59,12 +59,4 @@ public class FixtureRepositoryShould extends IntegrationTestBase {
         Fixture resultFromFindById = repository.findById(fixture.getId()).orElseThrow(ResourceNotFoundException::new);
         assertThat(resultFromFindById.getId()).isEqualTo(fixture.getId());
     }
-
-    @Test
-    @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:fixtures"})
-    public void notFindByIdForNonGroupMember() {
-        Fixture fixture = fixtureBuilder.createNewFixtureWithDefaults().persist().build();
-        accessControlListBuilder.configureAccessControlList("google|12345", Fixture.class, fixture.getId());
-        assertThrows(AccessDeniedException.class, () -> repository.findById(fixture.getId()));
-    }
 }

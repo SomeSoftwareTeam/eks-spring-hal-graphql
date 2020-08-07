@@ -59,12 +59,4 @@ public class DocumentRepositoryShould extends IntegrationTestBase {
         Document resultFromFindById = repository.findById(document.getId()).orElseThrow(ResourceNotFoundException::new);
         assertThat(resultFromFindById.getId()).isEqualTo(document.getId());
     }
-
-    @Test
-    @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:documents"})
-    public void notFindByIdForNonOwner() {
-        Document document = documentBuilder.createNewDocumentWithDefaults().persist().build();
-        accessControlListBuilder.configureAccessControlList("google|12345", Document.class, document.getId());
-        assertThrows(AccessDeniedException.class, () -> repository.findById(document.getId()));
-    }
 }

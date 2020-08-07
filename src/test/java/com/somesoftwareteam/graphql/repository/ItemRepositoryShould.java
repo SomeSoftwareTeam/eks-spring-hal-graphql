@@ -61,12 +61,4 @@ public class ItemRepositoryShould extends IntegrationTestBase {
         Item resultFromFindById = repository.findById(item.getId()).orElseThrow(ResourceNotFoundException::new);
         assertThat(resultFromFindById.getId()).isEqualTo(item.getId());
     }
-
-    @Test
-    @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:items"})
-    public void notFindItemByIdForNonOwner() {
-        Item item = itemBuilder.createNewItemWithDefaults().persist().build();
-        accessControlListBuilder.configureAccessControlList("google|12345", Item.class, item.getId());
-        assertThrows(AccessDeniedException.class, () -> repository.findById(item.getId()));
-    }
 }

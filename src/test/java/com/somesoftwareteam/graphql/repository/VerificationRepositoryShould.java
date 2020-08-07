@@ -66,14 +66,4 @@ public class VerificationRepositoryShould extends IntegrationTestBase {
                 .findById(verification.getId()).orElseThrow(ResourceNotFoundException::new);
         assertThat(resultFromGetById.getId()).isEqualTo(verification.getId());
     }
-
-    @Test
-    @WithMockUser(username = "google|54321", authorities = {"SCOPE_read:verifications"})
-    public void notFindFixtureByIdForNonOwner() {
-        Verification verification = verificationBuilder
-                .createNewVerificationWithDefaults().useGroupId("google|12345").persist().build();
-        accessControlListBuilder
-                .configureAccessControlList("google|12345", Verification.class, verification.getId());
-        assertThrows(AccessDeniedException.class, () -> repository.findById(verification.getId()));
-    }
 }
