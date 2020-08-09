@@ -32,6 +32,13 @@ public class Auth0WrapperShould {
     }
 
     @Test
+    public void searchAuth0CoreUsers() throws Auth0Exception {
+        List<User> users = auth0Wrapper.searchAuth0CoreUsers("Thomas");
+        users.forEach(u -> System.out.println(u.getName()));
+        assertThat(users).isNotEmpty();
+    }
+
+    @Test
     public void getAuth0ExtGroups() throws IOException {
         List<Auth0ExtGroup> groups = auth0Wrapper.getAuth0ExtGroups();
         groups.forEach(g -> System.out.println(g.getName()));

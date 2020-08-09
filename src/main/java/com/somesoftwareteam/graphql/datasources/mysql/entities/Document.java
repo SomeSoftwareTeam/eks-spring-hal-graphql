@@ -42,7 +42,7 @@ public class Document {
     private UUID propertyId;
 
     @UpdateTimestamp
-    private ZonedDateTime updated;
+    private ZonedDateTime updatedAt;
 
     String url;
 
@@ -130,12 +130,12 @@ public class Document {
         this.propertyId = propertyId;
     }
 
-    public ZonedDateTime getUpdated() {
-        return updated;
+    public ZonedDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdated(ZonedDateTime updated) {
-        this.updated = updated;
+    public void setUpdatedAt(ZonedDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public String getUrl() {

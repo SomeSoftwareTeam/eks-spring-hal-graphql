@@ -24,7 +24,7 @@ public class Property {
     @Type(type = "json-string")
     private JsonNode attributes;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id", insertable = false, updatable = false)
     private Club club;
 
@@ -54,7 +54,7 @@ public class Property {
     private String ownerId;
 
     @UpdateTimestamp
-    private ZonedDateTime updated;
+    private ZonedDateTime updatedAt;
 
     public JsonNode getAttributes() {
         return attributes;
@@ -136,11 +136,11 @@ public class Property {
         this.ownerId = ownerId;
     }
 
-    public ZonedDateTime getUpdated() {
-        return updated;
+    public ZonedDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdated(ZonedDateTime updated) {
-        this.updated = updated;
+    public void setUpdatedAt(ZonedDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

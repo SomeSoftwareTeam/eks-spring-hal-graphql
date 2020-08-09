@@ -43,7 +43,7 @@ public class Fixture {
     private UUID propertyId;
 
     @UpdateTimestamp
-    private ZonedDateTime updated;
+    private ZonedDateTime updatedAt;
 
     public Fixture() {
     }
@@ -115,11 +115,11 @@ public class Fixture {
         this.propertyId = propertyId;
     }
 
-    public ZonedDateTime getUpdated() {
-        return updated;
+    public ZonedDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdated(ZonedDateTime updated) {
-        this.updated = updated;
+    public void setUpdatedAt(ZonedDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

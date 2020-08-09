@@ -8,7 +8,16 @@ create table club
     id binary(16) primary key,
     name varchar(255) not null,
     owner_id varchar(255) not null,
-    updated timestamp not null default current_timestamp
+    updated_at timestamp not null default current_timestamp
+);
+
+create table club_member
+(
+    club_id binary(16) not null,
+    created_at timestamp not null default current_timestamp,
+    id binary(16) primary key,
+    member_id varchar(255) not null,
+    FOREIGN KEY (club_id) REFERENCES club(id)
 );
 
 create table property
@@ -23,7 +32,7 @@ create table property
     location point srid 3857,
     name varchar(255) not null,
     owner_id varchar(255) not null,
-    updated timestamp not null default current_timestamp,
+    updated_at timestamp not null default current_timestamp,
     FOREIGN KEY (club_id) REFERENCES club(id)
 );
 
@@ -36,7 +45,7 @@ create table verification
     attributes json not null,
     owner_id varchar(255) not null,
     property_id binary(16),
-    updated timestamp not null default current_timestamp,
+    updated_at timestamp not null default current_timestamp,
     FOREIGN KEY (property_id) REFERENCES property(id)
 );
 
@@ -49,7 +58,7 @@ create table fixture
     name varchar(255) not null,
     owner_id varchar(255) not null,
     property_id binary(16),
-    updated timestamp not null default current_timestamp,
+    updated_at timestamp not null default current_timestamp,
     FOREIGN KEY (property_id) REFERENCES property(id)
 );
 
@@ -62,7 +71,7 @@ create table item
     name varchar(255) not null,
     owner_id varchar(255) not null,
     property_id binary(16),
-    updated timestamp not null default current_timestamp,
+    updated_at timestamp not null default current_timestamp,
     FOREIGN KEY (property_id) REFERENCES property(id)
 );
 
@@ -76,7 +85,7 @@ create table document
     name varchar(255) not null,
     owner_id varchar(255) not null,
     property_id binary(16),
-    updated timestamp not null default current_timestamp,
+    updated_at timestamp not null default current_timestamp,
     url varchar(255) not null,
     FOREIGN KEY (property_id) REFERENCES property(id)
 );

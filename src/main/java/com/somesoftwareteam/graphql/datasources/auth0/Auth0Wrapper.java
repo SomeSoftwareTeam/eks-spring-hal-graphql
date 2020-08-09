@@ -27,14 +27,16 @@ import java.util.Objects;
 
 /**
  * https://auth0.com/docs/extensions/authorization-extension/v2/api-access
- * https://github.com/auth0/auth0-java
  * https://auth0.com/docs/api/authorization-extension
+ * https://github.com/auth0/auth0-java
+ * https://auth0.com/docs/api/management/v2
  */
 @Service
 public class Auth0Wrapper {
 
     private final AuthAPI authAPI;
     private final Logger logger;
+    private final ManagementAPI managementAPI;
     private final ObjectMapper objectMapper;
     private final OkHttpClient okHttpClient;
     private ZonedDateTime lastToken;
@@ -47,6 +49,7 @@ public class Auth0Wrapper {
     public Auth0Wrapper(AuthAPI authAPI, ObjectMapper objectMapper) throws Auth0Exception {
         this.authAPI = authAPI;
         this.logger = LoggerFactory.getLogger("Auth0Wrapper");
+        this.managementAPI = new ManagementAPI("somesoftwareteam.auth0.com", "");
         this.objectMapper = objectMapper;
         this.okHttpClient = new OkHttpClient();
         requestTokens();
@@ -55,12 +58,25 @@ public class Auth0Wrapper {
     public List<User> getAuth0CoreUsers() throws Auth0Exception {
         if (tokensAreExpired()) requestTokens();
         logger.info("Requesting authorization core users");
-        ManagementAPI managementAPI = new ManagementAPI("somesoftwareteam.auth0.com", auth0CoreApiTokenHolder.getAccessToken());
         UserFilter filter = new UserFilter().withPage(0, 20);
         com.auth0.net.Request<UsersPage> request = managementAPI.users().list(filter);
         UsersPage page = request.execute();
         return page.getItems();
     }
+
+    public List<User> searchAuth0CoreUsers(String luceneSearchString) throws Auth0Exception {
+        if (tokensAreExpired()) requestTokens();
+        logger.info("Searching authorization core users");
+        UserFilter filter = new UserFilter().withQuery(luceneSearchString).withPage(0, 20);
+        com.auth0.net.Request<UsersPage> request = managementAPI.users().list(filter);
+        UsersPage page = request.execute();
+        return page.getItems();
+    }
+
+
+
+
+
 
     public List<Auth0ExtGroup> getAuth0ExtGroups() throws IOException {
         logger.info("Requesting authorization extension groups");
@@ -147,6 +163,7 @@ public class Auth0Wrapper {
         lastToken = ZonedDateTime.now();
         AuthRequest auth0CoreApiAuthRequest = authAPI.requestToken("https://somesoftwareteam.auth0.com/api/v2/");
         auth0CoreApiTokenHolder = auth0CoreApiAuthRequest.execute();
+        managementAPI.setApiToken(auth0CoreApiTokenHolder.getAccessToken());
         AuthRequest auth0AuthExtAuthRequest = authAPI.requestToken("urn:auth0-authz-api");
         auth0AuthExtTokenHolder = auth0AuthExtAuthRequest.execute();
     }

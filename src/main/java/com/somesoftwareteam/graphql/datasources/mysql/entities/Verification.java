@@ -40,7 +40,7 @@ public class Verification {
     private UUID propertyId;
 
     @UpdateTimestamp
-    private ZonedDateTime updated;
+    private ZonedDateTime updatedAt;
 
     public Verification() {
     }
@@ -112,11 +112,11 @@ public class Verification {
         this.propertyId = propertyId;
     }
 
-    public ZonedDateTime getUpdated() {
-        return updated;
+    public ZonedDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdated(ZonedDateTime updated) {
-        this.updated = updated;
+    public void setUpdatedAt(ZonedDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

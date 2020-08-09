@@ -11,6 +11,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.ExposesResourceFor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -34,6 +35,13 @@ public class MemberController {
     @GetMapping(value = "/rest/members")
     public ResponseEntity<?> getMembers() throws Auth0Exception {
         List<User> users = auth0Wrapper.getAuth0CoreUsers();
+        List<EntityModel<Member>> models = users.stream().map(this::convertToEntityModel).collect(Collectors.toList());
+        return ResponseEntity.ok(CollectionModel.of(models));
+    }
+
+    @GetMapping(value = "/rest/members/search/findByNameContains")
+    public ResponseEntity<?> getMembers(@RequestParam String input) throws Auth0Exception {
+        List<User> users = auth0Wrapper.searchAuth0CoreUsers(input);
         List<EntityModel<Member>> models = users.stream().map(this::convertToEntityModel).collect(Collectors.toList());
         return ResponseEntity.ok(CollectionModel.of(models));
     }
