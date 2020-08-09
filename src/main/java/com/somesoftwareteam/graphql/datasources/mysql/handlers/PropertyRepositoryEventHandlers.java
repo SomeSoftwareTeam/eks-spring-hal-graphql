@@ -8,6 +8,7 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
+import org.springframework.data.rest.core.annotation.HandleBeforeSave;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +30,11 @@ public class PropertyRepositoryEventHandlers {
     }
 
     @HandleBeforeCreate
+    public void handleBeforeCreate(Property property) {
+        attemptPropertyGeocode(property);
+    }
+
+    @HandleBeforeSave
     public void handleBeforeSave(Property property) {
         attemptPropertyGeocode(property);
     }
