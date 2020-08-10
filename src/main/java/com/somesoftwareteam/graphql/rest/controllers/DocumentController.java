@@ -60,6 +60,7 @@ public class DocumentController {
         String ownerId = authenticationFacade.getCurrentPrincipalName();
 
         Document document = new Document(name, ownerId, url, description, JacksonUtil.toJsonNode("{}"), property);
+        document.setPropertyId(propertyId);
 
         documentRepository.save(document);
 
