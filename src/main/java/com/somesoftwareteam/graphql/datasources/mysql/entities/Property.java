@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import java.time.ZonedDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -20,6 +21,11 @@ import java.util.UUID;
 @Table(name = "property")
 @TypeDef(name = "json-string", typeClass = JsonStringType.class)
 public class Property {
+
+    @NotBlank(message = "Property address cannot be empty.")
+    private String address;
+
+    private boolean addressFormatted;
 
     @Type(type = "json-string")
     private JsonNode attributes;
@@ -34,10 +40,11 @@ public class Property {
     @CreationTimestamp
     private ZonedDateTime createdAt;
 
-    @NotBlank(message = "Property address cannot be empty.")
-    private String address;
+    @OneToMany(mappedBy = "property", fetch = FetchType.LAZY)
+    private Set<Document> documents;
 
-    private boolean addressFormatted;
+    @OneToMany(mappedBy = "property", fetch = FetchType.LAZY)
+    Set<Fixture> fixtures;
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -86,6 +93,14 @@ public class Property {
 
     public void setCreatedAt(ZonedDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Set<Document> getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(Set<Document> documents) {
+        this.documents = documents;
     }
 
     public String getAddress() {
