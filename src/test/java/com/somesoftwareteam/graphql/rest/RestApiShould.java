@@ -26,7 +26,7 @@ class RestApiShould {
         WebTestClient client = WebTestClient.bindToServer().baseUrl("http://localhost:" + port).build();
         client.get().uri("/rest/documents").exchange().expectStatus().isUnauthorized();
         client.get().uri("/rest/fixtures").exchange().expectStatus().isUnauthorized();
-        client.get().uri("/rest/items").exchange().expectStatus().isUnauthorized();
+        client.get().uri("/rest/records").exchange().expectStatus().isUnauthorized();
         client.get().uri("/rest/properties").exchange().expectStatus().isUnauthorized();
         client.get().uri("/rest/verifications").exchange().expectStatus().isUnauthorized();
     }

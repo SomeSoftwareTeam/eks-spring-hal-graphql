@@ -1,5 +1,6 @@
-package com.somesoftwareteam.graphql.utility;
+package com.somesoftwareteam.graphql.rest;
 
+import com.somesoftwareteam.graphql.utility.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -20,7 +21,7 @@ import static org.springframework.hateoas.MediaTypes.HAL_JSON;
  * https://docs.spring.io/spring-hateoas/docs/current/reference/html/#client.web-test-client
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class HalResourceBase<T> {
+public class RestApiResourceBase<T> {
 
     @LocalServerPort
     public int port;
@@ -29,7 +30,7 @@ public class HalResourceBase<T> {
     public DocumentBuilder documentBuilder;
 
     @Autowired
-    public ItemBuilder itemBuilder;
+    public RecordBuilder itemBuilder;
 
     @Autowired
     public FixtureBuilder fixtureBuilder;

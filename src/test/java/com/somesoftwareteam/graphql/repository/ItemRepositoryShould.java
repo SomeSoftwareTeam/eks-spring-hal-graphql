@@ -1,21 +1,9 @@
 package com.somesoftwareteam.graphql.repository;
 
-import com.somesoftwareteam.graphql.datasources.mysql.entities.Item;
-import com.somesoftwareteam.graphql.datasources.mysql.repositories.ItemRepository;
+import com.somesoftwareteam.graphql.datasources.mysql.repositories.RecordRepository;
 import com.somesoftwareteam.graphql.utility.IntegrationTestBase;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.test.context.support.WithMockUser;
-
-import javax.transaction.Transactional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Help from:
@@ -27,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class ItemRepositoryShould extends IntegrationTestBase {
 
     @Autowired
-    private ItemRepository repository;
+    private RecordRepository repository;
 
     @BeforeEach
     public void before() {

@@ -50,22 +50,15 @@ public class DocumentController {
                                         @RequestParam(value = "propertyId", required = false) UUID propertyId,
                                         @RequestParam("name") String name,
                                         @RequestParam("description") String description) {
-
         String url = this.amazonWrapper.uploadFile(file);
-
         Property property = Objects.isNull(propertyId)
                 ? null
                 : propertyRepository.findById(propertyId).orElseThrow(ResourceNotFoundException::new);
-
         String ownerId = authenticationFacade.getCurrentPrincipalName();
-
         Document document = new Document(name, ownerId, url, description, JacksonUtil.toJsonNode("{}"), property);
         document.setPropertyId(propertyId);
-
         documentRepository.save(document);
-
         EntityModel<Document> model = documentModelAssembler.toModel(document);
-
         return ResponseEntity.created(model.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(model);
     }
 }

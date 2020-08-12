@@ -30,12 +30,16 @@ public class ClubRepositoryEventHandlers {
 
     @HandleAfterCreate
     public void handleAfterCreate(Club club) throws IOException {
-        String memberId = authenticationFacade.getCurrentPrincipalName();
-        clubMemberRepository.save(new ClubMember(club.getId(), memberId));
+        addPrincipalAsClubMember(club);
     }
 
     @HandleBeforeSave
     public void handleBeforeSave(Club club) {
         System.out.println("here");
+    }
+
+    private void addPrincipalAsClubMember(Club club) {
+        String memberId = authenticationFacade.getCurrentPrincipalName();
+        clubMemberRepository.save(new ClubMember(club.getId(), memberId));
     }
 }

@@ -12,8 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -39,7 +37,7 @@ public class PropertyRepositoryShould extends IntegrationTestBase {
     @Test
     @WithMockAuthentication(groups = {"Trenor Laners"}, authorities = {"SCOPE_read:properties"})
     public void findAllForGroupMember() {
-        Property property = propertyBuilder.createNewPropertyWithDefaults().persist().build();
+        Property property = propertyBuilder.createNewEntityWithDefaults().persist().build();
         Page<Property> resultFromFindAll = repository.findAll(PageRequest.of(0, 10));
         assertThat(resultFromFindAll.getContent().size()).isGreaterThan(0);
     }
@@ -55,7 +53,7 @@ public class PropertyRepositoryShould extends IntegrationTestBase {
     @Test
     @WithMockAuthentication(groups = {"Trenor Laners"}, authorities = {"SCOPE_read:properties"}, name = "google|12345")
     public void findByIdForGroupMember() {
-        Property property = propertyBuilder.createNewPropertyWithDefaults().persist().build();
+        Property property = propertyBuilder.createNewEntityWithDefaults().persist().build();
         Property resultFromFindById = repository.findById(property.getId()).orElseThrow(ResourceNotFoundException::new);
         assertThat(resultFromFindById.getId()).isEqualTo(property.getId());
     }

@@ -22,7 +22,7 @@ public class VerificationBuilder {
     private ObjectNode attributes;
     private Verification verification;
 
-    public VerificationBuilder createNewVerificationWithDefaults() {
+    public VerificationBuilder createNewEntityWithDefaults() {
         attributes = objectMapper.createObjectNode();
         verification = new Verification();
         verification.setAttributes(attributes);

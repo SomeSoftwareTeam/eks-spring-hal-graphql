@@ -1,7 +1,6 @@
 package com.somesoftwareteam.graphql.rest;
 
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Document;
-import com.somesoftwareteam.graphql.utility.HalResourceBase;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
@@ -16,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * https://docs.spring.io/spring/docs/current/spring-framework-reference/pdf/testing-webtestclient.pdf
  * https://docs.spring.io/spring-hateoas/docs/current/reference/html/#client.web-test-client
  */
-class DocumentHalApiShould extends HalResourceBase<Document> {
+class DocumentRestApiShould extends RestApiResourceBase<Document> {
 
     @Test
     public void createReadUpdateDelete() {

@@ -26,7 +26,7 @@ public class PropertyBuilder {
     private ObjectNode attributes;
     private Property property;
 
-    public PropertyBuilder createNewPropertyWithDefaults() {
+    public PropertyBuilder createNewEntityWithDefaults() {
         attributes = objectMapper.createObjectNode();
         property = new Property();
         property.setAddress("135 Trenor Ln, Powells Point, NC 27966, USA");

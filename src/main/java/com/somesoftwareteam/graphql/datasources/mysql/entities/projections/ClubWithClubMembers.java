@@ -14,20 +14,12 @@ import java.util.UUID;
  */
 @Projection(name = "clubMembers", types = {Club.class})
 public interface ClubWithClubMembers {
-
     JsonNode getAttributes();
-
     ZonedDateTime getCreatedAt();
-
     String getDescription();
-
     Set<ClubMember> getClubMembers();
-
     String getName();
-
     UUID getId();
-
     String getOwnerId();
-
     ZonedDateTime getUpdatedAt();
 }

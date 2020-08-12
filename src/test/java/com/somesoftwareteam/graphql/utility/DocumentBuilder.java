@@ -21,7 +21,7 @@ public class DocumentBuilder {
     private ObjectNode attributes;
     private Document document;
 
-    public DocumentBuilder createNewDocumentWithDefaults() {
+    public DocumentBuilder createNewEntityWithDefaults() {
         attributes = objectMapper.createObjectNode();
         document = new Document();
         document.setAttributes(attributes);

@@ -26,7 +26,7 @@ public class IntegrationTestBase {
     public DocumentBuilder documentBuilder;
 
     @Autowired
-    public ItemBuilder itemBuilder;
+    public RecordBuilder itemBuilder;
 
     @Autowired
     public FixtureBuilder fixtureBuilder;

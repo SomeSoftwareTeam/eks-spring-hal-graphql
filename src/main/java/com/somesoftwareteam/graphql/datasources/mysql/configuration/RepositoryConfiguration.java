@@ -1,5 +1,6 @@
 package com.somesoftwareteam.graphql.datasources.mysql.configuration;
 
+import com.somesoftwareteam.graphql.datasources.mysql.entities.Record;
 import com.somesoftwareteam.graphql.datasources.mysql.entities.*;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -24,9 +25,11 @@ public class RepositoryConfiguration implements RepositoryRestConfigurer {
                 .exposeIdsFor(Club.class)
                 .exposeIdsFor(ClubMember.class)
                 .exposeIdsFor(Document.class)
-                .exposeIdsFor(Item.class)
                 .exposeIdsFor(Fixture.class)
                 .exposeIdsFor(Property.class)
+                .exposeIdsFor(Organization.class)
+                .exposeIdsFor(OrganizationMember.class)
+                .exposeIdsFor(Record.class)
                 .exposeIdsFor(Verification.class);
     }
 }

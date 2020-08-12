@@ -11,9 +11,9 @@ import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "item")
+@Table(name = "record")
 @TypeDef(name = "json-string", typeClass = JsonStringType.class)
-public class Item {
+public class Record {
 
     @Type(type = "json-string")
     private JsonNode attributes;
@@ -41,15 +41,15 @@ public class Item {
     @UpdateTimestamp
     private ZonedDateTime updatedAt;
 
-    public Item() {
+    public Record() {
     }
 
-    public Item(String name, String groupId, JsonNode attributes) {
+    public Record(String name, JsonNode attributes) {
         this.name = name;
         this.attributes = attributes;
     }
 
-    public Item(String name, String groupId, JsonNode attributes, Property property) {
+    public Record(String name, JsonNode attributes, Property property) {
         this.name = name;
         this.attributes = attributes;
         this.property = property;

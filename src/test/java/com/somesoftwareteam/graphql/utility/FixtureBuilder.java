@@ -22,7 +22,7 @@ public class FixtureBuilder {
     private ObjectNode attributes;
     private Fixture fixture;
 
-    public FixtureBuilder createNewFixtureWithDefaults() {
+    public FixtureBuilder createNewEntityWithDefaults() {
         attributes = objectMapper.createObjectNode();
         fixture = new Fixture();
         fixture.setAttributes(attributes);
