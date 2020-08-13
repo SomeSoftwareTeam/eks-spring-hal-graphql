@@ -2,13 +2,13 @@ package com.somesoftwareteam.graphql.datasources.mysql.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.ZonedDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -30,8 +30,12 @@ public class Organization {
 
     private String name;
 
+    @OneToMany(mappedBy = "organization")
+    private Set<OrganizationMember> organizationMembers;
+
     private String ownerId;
 
+    @UpdateTimestamp
     private ZonedDateTime updatedAt;
 
     public JsonNode getAttributes() {
