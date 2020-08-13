@@ -5,6 +5,7 @@ import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.ZonedDateTime;
@@ -30,7 +31,7 @@ public class Organization {
 
     private String name;
 
-    @OneToMany(mappedBy = "organization")
+    @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<OrganizationMember> organizationMembers;
 
     private String ownerId;
