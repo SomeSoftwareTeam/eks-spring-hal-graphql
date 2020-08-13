@@ -6,6 +6,7 @@ import org.hibernate.annotations.*;
 import org.locationtech.jts.geom.Point;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -40,10 +41,10 @@ public class Property {
     @CreationTimestamp
     private ZonedDateTime createdAt;
 
-    @OneToMany(mappedBy = "property", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "property", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Document> documents;
 
-    @OneToMany(mappedBy = "property", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "property", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     Set<Fixture> fixtures;
 
     @Id
