@@ -1,6 +1,9 @@
 package com.somesoftwareteam.graphql.datasources.mysql.repositories;
 
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Organization;
+import com.somesoftwareteam.graphql.datasources.mysql.entities.Property;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,4 +19,6 @@ import java.util.UUID;
 @Repository
 @PreAuthorize("hasAuthority('SCOPE_read:organizations')")
 public interface OrganizationRepository extends JpaRepository<Organization, UUID>, JpaSpecificationExecutor<Organization> {
+
+    Page<Organization> findByNameContains(String input, Pageable pageable);
 }

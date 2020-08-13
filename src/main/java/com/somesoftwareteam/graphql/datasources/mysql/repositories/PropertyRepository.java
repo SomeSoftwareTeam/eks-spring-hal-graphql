@@ -1,6 +1,8 @@
 package com.somesoftwareteam.graphql.datasources.mysql.repositories;
 
 import com.somesoftwareteam.graphql.datasources.mysql.entities.Property;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -17,4 +19,6 @@ import java.util.UUID;
 @RepositoryRestResource
 @PreAuthorize("hasAuthority('SCOPE_read:properties')")
 public interface PropertyRepository extends JpaRepository<Property, UUID>, JpaSpecificationExecutor<Property> {
+
+    Page<Property> findByNameContains(String input, Pageable pageable);
 }
