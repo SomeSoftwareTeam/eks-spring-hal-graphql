@@ -68,7 +68,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             public void addCorsMappings(CorsRegistry registry) {
                 registry
                         .addMapping("/**")
-                        .allowedOrigins("http://localhost:3000", "https://leslie.somesoftwareteam.com");
+                        .allowedOrigins(
+                                "http://localhost:3000",
+                                "https://leslie.somesoftwareteam.com",
+                                "https://next.thomasportwood.com");
             }
         };
     }

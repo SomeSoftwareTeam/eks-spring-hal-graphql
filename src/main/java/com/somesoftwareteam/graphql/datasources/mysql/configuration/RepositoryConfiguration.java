@@ -18,7 +18,7 @@ public class RepositoryConfiguration implements RepositoryRestConfigurer {
         config
                 .getCorsRegistry()
                 .addMapping("/**")
-                .allowedOrigins("http://localhost:3000", "https://leslie.somesoftwareteam.com")
+                .allowedOrigins("http://localhost:3000", "https://leslie.somesoftwareteam.com", "https://next.thomasportwood.com")
                 .allowedMethods("GET", "PUT", "POST", "DELETE");
 
         config
