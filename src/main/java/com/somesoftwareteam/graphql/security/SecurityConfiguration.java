@@ -70,8 +70,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .addMapping("/**")
                         .allowedOrigins(
                                 "http://localhost:3000",
-                                "https://leslie.somesoftwareteam.com",
-                                "https://next.thomasportwood.com");
+                                "https://clubabode.com");
             }
         };
     }
