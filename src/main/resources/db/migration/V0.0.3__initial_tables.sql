@@ -90,9 +90,8 @@ create table record
     id binary(16) primary key,
     name varchar(255) not null,
     owner_id varchar(255) not null,
-    property_id binary(16),
-    updated_at timestamp not null default current_timestamp,
-    FOREIGN KEY (property_id) REFERENCES property(id)
+    parent_id binary(16),
+    updated_at timestamp not null default current_timestamp
 );
 
 create table document

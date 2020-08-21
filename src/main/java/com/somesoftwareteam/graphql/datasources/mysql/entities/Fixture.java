@@ -10,6 +10,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import java.time.ZonedDateTime;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -41,6 +42,9 @@ public class Fixture {
 
     @Column(name = "property_id")
     private UUID propertyId;
+
+    @OneToMany(mappedBy = "parent")
+    private Set<Record> records;
 
     @UpdateTimestamp
     private ZonedDateTime updatedAt;
@@ -113,6 +117,14 @@ public class Fixture {
 
     public void setPropertyId(UUID propertyId) {
         this.propertyId = propertyId;
+    }
+
+    public Set<Record> getRecords() {
+        return records;
+    }
+
+    public void setRecords(Set<Record> records) {
+        this.records = records;
     }
 
     public ZonedDateTime getUpdatedAt() {

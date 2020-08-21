@@ -36,8 +36,8 @@ public class RecordBuilder {
         return this;
     }
 
-    public RecordBuilder useProperty(Property property) {
-        record.setProperty(property);
+    public RecordBuilder useParent(Property property) {
+        record.setParent(property);
         return this;
     }
 

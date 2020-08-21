@@ -32,28 +32,14 @@ public class Record {
     private String ownerId;
 
     @ManyToOne
-    @JoinColumn(name = "property_id", updatable = false, insertable = false)
-    private Property property;
+    @JoinColumn(name = "parent_id", updatable = false, insertable = false)
+    private Property parent;
 
-    @Column(name = "property_id")
-    private UUID propertyId;
+    @Column(name = "parent_id")
+    private UUID parentId;
 
     @UpdateTimestamp
     private ZonedDateTime updatedAt;
-
-    public Record() {
-    }
-
-    public Record(String name, JsonNode attributes) {
-        this.name = name;
-        this.attributes = attributes;
-    }
-
-    public Record(String name, JsonNode attributes, Property property) {
-        this.name = name;
-        this.attributes = attributes;
-        this.property = property;
-    }
 
     public JsonNode getAttributes() {
         return attributes;
@@ -95,20 +81,20 @@ public class Record {
         this.ownerId = ownerId;
     }
 
-    public Property getProperty() {
-        return property;
+    public Property getParent() {
+        return parent;
     }
 
-    public void setProperty(Property property) {
-        this.property = property;
+    public void setParent(Property parent) {
+        this.parent = parent;
     }
 
-    public UUID getPropertyId() {
-        return propertyId;
+    public UUID getParentId() {
+        return parentId;
     }
 
-    public void setPropertyId(UUID propertyId) {
-        this.propertyId = propertyId;
+    public void setParentId(UUID parentId) {
+        this.parentId = parentId;
     }
 
     public ZonedDateTime getUpdatedAt() {

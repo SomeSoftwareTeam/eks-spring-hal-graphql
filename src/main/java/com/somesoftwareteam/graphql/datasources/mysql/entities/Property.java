@@ -5,10 +5,10 @@ import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import org.hibernate.annotations.*;
 import org.locationtech.jts.geom.Point;
 
-import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.ZonedDateTime;
 import java.util.Set;
@@ -60,6 +60,9 @@ public class Property {
 
     @NotBlank(message = "Property owner id cannot be empty.")
     private String ownerId;
+
+    @OneToMany(mappedBy = "parent")
+    private Set<Record> records;
 
     @UpdateTimestamp
     private ZonedDateTime updatedAt;
@@ -120,6 +123,14 @@ public class Property {
         this.addressFormatted = addressFormatted;
     }
 
+    public Set<Fixture> getFixtures() {
+        return fixtures;
+    }
+
+    public void setFixtures(Set<Fixture> fixtures) {
+        this.fixtures = fixtures;
+    }
+
     public UUID getId() {
         return id;
     }
@@ -150,6 +161,15 @@ public class Property {
 
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
+    }
+
+
+    public Set<Record> getRecords() {
+        return records;
+    }
+
+    public void setRecords(Set<Record> records) {
+        this.records = records;
     }
 
     public ZonedDateTime getUpdatedAt() {
