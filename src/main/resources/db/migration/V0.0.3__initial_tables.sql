@@ -108,3 +108,12 @@ create table document
     url varchar(255) not null,
     FOREIGN KEY (property_id) REFERENCES property(id)
 );
+
+create table event
+(
+    created_at timestamp not null default current_timestamp,
+    id bigint not null auto_increment primary key,
+    attributes json not null,
+    parent_id binary(16) not null,
+    updated_at timestamp not null default current_timestamp
+);
