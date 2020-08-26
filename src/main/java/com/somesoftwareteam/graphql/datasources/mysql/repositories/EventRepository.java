@@ -12,6 +12,5 @@ import org.springframework.stereotype.Repository;
  * https://docs.spring.io/spring-security/site/docs/4.0.x/reference/htmlsingle/#common-expressions
  */
 @Repository
-@PreAuthorize("hasAuthority('SCOPE_read:events')")
 public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecificationExecutor<Event> {
 }
