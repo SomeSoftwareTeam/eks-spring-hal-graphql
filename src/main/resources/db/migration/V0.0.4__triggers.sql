@@ -1,9 +1,13 @@
-create trigger create_property_trigger after insert on property
+delimiter $$
+create trigger create_property_trigger
+    after insert
+    on property
     for each row
-    begin
-        insert into event(parent_id, attributes) values (new.id, '{}');
-    end
-
+begin
+    insert into event(parent_id, attributes) values (new.id, '{}');
+end
+$$
+delimiter ;
 #
 # create trigger create_fixture_trigger after insert on fixture
 #     for each row insert into event(parent_id, attributes) values (new.id, '{"type": "CREATE"}');
