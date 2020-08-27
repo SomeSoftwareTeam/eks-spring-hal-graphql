@@ -1,5 +1,5 @@
 # https://dev.mysql.com/doc/refman/8.0/en/stored-programs-logging.html
-SET GLOBAL log_bin_trust_function_creators = 1;
+# SET GLOBAL log_bin_trust_function_creators = 1;
 
 delimiter $$
 create trigger create_property_trigger

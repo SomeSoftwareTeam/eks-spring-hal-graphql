@@ -22,6 +22,8 @@ public class TestMySqlContainer extends MySQLContainer<TestMySqlContainer> {
             container = new TestMySqlContainer()
                     .withEnv("MYSQL_ROOT_PASSWORD", "test");
 
+            container.addParameter("log_bin_trust_function_creators", "1");
+
             container.start();
         }
         return container;

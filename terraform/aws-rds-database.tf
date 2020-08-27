@@ -16,7 +16,7 @@ resource "aws_db_instance" "graphql" {
   name                        = "graphql"
   username                    = var.mysql_username
   password                    = var.mysql_password
-  parameter_group_name        = "default.mysql8.0"
+  parameter_group_name        = "club-abode-parameter-group"
   publicly_accessible         = "true"
   db_subnet_group_name        = aws_db_subnet_group.graphql.name
   tags = {
