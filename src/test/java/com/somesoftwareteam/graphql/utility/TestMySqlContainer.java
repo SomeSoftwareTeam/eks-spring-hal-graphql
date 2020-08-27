@@ -20,8 +20,6 @@ public class TestMySqlContainer extends MySQLContainer<TestMySqlContainer> {
 
             // https://github.com/testcontainers/testcontainers-java/issues/2627
             container = new TestMySqlContainer()
-                    .withUsername("root")
-                    .withPassword("test")
                     .withEnv("MYSQL_ROOT_PASSWORD", "test");
 
             container.start();
@@ -33,8 +31,8 @@ public class TestMySqlContainer extends MySQLContainer<TestMySqlContainer> {
     public void start() {
         super.start();
         System.setProperty("SPRING_DATASOURCE_URL", container.getJdbcUrl());
-        System.setProperty("SPRING_DATASOURCE_USERNAME", container.getUsername());
-        System.setProperty("SPRING_DATASOURCE_PASSWORD", container.getPassword());
+        System.setProperty("SPRING_DATASOURCE_USERNAME", "root");
+        System.setProperty("SPRING_DATASOURCE_PASSWORD", "test");
     }
 
     @Override
