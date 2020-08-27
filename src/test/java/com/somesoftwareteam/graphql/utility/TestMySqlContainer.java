@@ -17,7 +17,13 @@ public class TestMySqlContainer extends MySQLContainer<TestMySqlContainer> {
 
     public static TestMySqlContainer getInstance() {
         if (container == null) {
-            container = new TestMySqlContainer();
+
+            // https://github.com/testcontainers/testcontainers-java/issues/2627
+            container = new TestMySqlContainer()
+                    .withUsername("root")
+                    .withPassword("test")
+                    .withEnv("MYSQL_ROOT_PASSWORD", "test");
+
             container.start();
         }
         return container;
