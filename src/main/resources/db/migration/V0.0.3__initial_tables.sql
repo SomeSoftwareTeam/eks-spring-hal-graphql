@@ -117,6 +117,3 @@ create table event
     parent_id binary(16) not null,
     updated_at timestamp not null default current_timestamp
 );
-
-create trigger create_property_trigger after insert on property
-    for each row insert into event(parent_id, attributes) values (new.id, '{"type": "CREATE"}');
