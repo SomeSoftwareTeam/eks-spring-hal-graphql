@@ -1,3 +1,5 @@
+SET GLOBAL log_bin_trust_function_creators = 1;
+
 delimiter $$
 create trigger create_property_trigger
     after insert
