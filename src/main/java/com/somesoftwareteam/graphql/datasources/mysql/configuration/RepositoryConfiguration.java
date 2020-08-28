@@ -25,6 +25,7 @@ public class RepositoryConfiguration implements RepositoryRestConfigurer {
                 .exposeIdsFor(Club.class)
                 .exposeIdsFor(ClubMember.class)
                 .exposeIdsFor(Document.class)
+                .exposeIdsFor(Event.class)
                 .exposeIdsFor(Fixture.class)
                 .exposeIdsFor(Property.class)
                 .exposeIdsFor(Organization.class)
