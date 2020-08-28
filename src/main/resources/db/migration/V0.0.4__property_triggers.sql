@@ -5,9 +5,11 @@ create trigger create_property_trigger
     for each row
 begin
     insert into event(parent_id, attributes)
-    values (new.id, '{
-      "type": "CREATE"
-    }');
+    values (new.id,
+            concat('{',
+                   '"type": "CREATE"',
+                   '"description": "Created property ', new.name, '"'
+                   '}'));
 end
 $$
 delimiter ;
