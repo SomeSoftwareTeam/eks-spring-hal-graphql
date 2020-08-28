@@ -1,13 +1,10 @@
-# https://dev.mysql.com/doc/refman/8.0/en/stored-programs-logging.html
-# SET GLOBAL log_bin_trust_function_creators = 1;
-
 delimiter $$
 create trigger create_property_trigger
     after insert
     on property
     for each row
 begin
-    insert into event(parent_id, attributes) values (new.id, '{}');
+    insert into event(parent_id, attributes) values (new.id, '{"type": "CREATE"}');
 end
 $$
 delimiter ;
