@@ -13,3 +13,19 @@ begin
 end
 $$
 delimiter ;
+
+delimiter $$
+create trigger update_fixture_trigger
+    after update
+    on fixture
+    for each row
+begin
+    insert into event(parent_id, attributes)
+    values (new.id,
+            concat('{',
+                   '"type": "UPDATE",',
+                   '"description": "Updated fixture ', new.name, '"'
+                       '}'));
+end
+$$
+delimiter ;

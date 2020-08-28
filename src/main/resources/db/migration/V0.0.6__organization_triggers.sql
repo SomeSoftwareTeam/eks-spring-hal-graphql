@@ -13,3 +13,19 @@ begin
 end
 $$
 delimiter ;
+
+delimiter $$
+create trigger update_organization_trigger
+    after update
+    on organization
+    for each row
+begin
+    insert into event(parent_id, attributes)
+    values (new.id,
+            concat('{',
+                   '"type": "UPDATE",',
+                   '"description": "Updated organization ', new.name, '"'
+                       '}'));
+end
+$$
+delimiter ;

@@ -13,3 +13,19 @@ begin
 end
 $$
 delimiter ;
+
+delimiter $$
+create trigger update_document_trigger
+    after update
+    on document
+    for each row
+begin
+    insert into event(parent_id, attributes)
+    values (new.id,
+            concat('{',
+                   '"type": "UPDATE",',
+                   '"description": "Updated document ', new.name, '"'
+                       '}'));
+end
+$$
+delimiter ;
