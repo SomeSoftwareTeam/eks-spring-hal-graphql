@@ -7,7 +7,7 @@ begin
     insert into event(parent_id, attributes)
     values (new.id,
             concat('{',
-                   '"type": "CREATE"',
+                   '"type": "CREATE",',
                    '"description": "Created property ', new.name, '"'
                    '}'));
 end

@@ -5,9 +5,11 @@ create trigger create_document_trigger
     for each row
 begin
     insert into event(parent_id, attributes)
-    values (new.id, '{
-      "type": "CREATE"
-    }');
+    values (new.id,
+            concat('{',
+                   '"type": "CREATE",',
+                   '"description": "Created document ', new.name, '"'
+                       '}'));
 end
 $$
 delimiter ;

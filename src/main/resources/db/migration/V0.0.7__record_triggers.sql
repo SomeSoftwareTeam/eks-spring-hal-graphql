@@ -5,9 +5,11 @@ create trigger create_record_trigger
     for each row
 begin
     insert into event(parent_id, attributes)
-    values (new.id, '{
-      "type": "CREATE"
-    }');
+    values (new.id,
+            concat('{',
+                   '"type": "CREATE",',
+                   '"description": "Created record ', new.name, '"'
+                       '}'));
 end
 $$
 delimiter ;
